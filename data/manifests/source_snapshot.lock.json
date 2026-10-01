@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "dataset": "eoinamoore/historical-nba-data-and-player-box-scores",
+  "dataset_url": "https://www.kaggle.com/datasets/eoinamoore/historical-nba-data-and-player-box-scores",
+  "declared_license": "CC0: Public Domain",
+  "kaggle_version": 515,
+  "source_last_updated": "2026-06-15T11:08:10.51Z",
+  "retrieved_at": "2026-10-01T22:01:02.512133+00:00",
+  "files": [
+    {
+      "name": "Games.csv",
+      "bytes": 11208824,
+      "sha256": "8b21e7e0ebfe25f1de48c18ec701e08a47974d32be006be044b85b2661dfff29"
+    },
+    {
+      "name": "LeagueSchedule25_26.csv",
+      "bytes": 190587,
+      "sha256": "15d9c970a23820f6395b0444fdf81c25750a0ce10368cecdeab26b6f117243fd"
+    },
+    {
+      "name": "PlayerStatistics.csv",
+      "bytes": 389667759,
+      "sha256": "8e5a33676661c3612bf87f185abb745254b09ab66cfee5aeccb5ae13d538c652"
+    },
+    {
+      "name": "Players.csv",
+      "bytes": 524037,
+      "sha256": "93e3c46070e6141f9ba2cf5379ee95318f4afec6e244492c3ed1a4a7e3c1d7f7"
+    },
+    {
+      "name": "TeamHistories.csv",
+      "bytes": 6947,
+      "sha256": "8e16158a963e6d66aef3cf053fee3c46d4c4e646c7c1c7446b865296ba188388"
+    },
+    {
+      "name": "TeamStatistics.csv",
+      "bytes": 36020027,
+      "sha256": "37df1d8096252a9a38a1162872fdf85a2e413ea978c8b1d70edd3bd7f4399be9"
+    }
+  ]
+}

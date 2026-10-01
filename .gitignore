@@ -1,0 +1,39 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+coverage/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+
+# Local databases and downloaded data
+data/raw/*
+!data/raw/.gitkeep
+data/staging/
+data/processed/*
+!data/processed/.gitkeep
+*.sqlite
+*.sqlite3
+*.duckdb
+postgres-data/
+
+# Logs and generated artifacts
+*.log
+tmp/
+artifacts/
