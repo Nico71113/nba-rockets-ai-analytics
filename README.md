@@ -1,12 +1,19 @@
 # ArcLine · NBA Evidence Lab
 
 [![CI](https://github.com/Nico71113/nba-rockets-ai-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/Nico71113/nba-rockets-ai-analytics/actions/workflows/ci.yml)
+[![Public showcase](https://img.shields.io/badge/live-public_showcase-4bd6c3)](https://nico71113.github.io/nba-rockets-ai-analytics/)
 
 An explainable, local-first NBA analytics assistant built around the Houston
 Rockets and Kevin Durant. Ask a supported question in plain English and the app
 returns the exact database result, calculation method, interpreted filters, and
 supporting game IDs. When the snapshot cannot support a claim, the app explains
 which data is missing instead of guessing.
+
+**[Open the public HTTPS showcase →](https://nico71113.github.io/nba-rockets-ai-analytics/)**
+
+The hosted showcase contains seven versioned responses captured from the tested
+API, including row-level evidence. It is explicitly labeled in the UI; clone
+the repository to run broader natural-language questions against PostgreSQL.
 
 ![ArcLine NBA Evidence Lab dashboard](docs/assets/arcline-hero.png)
 
@@ -160,10 +167,13 @@ failure cases that shaped the product, read the short
 
 ## Deployment
 
-The repository ships production containers and documents two deployment modes:
-a private local-first stack with Ollama, and a hosted portfolio stack where the
-database is restored from the reproducible pipeline and the intent-model policy
-is chosen explicitly. See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+The repository ships production containers and a stable
+[GitHub Pages showcase](https://nico71113.github.io/nba-rockets-ai-analytics/).
+The showcase replays seven versioned API responses so it stays available without
+claiming that PostgreSQL is running in the browser. The full local-first stack
+uses PostgreSQL and Ollama; a hosted full-stack deployment restores the database
+from the reproducible pipeline and chooses the intent-model policy explicitly.
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
 ## Repository data policy
 
