@@ -54,12 +54,12 @@ remain local and ignored by Git. The repository publishes transformation code,
 checksums, schemas, tests, and attribution—not a replacement copy of the source
 database.
 
-## Planned subset
+## Implemented subset
 
 - Season: 2025-26
 - Structured scope: all 30 teams
 - Product focus: Houston Rockets and Kevin Durant
-- Narrative/play-by-play scope: Rockets games first
+- Play-by-play: not downloaded or used in the current version
 
 The verified source snapshot contains 1,230 regular-season games across 30
 teams, 82 Rockets regular-season games, and 78 Kevin Durant regular-season

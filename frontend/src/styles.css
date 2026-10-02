@@ -1,0 +1,150 @@
+:root {
+  color-scheme: dark;
+  --ink: #eaf6f4;
+  --muted: #94aaa8;
+  --muted-strong: #bdcfcc;
+  --page: #061113;
+  --panel: rgba(13, 31, 33, 0.82);
+  --panel-solid: #0d1f21;
+  --line: rgba(181, 222, 216, 0.14);
+  --teal: #4bd6c3;
+  --teal-dark: #123e3b;
+  --orange: #ff8a4c;
+  --gold: #f4c56a;
+  --red: #ff6d6d;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+  font-family:
+    Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  background: var(--page);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 82% 8%, rgba(75, 214, 195, 0.13), transparent 32rem),
+    radial-gradient(circle at 8% 36%, rgba(255, 138, 76, 0.09), transparent 28rem),
+    var(--page);
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex="-1"]:focus-visible {
+  outline: 3px solid rgba(75, 214, 195, 0.55);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: #041112;
+  background: var(--teal);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(5, 19, 20, 0.25);
+  border-top-color: #051314;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+.spinner--dark {
+  border-color: rgba(75, 214, 195, 0.2);
+  border-top-color: var(--teal);
+}
+
+.skeleton {
+  display: block;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0.04)
+  );
+  background-size: 220% 100%;
+  animation: shimmer 1.7s infinite;
+}
+
+.brand-mark {
+  position: relative;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid rgba(75, 214, 195, 0.34);
+  border-radius: 50%;
+  background: rgba(75, 214, 195, 0.08);
+}
+
+.brand-mark::before,
+.brand-mark::after,
+.brand-mark span {
+  position: absolute;
+  content: "";
+}
+
+.brand-mark::before {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--teal);
+  border-radius: 50%;
+}
+
+.brand-mark::after {
+  width: 27px;
+  height: 1px;
+  background: var(--orange);
+  transform: rotate(-38deg);
+}
+
+.brand-mark span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 9px -8px 0 var(--teal), -8px 8px 0 var(--teal);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  to { background-position: -220% 0; }
+}

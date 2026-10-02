@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import csv
 import json
-from collections import Counter
+from collections import Counter, defaultdict
+from datetime import datetime
 
 from ingestion.config import (
     HOUSTON_ROCKETS_TEAM_ID,
@@ -49,7 +50,62 @@ def reconcile_team_rows(
                 f"Score mismatch for game {row['game_id']} and team {row['team_id']}: "
                 f"{row['team_score']} != {expected_score}"
             )
+        expected_opponent_id = (
+            game["away_team_id"] if row["team_id"] == game["home_team_id"] else game["home_team_id"]
+        )
+        expected_home = row["team_id"] == game["home_team_id"]
+        expected_won = row["team_id"] == game["winner_team_id"]
+        if row["opponent_team_id"] != expected_opponent_id:
+            errors.append(f"Opponent mismatch for game {row['game_id']} and team {row['team_id']}")
+        if (row["is_home"] == "true") != expected_home:
+            errors.append(f"Home/away mismatch for game {row['game_id']} and team {row['team_id']}")
+        if (row["won"] == "true") != expected_won:
+            errors.append(f"Win/loss mismatch for game {row['game_id']} and team {row['team_id']}")
     return errors
+
+
+def reconcile_player_rows(
+    team_rows: list[dict[str, str]], player_rows: list[dict[str, str]]
+) -> tuple[list[str], int]:
+    errors: list[str] = []
+    teams = {(row["game_id"], row["team_id"]): row for row in team_rows}
+    minute_totals: dict[tuple[str, str], int] = defaultdict(int)
+    played_counts: Counter[tuple[str, str]] = Counter()
+
+    for row in player_rows:
+        key = (row["game_id"], row["team_id"])
+        team = teams.get(key)
+        if team is None:
+            errors.append(f"Player row references missing team-game row {key}")
+            continue
+        for field in ("opponent_team_id", "is_home", "won"):
+            if row[field] != team[field]:
+                errors.append(
+                    f"Player/team mismatch for game {row['game_id']}, "
+                    f"player {row['player_id']}, field {field}"
+                )
+        did_play = row["did_play"] == "true"
+        if did_play:
+            if row["minutes_seconds"] == "":
+                errors.append(f"Played row has no minutes for player {row['player_id']}")
+            else:
+                minute_totals[key] += int(row["minutes_seconds"])
+                played_counts[key] += 1
+        elif row["minutes_seconds"] != "":
+            errors.append(f"DNP row has minutes for player {row['player_id']}")
+
+    max_difference = 0
+    for key, team in teams.items():
+        expected = int(team["minutes_seconds"])
+        actual = minute_totals.get(key, 0)
+        difference = abs(expected - actual)
+        max_difference = max(max_difference, difference)
+        tolerance = max(10, played_counts[key])
+        if difference > tolerance:
+            errors.append(
+                f"Player minutes for game/team {key} differ from team total by {difference}s"
+            )
+    return errors, max_difference
 
 
 def validate() -> dict[str, object]:
@@ -63,11 +119,21 @@ def validate() -> dict[str, object]:
     if len(games_by_id) != len(games):
         errors.append("games.csv contains duplicate game_id values")
 
+    invalid_tipoffs = []
+    for row in games:
+        try:
+            tipoff = datetime.fromisoformat(row["tipoff_at"])
+        except (KeyError, ValueError):
+            invalid_tipoffs.append(row["game_id"])
+            continue
+        if tipoff.utcoffset() is None:
+            invalid_tipoffs.append(row["game_id"])
+    if invalid_tipoffs:
+        errors.append(f"Games contain {len(invalid_tipoffs)} missing or naive tipoff timestamps")
+
     regular_games = [row for row in games if row["game_type"] == "Regular Season"]
     regular_teams = {
-        team_id
-        for row in regular_games
-        for team_id in (row["home_team_id"], row["away_team_id"])
+        team_id for row in regular_games for team_id in (row["home_team_id"], row["away_team_id"])
     }
     rockets_regular = [
         row
@@ -83,6 +149,10 @@ def validate() -> dict[str, object]:
         errors.append(f"Expected 82 Rockets regular-season games, found {len(rockets_regular)}")
 
     errors.extend(reconcile_team_rows(games_by_id, team_rows))
+    player_reconciliation_errors, max_minutes_difference = reconcile_player_rows(
+        team_rows, player_rows
+    )
+    errors.extend(player_reconciliation_errors)
 
     unknown_player_games = sorted(
         {row["game_id"] for row in player_rows if row["game_id"] not in games_by_id}
@@ -112,6 +182,7 @@ def validate() -> dict[str, object]:
         "player_game_rows": len(player_rows),
         "durant_rockets_regular_season_rows": len(durant_regular),
         "durant_rockets_regular_season_dnp_rows": durant_did_not_play,
+        "max_player_team_minutes_difference_seconds": max_minutes_difference,
     }
     return {
         "status": "passed" if not errors else "failed",

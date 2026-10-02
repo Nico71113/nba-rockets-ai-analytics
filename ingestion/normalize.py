@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import csv
 import json
+from collections import defaultdict
 from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import datetime
+from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
+from zoneinfo import ZoneInfo
 
 from ingestion.config import (
     INCLUDED_GAME_TYPES,
@@ -22,7 +25,7 @@ from ingestion.config import (
 GAME_FIELDS = (
     "season_id",
     "game_id",
-    "game_datetime_est",
+    "tipoff_at",
     "game_date",
     "game_type",
     "home_team_id",
@@ -67,7 +70,7 @@ TEAM_GAME_FIELDS = (
     "personal_fouls",
     "turnovers",
     "plus_minus",
-    "minutes",
+    "minutes_seconds",
 )
 
 PLAYER_GAME_FIELDS = (
@@ -85,7 +88,7 @@ PLAYER_GAME_FIELDS = (
     "is_home",
     "won",
     "did_play",
-    "minutes",
+    "minutes_seconds",
     "points",
     "assists",
     "blocks",
@@ -109,10 +112,24 @@ PLAYER_GAME_FIELDS = (
     "starting_position",
 )
 
+EASTERN_TIME = ZoneInfo("America/New_York")
+MinutesEncoding = Literal["clock", "decimal"]
+
 
 def _parse_datetime(value: str) -> datetime | None:
     value = (value or "").strip()
     return datetime.fromisoformat(value) if value else None
+
+
+def _datetime_with_eastern_offset(value: str) -> str:
+    parsed = _parse_datetime(value)
+    if parsed is None:
+        return ""
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=EASTERN_TIME)
+    else:
+        parsed = parsed.astimezone(EASTERN_TIME)
+    return parsed.isoformat()
 
 
 def _within_season(value: str) -> bool:
@@ -121,16 +138,70 @@ def _within_season(value: str) -> bool:
 
 
 def _as_bool(value: str) -> bool:
-    return value.strip().lower() in {"1", "true", "yes", "y"}
+    cleaned = value.strip().lower()
+    if cleaned in {"1", "true", "yes", "y"}:
+        return True
+    if cleaned in {"0", "false", "no", "n"}:
+        return False
+    raise ValueError(f"Invalid boolean value: {value!r}")
 
 
 def _clean(value: Any) -> str:
     return "" if value is None else str(value).strip()
 
 
-def _matches_game_teams(
-    game: dict[str, str], team_id: str, opponent_team_id: str
-) -> bool:
+def _decimal_minutes_to_seconds(value: str) -> int:
+    try:
+        seconds = Decimal(value) * 60
+    except InvalidOperation as error:
+        raise ValueError(f"Invalid minute value: {value!r}") from error
+    return int(seconds.quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+
+
+def _clock_minutes_to_seconds(value: str) -> int:
+    try:
+        numeric = Decimal(value)
+    except InvalidOperation as error:
+        raise ValueError(f"Invalid minute value: {value!r}") from error
+    whole_minutes = int(numeric)
+    seconds = int(((numeric - whole_minutes) * 100).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+    # Some source rows contain ``9.6`` in an otherwise clock-style game. The
+    # base-100 representation reconciles only as 9:60, so normalize that carry
+    # to 10:00 instead of silently treating it as 9.6 decimal minutes.
+    if whole_minutes < 0 or not 0 <= seconds <= 60:
+        raise ValueError(f"Invalid clock-style minute value: {value!r}")
+    return whole_minutes * 60 + seconds
+
+
+def _minutes_to_seconds(value: str, encoding: MinutesEncoding) -> int:
+    if encoding == "clock":
+        return _clock_minutes_to_seconds(value)
+    return _decimal_minutes_to_seconds(value)
+
+
+def _choose_minutes_encoding(values: list[str], target_seconds: int) -> MinutesEncoding:
+    """Choose the source encoding that reconciles player time to the team total."""
+
+    candidates: list[tuple[int, MinutesEncoding]] = []
+    decimal_total = sum(_decimal_minutes_to_seconds(value) for value in values)
+    candidates.append((abs(decimal_total - target_seconds), "decimal"))
+    try:
+        clock_total = sum(_clock_minutes_to_seconds(value) for value in values)
+        candidates.append((abs(clock_total - target_seconds), "clock"))
+    except ValueError:
+        pass
+
+    difference, encoding = min(candidates)
+    tolerance_seconds = max(10, len(values))
+    if difference > tolerance_seconds:
+        raise ValueError(
+            "Player minutes do not reconcile to the team total: "
+            f"best difference is {difference}s (allowed {tolerance_seconds}s)"
+        )
+    return encoding
+
+
+def _matches_game_teams(game: dict[str, str], team_id: str, opponent_team_id: str) -> bool:
     return {team_id, opponent_team_id} == {
         game["home_team_id"],
         game["away_team_id"],
@@ -153,16 +224,17 @@ def normalize_games() -> dict[str, dict[str, str]]:
     destination = PROCESSED_DIR / "games.csv"
     games: dict[str, dict[str, str]] = {}
 
-    with source.open(newline="", encoding="utf-8-sig") as handle, _atomic_writer(
-        destination, GAME_FIELDS
-    ) as writer:
+    with (
+        source.open(newline="", encoding="utf-8-sig") as handle,
+        _atomic_writer(destination, GAME_FIELDS) as writer,
+    ):
         for row in csv.DictReader(handle):
             if not _within_season(row["gameDate"]) or row["gameType"] not in INCLUDED_GAME_TYPES:
                 continue
             game = {
                 "season_id": SEASON_ID,
                 "game_id": _clean(row["gameId"]),
-                "game_datetime_est": _clean(row["gameDateTimeEst"]),
+                "tipoff_at": _datetime_with_eastern_offset(row["gameDateTimeEst"]),
                 "game_date": _clean(row["gameDate"])[:10],
                 "game_type": _clean(row["gameType"]),
                 "home_team_id": _clean(row["hometeamId"]),
@@ -180,13 +252,17 @@ def normalize_games() -> dict[str, dict[str, str]]:
     return games
 
 
-def normalize_team_stats(games: dict[str, dict[str, str]]) -> int:
+def normalize_team_stats(
+    games: dict[str, dict[str, str]],
+) -> tuple[int, dict[tuple[str, str], int]]:
     source = RAW_DIR / "TeamStatistics.csv"
     destination = PROCESSED_DIR / "team_game_stats.csv"
     written = 0
-    with source.open(newline="", encoding="utf-8-sig") as handle, _atomic_writer(
-        destination, TEAM_GAME_FIELDS
-    ) as writer:
+    team_minutes: dict[tuple[str, str], int] = {}
+    with (
+        source.open(newline="", encoding="utf-8-sig") as handle,
+        _atomic_writer(destination, TEAM_GAME_FIELDS) as writer,
+    ):
         for row in csv.DictReader(handle):
             game = games.get(_clean(row["gameId"]))
             if game is None:
@@ -197,6 +273,8 @@ def normalize_team_stats(games: dict[str, dict[str, str]]) -> int:
                 # The source occasionally contains placeholder teamId=0 rows whose
                 # gameId later points at a rescheduled real game. They are not box scores.
                 continue
+            minutes_seconds = _decimal_minutes_to_seconds(_clean(row["numMinutes"]))
+            team_minutes[(game["game_id"], team_id)] = minutes_seconds
             normalized = {
                 "season_id": SEASON_ID,
                 "game_id": game["game_id"],
@@ -230,21 +308,59 @@ def normalize_team_stats(games: dict[str, dict[str, str]]) -> int:
                 "personal_fouls": _clean(row["foulsPersonal"]),
                 "turnovers": _clean(row["turnovers"]),
                 "plus_minus": _clean(row["plusMinusPoints"]),
-                "minutes": _clean(row["numMinutes"]),
+                "minutes_seconds": minutes_seconds,
             }
             writer.writerow(normalized)
             written += 1
-    return written
+    return written, team_minutes
 
 
-def normalize_player_stats(games: dict[str, dict[str, str]]) -> tuple[int, set[str]]:
+def _player_minutes_encodings(
+    games: dict[str, dict[str, str]],
+    team_minutes: dict[tuple[str, str], int],
+) -> dict[tuple[str, str], MinutesEncoding]:
+    grouped: dict[tuple[str, str], list[str]] = defaultdict(list)
+    source = RAW_DIR / "PlayerStatistics.csv"
+    with source.open(newline="", encoding="utf-8-sig") as handle:
+        for row in csv.DictReader(handle):
+            game = games.get(_clean(row["gameId"]))
+            if game is None:
+                continue
+            team_id = _clean(row["playerteamId"])
+            opponent_team_id = _clean(row["opponentteamId"])
+            if not _matches_game_teams(game, team_id, opponent_team_id):
+                continue
+            minutes = _clean(row["numMinutes"])
+            if minutes:
+                grouped[(game["game_id"], team_id)].append(minutes)
+
+    encodings: dict[tuple[str, str], MinutesEncoding] = {}
+    for key, values in grouped.items():
+        target_seconds = team_minutes.get(key)
+        if target_seconds is None:
+            raise ValueError(f"Missing team-minute target for game/team {key}")
+        try:
+            encodings[key] = _choose_minutes_encoding(values, target_seconds)
+        except ValueError as error:
+            raise ValueError(
+                f"Unable to parse player minutes for game/team {key}: {error}"
+            ) from error
+    return encodings
+
+
+def normalize_player_stats(
+    games: dict[str, dict[str, str]],
+    team_minutes: dict[tuple[str, str], int],
+) -> tuple[int, set[str]]:
     source = RAW_DIR / "PlayerStatistics.csv"
     destination = PROCESSED_DIR / "player_game_stats.csv"
     written = 0
     player_ids: set[str] = set()
-    with source.open(newline="", encoding="utf-8-sig") as handle, _atomic_writer(
-        destination, PLAYER_GAME_FIELDS
-    ) as writer:
+    minute_encodings = _player_minutes_encodings(games, team_minutes)
+    with (
+        source.open(newline="", encoding="utf-8-sig") as handle,
+        _atomic_writer(destination, PLAYER_GAME_FIELDS) as writer,
+    ):
         for row in csv.DictReader(handle):
             game = games.get(_clean(row["gameId"]))
             if game is None:
@@ -256,6 +372,11 @@ def normalize_player_stats(games: dict[str, dict[str, str]]) -> tuple[int, set[s
             player_id = _clean(row["personId"])
             player_ids.add(player_id)
             minutes = _clean(row["numMinutes"])
+            minutes_seconds = (
+                _minutes_to_seconds(minutes, minute_encodings[(game["game_id"], team_id)])
+                if minutes
+                else ""
+            )
             normalized = {
                 "season_id": SEASON_ID,
                 "game_id": game["game_id"],
@@ -273,7 +394,7 @@ def normalize_player_stats(games: dict[str, dict[str, str]]) -> tuple[int, set[s
                 "is_home": str(_as_bool(row["home"])).lower(),
                 "won": str(_as_bool(row["win"])).lower(),
                 "did_play": str(bool(minutes)).lower(),
-                "minutes": minutes,
+                "minutes_seconds": minutes_seconds,
                 "points": _clean(row["points"]),
                 "assists": _clean(row["assists"]),
                 "blocks": _clean(row["blocks"]),
@@ -320,9 +441,10 @@ def normalize_players(player_ids: set[str]) -> int:
         "to_year",
     )
     written = 0
-    with source.open(newline="", encoding="utf-8-sig") as handle, _atomic_writer(
-        destination, fields
-    ) as writer:
+    with (
+        source.open(newline="", encoding="utf-8-sig") as handle,
+        _atomic_writer(destination, fields) as writer,
+    ):
         for row in csv.DictReader(handle):
             if _clean(row["personId"]) not in player_ids:
                 continue
@@ -355,8 +477,8 @@ def main() -> None:
         raise SystemExit(message)
 
     games = normalize_games()
-    team_rows = normalize_team_stats(games)
-    player_rows, player_ids = normalize_player_stats(games)
+    team_rows, team_minutes = normalize_team_stats(games)
+    player_rows, player_ids = normalize_player_stats(games, team_minutes)
     player_count = normalize_players(player_ids)
     summary = {
         "season_id": SEASON_ID,

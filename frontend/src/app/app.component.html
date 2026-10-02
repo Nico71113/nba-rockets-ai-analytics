@@ -1,0 +1,358 @@
+<div class="page-shell">
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="ArcLine home">
+      <span class="brand-mark" aria-hidden="true">
+        <span></span>
+      </span>
+      <span>
+        <strong>ArcLine</strong>
+        <small>NBA Evidence Lab</small>
+      </span>
+    </a>
+
+    <div class="header-status" [class.header-status--offline]="!loadingCoverage && !coverage">
+      <span class="status-dot" aria-hidden="true"></span>
+      @if (loadingCoverage) {
+        Checking data
+      } @else if (coverage) {
+        {{ coverage.season_id }} snapshot ready
+      } @else {
+        API offline
+      }
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> Evidence-first NBA analytics</p>
+        <h1 id="page-title">Ask a basketball question.<br /><em>See the math.</em></h1>
+        <p class="hero-description">
+          Exact SQL answers for Houston and Kevin Durant, grounded in game-level data—complete
+          with calculations, filters, and source rows you can inspect.
+        </p>
+        <div class="scope-tags" aria-label="Current analysis focus">
+          <span>Houston focus</span>
+          <span>Kevin Durant</span>
+          <span>2025–26</span>
+          <span>All 30 teams</span>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="court-orbit court-orbit--outer"></div>
+        <div class="court-orbit court-orbit--inner"></div>
+        <div class="ball">
+          <span class="ball-line ball-line--vertical"></span>
+          <span class="ball-line ball-line--arc"></span>
+        </div>
+        <div class="shot-path"></div>
+        <span class="data-point data-point--one"></span>
+        <span class="data-point data-point--two"></span>
+        <span class="data-point data-point--three"></span>
+      </div>
+    </section>
+
+    <section class="coverage-strip" aria-labelledby="coverage-heading">
+      <h2 id="coverage-heading" class="visually-hidden">Dataset coverage</h2>
+      @if (coverage) {
+        <article>
+          <span class="coverage-value">{{ coverage.games | number }}</span>
+          <span class="coverage-label">Games</span>
+        </article>
+        <article>
+          <span class="coverage-value">{{ coverage.teams | number }}</span>
+          <span class="coverage-label">Teams</span>
+        </article>
+        <article>
+          <span class="coverage-value">{{ coverage.players | number }}</span>
+          <span class="coverage-label">Players</span>
+        </article>
+        <article>
+          <span class="coverage-value">{{ coverage.player_game_rows | number }}</span>
+          <span class="coverage-label">Player-game rows</span>
+        </article>
+        <article class="coverage-dates">
+          <span class="coverage-value coverage-value--date">
+            {{ formatDate(coverage.first_game_date) }} — {{ formatDate(coverage.last_game_date) }}
+          </span>
+          <span class="coverage-label">Loaded date range</span>
+        </article>
+      } @else {
+        @for (item of [1, 2, 3, 4, 5]; track item) {
+          <article aria-hidden="true">
+            <span class="skeleton skeleton--value"></span>
+            <span class="skeleton skeleton--label"></span>
+          </article>
+        }
+      }
+    </section>
+
+    <section class="workspace" aria-label="Analytics workspace">
+      <div class="query-column">
+        <div class="panel query-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">Query desk</p>
+              <h2>What do you want to know?</h2>
+            </div>
+            <span class="engine-chip"><span>SQL</span> verified</span>
+          </div>
+
+          <div class="suggestions" aria-label="Suggested questions">
+            @for (suggestion of suggestions; track suggestion.label) {
+              <button type="button" class="suggestion" (click)="useSuggestion(suggestion)">
+                <span>{{ suggestion.label }}</span>
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M4 10h11m-4-4 4 4-4 4" />
+                </svg>
+              </button>
+            }
+          </div>
+
+          <form class="question-form" (ngSubmit)="ask()">
+            <label for="question">Ask in plain English</label>
+            <div class="question-box">
+              <textarea
+                id="question"
+                name="question"
+                [(ngModel)]="question"
+                rows="3"
+                maxlength="500"
+                [disabled]="asking"
+                placeholder="e.g. What was Houston's record when Kevin Durant scored 30+ points?"
+              ></textarea>
+              <button type="submit" [disabled]="asking || !question.trim()">
+                @if (asking) {
+                  <span class="spinner" aria-hidden="true"></span>
+                  Checking
+                } @else {
+                  Run query
+                  <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M4 10h11m-4-4 4 4-4 4" />
+                  </svg>
+                }
+              </button>
+            </div>
+            <p class="form-note">
+              Arithmetic comes from database queries—not model-generated estimates.
+            </p>
+          </form>
+        </div>
+
+        <div class="result-region" aria-live="polite" aria-busy="asking">
+          @if (apiError) {
+            <section class="notice notice--error" role="alert">
+              <span class="notice-icon" aria-hidden="true">!</span>
+              <div>
+                <strong>Connection issue</strong>
+                <p>{{ apiError }}</p>
+              </div>
+            </section>
+          }
+
+          @if (asking) {
+            <section class="panel answer-card answer-card--loading" aria-label="Running query">
+              <div class="answer-loading-label">
+                <span class="spinner spinner--dark" aria-hidden="true"></span>
+                Filtering the game-level rows…
+              </div>
+              <span class="skeleton skeleton--answer"></span>
+              <span class="skeleton skeleton--answer-short"></span>
+              <div class="loading-metrics">
+                <span></span><span></span><span></span>
+              </div>
+            </section>
+          } @else if (response) {
+            <section
+              class="panel answer-card"
+              [class.answer-card--refusal]="response.result.method === 'refusal'"
+            >
+              <div class="answer-topline">
+                <span class="method-badge" [attr.data-method]="response.result.method">
+                  <span class="method-dot"></span>
+                  {{ response.result.method === 'refusal' ? 'Honest refusal' : response.result.method + ' answer' }}
+                </span>
+                <span class="intent-label">Intent: {{ response.intent.replaceAll('_', ' ') }}</span>
+              </div>
+
+              <h2 #answerHeading tabindex="-1">{{ response.result.answer }}</h2>
+
+              @if (objectEntries(response.result.metrics).length) {
+                <div class="metric-grid" aria-label="Answer metrics">
+                  @for (metric of objectEntries(response.result.metrics); track metric[0]) {
+                    <article>
+                      <span>{{ formatMetric(metric[1]) }}</span>
+                      <small>{{ metricLabel(metric[0]) }}</small>
+                    </article>
+                  }
+                </div>
+              }
+
+              @if (response.result.coverage_note) {
+                <div class="coverage-note">
+                  <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <circle cx="10" cy="10" r="8" />
+                    <path d="M10 9v5m0-8v.2" />
+                  </svg>
+                  <div>
+                    <strong>Coverage note</strong>
+                    <p>{{ response.result.coverage_note }}</p>
+                  </div>
+                </div>
+              }
+
+              <div class="answer-details">
+                @if (response.result.calculation.length) {
+                  <section>
+                    <h3>How it was calculated</h3>
+                    <ol class="calculation-list">
+                      @for (step of response.result.calculation; track step; let index = $index) {
+                        <li><span>{{ index + 1 }}</span>{{ step }}</li>
+                      }
+                    </ol>
+                  </section>
+                }
+
+                @if (objectEntries(response.interpretation).length) {
+                  <section>
+                    <h3>Question interpreted as</h3>
+                    <dl class="interpretation-list">
+                      @for (item of objectEntries(response.interpretation); track item[0]) {
+                        <div>
+                          <dt>{{ metricLabel(item[0]) }}</dt>
+                          <dd>{{ displayValue(item[1]) }}</dd>
+                        </div>
+                      }
+                    </dl>
+                  </section>
+                }
+              </div>
+
+              @if (response.result.evidence.length) {
+                <div class="evidence-block">
+                  <div class="evidence-heading">
+                    <div>
+                      <p class="section-kicker">Audit trail</p>
+                      <h3>Supporting evidence</h3>
+                    </div>
+                    <span>
+                      {{ response.result.evidence[0].game_ids.length | number }} game IDs
+                    </span>
+                  </div>
+
+                  @for (evidence of response.result.evidence; track evidence.source_table) {
+                    <details>
+                      <summary>
+                        <span>
+                          <small>Source tables</small>
+                          {{ evidence.source_table }}
+                        </span>
+                        <span class="details-action">Inspect rows</span>
+                      </summary>
+                      <div class="evidence-content">
+                        <div>
+                          <h4>Filters</h4>
+                          <dl>
+                            @for (filter of objectEntries(evidence.filters); track filter[0]) {
+                              <div>
+                                <dt>{{ metricLabel(filter[0]) }}</dt>
+                                <dd>{{ displayValue(filter[1]) }}</dd>
+                              </div>
+                            }
+                          </dl>
+                        </div>
+                        <div>
+                          <h4>Game IDs</h4>
+                          @if (evidence.game_ids.length) {
+                            <div class="game-ids">
+                              @for (gameId of evidence.game_ids; track gameId) {
+                                <code>{{ gameId }}</code>
+                              }
+                            </div>
+                          } @else {
+                            <p>No qualifying game rows.</p>
+                          }
+                        </div>
+                      </div>
+                    </details>
+                  }
+                </div>
+              }
+            </section>
+          } @else if (!apiError) {
+            <section class="panel empty-state">
+              <div class="empty-graphic" aria-hidden="true">
+                <span class="empty-line"></span>
+                <span class="empty-dot empty-dot--one"></span>
+                <span class="empty-dot empty-dot--two"></span>
+                <span class="empty-dot empty-dot--three"></span>
+              </div>
+              <div>
+                <p class="section-kicker">Ready for a question</p>
+                <h2>Answers you can audit, not just accept.</h2>
+                <p>Choose a prompt above or ask your own question to see the answer, math, and exact source rows together.</p>
+              </div>
+            </section>
+          }
+        </div>
+      </div>
+
+      <aside class="context-column" aria-label="Dataset details">
+        <section class="panel passport-card">
+          <div class="passport-heading">
+            <p class="section-kicker">Data passport</p>
+            <span class="live-pill"><i></i> Local snapshot</span>
+          </div>
+          <h2>Know what the system knows.</h2>
+          <p>Every answer is limited to the reproducible 2025–26 snapshot loaded into PostgreSQL.</p>
+
+          <div class="coverage-list">
+            <div>
+              <span class="coverage-icon" aria-hidden="true">30</span>
+              <div><strong>League-wide context</strong><small>All NBA teams</small></div>
+            </div>
+            <div>
+              <span class="coverage-icon coverage-icon--court" aria-hidden="true"></span>
+              <div><strong>Structured box scores</strong><small>Game, team, and player rows</small></div>
+            </div>
+            <div>
+              <span class="coverage-icon coverage-icon--focus" aria-hidden="true"></span>
+              <div><strong>Houston-first experience</strong><small>Kevin Durant defaults</small></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel trust-card">
+          <div class="trust-number">01</div>
+          <div>
+            <h3>SQL does the math</h3>
+            <p>Totals, averages, filters, and records are calculated from typed database fields.</p>
+          </div>
+        </section>
+        <section class="panel trust-card">
+          <div class="trust-number">02</div>
+          <div>
+            <h3>Evidence travels with the answer</h3>
+            <p>Each result includes the tables, filters, and qualifying game identifiers.</p>
+          </div>
+        </section>
+        <section class="panel trust-card">
+          <div class="trust-number">03</div>
+          <div>
+            <h3>Missing data stays missing</h3>
+            <p>Tracking, matchup, and video questions receive a specific refusal instead of a guess.</p>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <strong>ArcLine</strong>
+      <span>Independent portfolio project · Not affiliated with or endorsed by the NBA or any team.</span>
+    </div>
+    <a href="http://localhost:8100/docs" target="_blank" rel="noreferrer">API documentation ↗</a>
+  </footer>
+</div>

@@ -1,0 +1,99 @@
+{
+  "metadata": {
+    "purpose": "Golden cases for deterministic analytics functions",
+    "fixture": "mini_snapshot.json",
+    "rules": [
+      "Dates are inclusive.",
+      "DNP rows do not count as games played or zero-point games.",
+      "The default game type is Regular Season.",
+      "Unsupported or uncovered questions must refuse instead of guessing.",
+      "Cross-table answers must return the exact supporting game IDs."
+    ]
+  },
+  "cases": [
+    {
+      "id": "player-full-regular-season-summary",
+      "question": "Across the loaded regular-season window, how many games did Kevin Durant play and what were his scoring and basic averages?",
+      "operation": "player_period_summary",
+      "params": {"player_id": 201142, "team_id": 1610612745, "start_date": "2025-10-01", "end_date": "2026-06-30"},
+      "expected": {"method": "sql", "metrics": {"games_played": 3, "total_points": 90, "points_per_game": 30.0, "rebounds_per_game": 8.0, "assists_per_game": 5.0}, "game_ids": ["eval-001", "eval-002", "eval-004"], "answer_contains": ["played 3 games", "90 total points"]}
+    },
+    {
+      "id": "coverage-start-is-inclusive",
+      "question": "What did Durant do on the first date covered by this snapshot?",
+      "operation": "player_period_summary",
+      "params": {"player_id": 201142, "team_id": 1610612745, "start_date": "2025-10-01", "end_date": "2025-10-01"},
+      "expected": {"method": "sql", "metrics": {"games_played": 1, "total_points": 35}, "game_ids": ["eval-001"]}
+    },
+    {
+      "id": "coverage-end-is-inclusive",
+      "question": "What did Durant do on the last date covered by this snapshot?",
+      "operation": "player_period_summary",
+      "params": {"player_id": 201142, "team_id": 1610612745, "start_date": "2026-06-30", "end_date": "2026-06-30"},
+      "expected": {"method": "sql", "metrics": {"games_played": 1, "total_points": 30}, "game_ids": ["eval-004"]}
+    },
+    {
+      "id": "team-record-includes-player-absence",
+      "question": "What was Houston's regular-season record across the whole window, including games Durant did not play?",
+      "operation": "team_record",
+      "params": {"team_id": 1610612745, "start_date": "2025-10-01", "end_date": "2026-06-30"},
+      "expected": {"method": "sql", "metrics": {"games": 4, "wins": 2, "losses": 2}, "game_ids": ["eval-001", "eval-002", "eval-003", "eval-004"], "answer_contains": ["went 2-2"]}
+    },
+    {
+      "id": "cross-table-threshold-record",
+      "question": "What was Houston's record when Durant scored at least 30 points?",
+      "operation": "team_record_when_player_reaches",
+      "params": {"team_id": 1610612745, "player_id": 201142, "stat": "points", "threshold": 30, "start_date": "2025-10-01", "end_date": "2026-06-30"},
+      "expected": {"method": "sql", "metrics": {"games": 2, "wins": 1, "losses": 1, "threshold": 30}, "game_ids": ["eval-001", "eval-004"], "answer_contains": ["went 1-1", "at least 30 points"]}
+    },
+    {
+      "id": "game-result-home-away-order",
+      "question": "Who won the Rockets-Thunder game on October 1, and what was the final score?",
+      "operation": "game_result",
+      "params": {"team_id": 1610612745, "opponent_team_id": 1610612760, "game_date": "2025-10-01"},
+      "expected": {"method": "sql", "metrics": {"home_score": 110, "away_score": 100, "winner_team_id": 1610612745}, "game_ids": ["eval-001"], "answer_contains": ["Houston Rockets won", "Oklahoma City Thunder 100", "Houston Rockets 110"]}
+    },
+    {
+      "id": "game-type-isolation",
+      "question": "Summarize Durant's playoff production without mixing regular-season games into it.",
+      "operation": "player_period_summary",
+      "params": {"player_id": 201142, "team_id": 1610612745, "start_date": "2025-10-01", "end_date": "2026-06-30", "game_type": "Playoffs"},
+      "expected": {"method": "sql", "metrics": {"games_played": 1, "total_points": 40, "points_per_game": 40.0, "rebounds_per_game": 10.0, "assists_per_game": 7.0}, "game_ids": ["eval-005"]}
+    },
+    {
+      "id": "unsupported-stat-refusal",
+      "question": "What was Houston's record when Durant created at least three screen assists?",
+      "operation": "team_record_when_player_reaches",
+      "params": {"team_id": 1610612745, "player_id": 201142, "stat": "screen_assists", "threshold": 3, "start_date": "2025-10-01", "end_date": "2026-06-30"},
+      "expected": {"method": "refusal", "answer_contains": ["not supported"], "coverage_contains": ["Supported player stats"]}
+    },
+    {
+      "id": "no-threshold-matches-is-valid-zero",
+      "question": "What was Houston's record when Durant scored 50 or more?",
+      "operation": "team_record_when_player_reaches",
+      "params": {"team_id": 1610612745, "player_id": 201142, "stat": "points", "threshold": 50, "start_date": "2025-10-01", "end_date": "2026-06-30"},
+      "expected": {"method": "sql", "metrics": {"games": 0, "wins": 0, "losses": 0, "threshold": 50}, "game_ids": [], "answer_contains": ["No games matched"]}
+    },
+    {
+      "id": "outside-date-coverage-refusal",
+      "question": "How many points did Durant score for Houston in September 2025?",
+      "operation": "player_period_summary",
+      "params": {"player_id": 201142, "team_id": 1610612745, "start_date": "2025-09-01", "end_date": "2025-09-30"},
+      "expected": {"method": "refusal", "answer_contains": ["No played games"], "coverage_contains": ["outside the loaded snapshot"]}
+    },
+    {
+      "id": "unloaded-game-type-refusal",
+      "question": "Summarize Durant's preseason games in this fixture.",
+      "operation": "player_period_summary",
+      "params": {"player_id": 201142, "team_id": 1610612745, "start_date": "2025-10-01", "end_date": "2026-06-30", "game_type": "Preseason"},
+      "expected": {"method": "refusal", "answer_contains": ["No played games"], "coverage_contains": ["outside the loaded snapshot"]}
+    },
+    {
+      "id": "unknown-matchup-refusal",
+      "question": "What happened in a Rockets-Thunder game on a date with no matching game?",
+      "operation": "game_result",
+      "params": {"team_id": 1610612745, "opponent_team_id": 1610612760, "game_date": "2026-02-14"},
+      "expected": {"method": "refusal", "answer_contains": ["No game between those teams"], "coverage_contains": ["Check the team IDs"]}
+    }
+  ]
+}

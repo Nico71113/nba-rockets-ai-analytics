@@ -11,9 +11,10 @@ requires-python = ">=3.11"
 license = { file = "LICENSE" }
 authors = [{ name = "Nico71113" }]
 dependencies = [
+  "alembic>=1.14,<2",
   "fastapi>=0.115,<1",
+  "httpx>=0.28,<1",
   "kagglehub>=0.3.13,<1",
-  "pgvector>=0.3,<1",
   "psycopg[binary]>=3.2,<4",
   "pydantic-settings>=2.7,<3",
   "sqlalchemy>=2.0,<3",
@@ -33,7 +34,7 @@ packages = ["backend", "ingestion"]
 [tool.pytest.ini_options]
 addopts = "-q"
 pythonpath = ["."]
-testpaths = ["backend/tests", "ingestion/tests"]
+testpaths = ["backend/tests", "ingestion/tests", "evals/tests"]
 
 [tool.ruff]
 line-length = 100

@@ -1,0 +1,19 @@
+{
+  "source_snapshot": "eoinamoore/historical-nba-data-and-player-box-scores version 515",
+  "season_id": "2025-26",
+  "counts": {
+    "games": 1322,
+    "team_game_rows": 2644,
+    "player_game_rows": 34787,
+    "players": 591,
+    "regular_season_games": 1230,
+    "regular_season_teams": 30,
+    "rockets_regular_season_games": 82,
+    "durant_rockets_regular_season_rows": 78,
+    "durant_rockets_regular_season_dnp_rows": 0
+  },
+  "known_coverage_limitations": {
+    "rockets_regular_season_games_without_durant_row": 4,
+    "meaning": "The snapshot cannot establish a reason for those four absences; the application must not invent one."
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "metadata": {
+    "name": "Synthetic Rockets analytics evaluation snapshot",
+    "synthetic": true,
+    "season_id": "2025-26",
+    "coverage_start": "2025-10-01",
+    "coverage_end": "2026-06-30",
+    "notes": "Hand-checkable data created for tests. It is not copied from any assessment or third-party dataset."
+  },
+  "teams": [
+    {"team_id": 1610612745, "name": "Houston Rockets"},
+    {"team_id": 1610612760, "name": "Oklahoma City Thunder"},
+    {"team_id": 1610612744, "name": "Golden State Warriors"}
+  ],
+  "players": [
+    {
+      "player_id": 201142,
+      "first_name": "Kevin",
+      "last_name": "Durant"
+    }
+  ],
+  "games": [
+    {
+      "game_id": "eval-001",
+      "season_id": "2025-26",
+      "tipoff_at": "2025-10-01T20:00:00-04:00",
+      "game_date": "2025-10-01",
+      "game_type": "Regular Season",
+      "home_team_id": 1610612745,
+      "away_team_id": 1610612760,
+      "home_score": 110,
+      "away_score": 100,
+      "winner_team_id": 1610612745
+    },
+    {
+      "game_id": "eval-002",
+      "season_id": "2025-26",
+      "tipoff_at": "2025-11-15T20:00:00-05:00",
+      "game_date": "2025-11-15",
+      "game_type": "Regular Season",
+      "home_team_id": 1610612760,
+      "away_team_id": 1610612745,
+      "home_score": 105,
+      "away_score": 102,
+      "winner_team_id": 1610612760
+    },
+    {
+      "game_id": "eval-003",
+      "season_id": "2025-26",
+      "tipoff_at": "2026-01-05T20:00:00-05:00",
+      "game_date": "2026-01-05",
+      "game_type": "Regular Season",
+      "home_team_id": 1610612745,
+      "away_team_id": 1610612744,
+      "home_score": 120,
+      "away_score": 115,
+      "winner_team_id": 1610612745
+    },
+    {
+      "game_id": "eval-004",
+      "season_id": "2025-26",
+      "tipoff_at": "2026-06-30T20:00:00-04:00",
+      "game_date": "2026-06-30",
+      "game_type": "Regular Season",
+      "home_team_id": 1610612744,
+      "away_team_id": 1610612745,
+      "home_score": 101,
+      "away_score": 99,
+      "winner_team_id": 1610612744
+    },
+    {
+      "game_id": "eval-005",
+      "season_id": "2025-26",
+      "tipoff_at": "2026-05-01T20:00:00-04:00",
+      "game_date": "2026-05-01",
+      "game_type": "Playoffs",
+      "home_team_id": 1610612745,
+      "away_team_id": 1610612760,
+      "home_score": 130,
+      "away_score": 120,
+      "winner_team_id": 1610612745
+    }
+  ],
+  "team_game_stats": [
+    {"game_id": "eval-001", "team_id": 1610612745, "opponent_team_id": 1610612760, "is_home": true, "won": true, "team_score": 110, "opponent_score": 100},
+    {"game_id": "eval-001", "team_id": 1610612760, "opponent_team_id": 1610612745, "is_home": false, "won": false, "team_score": 100, "opponent_score": 110},
+    {"game_id": "eval-002", "team_id": 1610612760, "opponent_team_id": 1610612745, "is_home": true, "won": true, "team_score": 105, "opponent_score": 102},
+    {"game_id": "eval-002", "team_id": 1610612745, "opponent_team_id": 1610612760, "is_home": false, "won": false, "team_score": 102, "opponent_score": 105},
+    {"game_id": "eval-003", "team_id": 1610612745, "opponent_team_id": 1610612744, "is_home": true, "won": true, "team_score": 120, "opponent_score": 115},
+    {"game_id": "eval-003", "team_id": 1610612744, "opponent_team_id": 1610612745, "is_home": false, "won": false, "team_score": 115, "opponent_score": 120},
+    {"game_id": "eval-004", "team_id": 1610612744, "opponent_team_id": 1610612745, "is_home": true, "won": true, "team_score": 101, "opponent_score": 99},
+    {"game_id": "eval-004", "team_id": 1610612745, "opponent_team_id": 1610612744, "is_home": false, "won": false, "team_score": 99, "opponent_score": 101},
+    {"game_id": "eval-005", "team_id": 1610612745, "opponent_team_id": 1610612760, "is_home": true, "won": true, "team_score": 130, "opponent_score": 120},
+    {"game_id": "eval-005", "team_id": 1610612760, "opponent_team_id": 1610612745, "is_home": false, "won": false, "team_score": 120, "opponent_score": 130}
+  ],
+  "player_game_stats": [
+    {"game_id": "eval-001", "player_id": 201142, "team_id": 1610612745, "opponent_team_id": 1610612760, "is_home": true, "won": true, "did_play": true, "minutes": "36.5", "points": 35, "total_rebounds": 7, "assists": 5},
+    {"game_id": "eval-002", "player_id": 201142, "team_id": 1610612745, "opponent_team_id": 1610612760, "is_home": false, "won": false, "did_play": true, "minutes": "38.0", "points": 25, "total_rebounds": 9, "assists": 4},
+    {"game_id": "eval-003", "player_id": 201142, "team_id": 1610612745, "opponent_team_id": 1610612744, "is_home": true, "won": true, "did_play": false, "availability_comment": "Synthetic DNP - Injury/Illness"},
+    {"game_id": "eval-004", "player_id": 201142, "team_id": 1610612745, "opponent_team_id": 1610612744, "is_home": false, "won": false, "did_play": true, "minutes": "37.0", "points": 30, "total_rebounds": 8, "assists": 6},
+    {"game_id": "eval-005", "player_id": 201142, "team_id": 1610612745, "opponent_team_id": 1610612760, "is_home": true, "won": true, "did_play": true, "minutes": "40.0", "points": 40, "total_rebounds": 10, "assists": 7}
+  ]
+}
