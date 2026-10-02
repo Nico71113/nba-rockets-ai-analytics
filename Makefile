@@ -1,8 +1,8 @@
 PYTHON ?= .venv/bin/python
 
 .PHONY: install data-download data-normalize data-validate migrate data-load data \
-	test lint language-eval frontend-install frontend-test frontend-build frontend-audit \
-	verify up down
+	test lint language-eval golden-eval frontend-install frontend-test frontend-build frontend-audit \
+	frontend-e2e frontend-lighthouse verify quality up down
 
 install:
 	python3 -m venv .venv
@@ -36,6 +36,9 @@ lint:
 language-eval:
 	$(PYTHON) -m evals.run_language_eval
 
+golden-eval:
+	$(PYTHON) -m evals.run_golden_eval
+
 frontend-install:
 	cd frontend && npm ci
 
@@ -48,7 +51,15 @@ frontend-build:
 frontend-audit:
 	cd frontend && npm audit --audit-level=moderate
 
+frontend-e2e:
+	cd frontend && npm run e2e
+
+frontend-lighthouse:
+	cd frontend && npm run lighthouse
+
 verify: test lint frontend-test frontend-build frontend-audit
+
+quality: verify frontend-e2e frontend-lighthouse
 
 up:
 	docker compose up --build -d

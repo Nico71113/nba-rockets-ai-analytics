@@ -33,9 +33,13 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
+      - run: npm run demo:validate
       - run: npm test
       - run: npm run build
       - run: npm audit --audit-level=moderate
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e
+      - run: npm run lighthouse
 
   docker-smoke:
     runs-on: ubuntu-24.04

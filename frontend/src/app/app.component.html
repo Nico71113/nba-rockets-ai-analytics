@@ -15,12 +15,20 @@
       @if (loadingCoverage) {
         Checking data
       } @else if (coverage) {
-        {{ coverage.season_id }} snapshot ready
+        {{ coverage.season_id }} {{ demoMode ? 'verified showcase' : 'snapshot ready' }}
       } @else {
         API offline
       }
     </div>
   </header>
+
+  @if (demoMode) {
+    <div class="demo-notice" role="note">
+      <strong>Public showcase mode.</strong>
+      The seven suggested questions replay versioned responses captured from the tested API.
+      Clone the repository to run broader queries against PostgreSQL.
+    </div>
+  }
 
   <main id="top">
     <section class="hero" aria-labelledby="page-title">
@@ -140,7 +148,7 @@
           </form>
         </div>
 
-        <div class="result-region" aria-live="polite" aria-busy="asking">
+        <div class="result-region" aria-live="polite" [attr.aria-busy]="asking">
           @if (apiError) {
             <section class="notice notice--error" role="alert">
               <span class="notice-icon" aria-hidden="true">!</span>
@@ -351,10 +359,16 @@
         <section class="panel passport-card">
           <div class="passport-heading">
             <p class="section-kicker">Data passport</p>
-            <span class="live-pill"><i></i> Local snapshot</span>
+            <span class="live-pill"><i></i> {{ demoMode ? 'Verified showcase' : 'Local snapshot' }}</span>
           </div>
           <h2>Know what the system knows.</h2>
-          <p>Every answer is limited to the reproducible 2025–26 snapshot loaded into PostgreSQL.</p>
+          <p>
+            @if (demoMode) {
+              Hosted examples are versioned API responses from the reproducible 2025–26 snapshot.
+            } @else {
+              Every answer is limited to the reproducible 2025–26 snapshot loaded into PostgreSQL.
+            }
+          </p>
 
           <div class="coverage-list">
             <div>
@@ -402,6 +416,10 @@
       <strong>ArcLine</strong>
       <span>Independent portfolio project · Not affiliated with or endorsed by the NBA or any team.</span>
     </div>
-    <a href="http://localhost:8100/docs" target="_blank" rel="noreferrer">API documentation ↗</a>
+    @if (demoMode) {
+      <a href="https://github.com/Nico71113/nba-rockets-ai-analytics" target="_blank" rel="noreferrer">Source on GitHub ↗</a>
+    } @else {
+      <a href="http://localhost:8100/docs" target="_blank" rel="noreferrer">API documentation ↗</a>
+    }
   </footer>
 </div>

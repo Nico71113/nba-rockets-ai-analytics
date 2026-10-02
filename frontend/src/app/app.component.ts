@@ -11,7 +11,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 
-import { AnalyticsApiService } from './analytics-api.service';
+import { AnalyticsApiService, DEMO_MODE } from './analytics-api.service';
 import { CoverageResponse, Evidence, GameEvidenceRow, QueryResponse } from './models';
 
 interface SuggestedQuestion {
@@ -59,6 +59,7 @@ export class AppComponent implements OnInit {
       question: 'Which defender guarded Kevin Durant most often this season?'
     }
   ];
+  readonly demoMode = DEMO_MODE;
 
   question = this.suggestions[0].question;
   coverage: CoverageResponse | null = null;

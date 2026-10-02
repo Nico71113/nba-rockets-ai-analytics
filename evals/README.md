@@ -34,6 +34,19 @@ Run only these evaluations:
 pytest evals/tests
 ```
 
+With the local stack running, validate language coverage separately from exact
+numeric correctness:
+
+```bash
+python -m evals.run_language_eval  # 100 routing/response-contract cases
+python -m evals.run_golden_eval    # 20 exact answer/method/metric cases
+```
+
+The split is intentional: a question can reach the correct intent while still
+returning the wrong number. The first suite catches routing regressions; the
+second checks values and the evidence contract against independently computed
+reference results.
+
 The normalized-snapshot test skips when `data/processed/*.csv` is absent. Run
 the documented data pipeline first to enable that integration check. All
 synthetic golden cases still run without downloaded data or PostgreSQL.

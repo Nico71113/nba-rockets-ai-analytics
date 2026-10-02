@@ -181,3 +181,79 @@ def test_fixture_count_matches_database(eval_session: Session) -> None:
     assert eval_session.scalar(select(func.count()).select_from(Game)) == 5
     assert eval_session.scalar(select(func.count()).select_from(TeamGameStat)) == 10
     assert eval_session.scalar(select(func.count()).select_from(PlayerGameStat)) == 5
+
+
+def test_full_snapshot_golden_numbers_if_present() -> None:
+    processed = PROJECT_ROOT / "data" / "processed"
+    team_path = processed / "team_game_stats.csv"
+    player_path = processed / "player_game_stats.csv"
+    game_path = processed / "games.csv"
+    if not all(path.is_file() for path in (team_path, player_path, game_path)):
+        pytest.skip("Run the normalization pipeline to enable full-snapshot golden numbers")
+
+    team_rows = _rows(team_path)
+    player_rows = _rows(player_path)
+    games = _rows(game_path)
+    rockets = [
+        row
+        for row in team_rows
+        if row["team_id"] == HOUSTON_ROCKETS and row["game_type"] == "Regular Season"
+    ]
+    thunder = [
+        row
+        for row in team_rows
+        if row["team_name"] == "Oklahoma City Thunder"
+        and row["game_type"] == "Regular Season"
+    ]
+    durant = [
+        row
+        for row in player_rows
+        if row["player_id"] == KEVIN_DURANT
+        and row["team_id"] == HOUSTON_ROCKETS
+        and row["game_type"] == "Regular Season"
+        and _bool(row["did_play"])
+    ]
+
+    assert (len(rockets), sum(_bool(row["won"]) for row in rockets)) == (82, 52)
+    home = [row for row in rockets if _bool(row["is_home"])]
+    away = [row for row in rockets if not _bool(row["is_home"])]
+    assert (len(home), sum(_bool(row["won"]) for row in home)) == (41, 30)
+    assert (len(away), sum(_bool(row["won"]) for row in away)) == (41, 22)
+    assert (len(thunder), sum(_bool(row["won"]) for row in thunder)) == (82, 64)
+
+    assert len(durant) == 78
+    assert sum(int(row["points"]) for row in durant) == 2026
+    assert round(sum(int(row["points"]) for row in durant) / len(durant), 1) == 26.0
+    assert sum(int(row["total_rebounds"]) for row in durant) == 426
+    assert round(sum(int(row["assists"]) for row in durant) / len(durant), 1) == 4.8
+    road_durant = [row for row in durant if not _bool(row["is_home"])]
+    assert (len(road_durant), max(int(row["points"]) for row in road_durant)) == (38, 40)
+
+    def threshold_record(field: str, threshold: int) -> tuple[int, int]:
+        matching = [row for row in durant if int(row[field]) >= threshold]
+        return len(matching), sum(_bool(row["won"]) for row in matching)
+
+    assert threshold_record("points", 20) == (64, 40)
+    assert threshold_record("points", 30) == (29, 16)
+    assert threshold_record("three_pointers_made", 4) == (17, 11)
+    assert threshold_record("total_rebounds", 10) == (4, 2)
+
+    january = [row for row in rockets if row["game_date"].startswith("2026-01-")]
+    home_wins = [row for row in rockets if _bool(row["is_home"]) and _bool(row["won"])]
+    assert (len(january), sum(int(row["team_score"]) for row in january)) == (17, 1834)
+    assert round(sum(int(row["plus_minus"]) for row in home_wins) / len(home_wins), 1) == 13.4
+    assert round(sum(int(row["opponent_score"]) for row in rockets) / len(rockets), 1) == 110.0
+    assert max(int(row["team_score"]) for row in rockets) == 140
+
+    opener = next(
+        row
+        for row in games
+        if row["game_date"] == "2025-10-21"
+        and {row["home_team_name"], row["away_team_name"]}
+        == {"Houston Rockets", "Oklahoma City Thunder"}
+    )
+    assert (opener["away_score"], opener["home_score"], opener["winner_team_id"]) == (
+        "124",
+        "125",
+        "1610612760",
+    )

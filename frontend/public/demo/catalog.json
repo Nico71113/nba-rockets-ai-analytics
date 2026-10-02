@@ -1,0 +1,1422 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-02T18:30:26.399Z",
+  "source": "Captured from the tested ArcLine API against the fixed 2025-26 snapshot.",
+  "coverage": {
+    "season_id": "2025-26",
+    "first_game_date": "2025-10-21",
+    "last_game_date": "2026-06-13",
+    "games": 1322,
+    "teams": 30,
+    "players": 591,
+    "player_game_rows": 34787,
+    "team_game_rows": 2644
+  },
+  "queries": {
+    "what was houston's regular-season record in 2025-26?": {
+      "question": "What was Houston's regular-season record in 2025-26?",
+      "intent": "team_record",
+      "routing_source": "deterministic",
+      "interpretation": {
+        "intent": "team_record",
+        "game_type": "Regular Season",
+        "start_date": "2025-10-21",
+        "end_date": "2026-04-12",
+        "team_name": "Houston Rockets",
+        "team_id": 1610612745,
+        "location": "all"
+      },
+      "result": {
+        "method": "sql",
+        "answer": "Houston Rockets went 52-30 from 2025-10-21 through 2026-04-12.",
+        "metrics": {
+          "games": 82,
+          "wins": 52,
+          "losses": 30
+        },
+        "calculation": [
+          "Count qualifying team-game rows and sum the rows marked won=true."
+        ],
+        "evidence": [
+          {
+            "source_table": "team_game_stats + games",
+            "snapshot_id": "eoinamoore/historical-nba-data-and-player-box-scores@515",
+            "game_ids": [
+              "22500001",
+              "22500093",
+              "22500116",
+              "22500131",
+              "22500146",
+              "22500160",
+              "22500176",
+              "22500032",
+              "22500191",
+              "22500218",
+              "22500042",
+              "22500236",
+              "22500255",
+              "22500054",
+              "22500290",
+              "22500066",
+              "22500301",
+              "22500316",
+              "22500330",
+              "22500346",
+              "22500356",
+              "22501205",
+              "22501225",
+              "22500375",
+              "22500386",
+              "22500401",
+              "22500422",
+              "22500012",
+              "22500438",
+              "22500453",
+              "22500471",
+              "22500491",
+              "22500505",
+              "22500527",
+              "22500540",
+              "22500557",
+              "22500565",
+              "22500581",
+              "22500591",
+              "22500604",
+              "22500615",
+              "22500628",
+              "22500635",
+              "22500662",
+              "22500679",
+              "22500682",
+              "22500701",
+              "22500713",
+              "22500728",
+              "22500737",
+              "22500748",
+              "22500772",
+              "22500782",
+              "22500792",
+              "22500816",
+              "22500830",
+              "22500845",
+              "22500852",
+              "22500864",
+              "22500879",
+              "22500902",
+              "22500910",
+              "22500927",
+              "22500940",
+              "22500950",
+              "22500964",
+              "22500989",
+              "22501007",
+              "22501018",
+              "22501027",
+              "22501042",
+              "22501058",
+              "22501069",
+              "22501088",
+              "22501102",
+              "22501110",
+              "22501124",
+              "22501142",
+              "22501157",
+              "22501169",
+              "22501178",
+              "22501194"
+            ],
+            "filters": {
+              "team_id": 1610612745,
+              "start_date": "2025-10-21",
+              "end_date": "2026-04-12",
+              "game_type": "Regular Season",
+              "location": "all"
+            }
+          }
+        ],
+        "coverage_note": null
+      },
+      "elapsed_ms": 37
+    },
+    "what did kevin durant average for houston during the 2025-26 regular season?": {
+      "question": "What did Kevin Durant average for Houston during the 2025-26 regular season?",
+      "intent": "player_summary",
+      "routing_source": "deterministic",
+      "interpretation": {
+        "intent": "player_summary",
+        "game_type": "Regular Season",
+        "start_date": "2025-10-21",
+        "end_date": "2026-04-12",
+        "player_name": "Kevin Durant",
+        "player_id": 201142
+      },
+      "result": {
+        "method": "sql",
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12.",
+        "metrics": {
+          "games_played": 78,
+          "total_points": 2026,
+          "points_per_game": 26,
+          "rebounds_per_game": 5.5,
+          "assists_per_game": 4.8
+        },
+        "calculation": [
+          "Filter player-game rows by player, team, date range, game type, and did_play=true.",
+          "Sum points across 78 qualifying rows.",
+          "Compute per-game averages over the same qualifying rows."
+        ],
+        "evidence": [
+          {
+            "source_table": "player_game_stats + games",
+            "snapshot_id": "eoinamoore/historical-nba-data-and-player-box-scores@515",
+            "game_ids": [
+              "22500001",
+              "22500093",
+              "22500116",
+              "22500131",
+              "22500146",
+              "22500160",
+              "22500176",
+              "22500032",
+              "22500191",
+              "22500218",
+              "22500042",
+              "22500236",
+              "22500255",
+              "22500054",
+              "22500301",
+              "22500316",
+              "22500330",
+              "22500346",
+              "22500356",
+              "22501205",
+              "22501225",
+              "22500375",
+              "22500386",
+              "22500401",
+              "22500422",
+              "22500012",
+              "22500438",
+              "22500453",
+              "22500471",
+              "22500491",
+              "22500505",
+              "22500527",
+              "22500540",
+              "22500557",
+              "22500565",
+              "22500581",
+              "22500591",
+              "22500604",
+              "22500615",
+              "22500628",
+              "22500635",
+              "22500662",
+              "22500679",
+              "22500682",
+              "22500701",
+              "22500728",
+              "22500737",
+              "22500748",
+              "22500772",
+              "22500782",
+              "22500792",
+              "22500816",
+              "22500830",
+              "22500845",
+              "22500852",
+              "22500864",
+              "22500879",
+              "22500902",
+              "22500910",
+              "22500927",
+              "22500940",
+              "22500950",
+              "22500964",
+              "22500989",
+              "22501007",
+              "22501018",
+              "22501027",
+              "22501042",
+              "22501058",
+              "22501069",
+              "22501088",
+              "22501102",
+              "22501110",
+              "22501124",
+              "22501142",
+              "22501157",
+              "22501169",
+              "22501178"
+            ],
+            "filters": {
+              "player_id": 201142,
+              "team_id": null,
+              "start_date": "2025-10-21",
+              "end_date": "2026-04-12",
+              "game_type": "Regular Season"
+            }
+          }
+        ],
+        "coverage_note": null
+      },
+      "elapsed_ms": 152
+    },
+    "what was houston's record when kevin durant scored at least 30 points?": {
+      "question": "What was Houston's record when Kevin Durant scored at least 30 points?",
+      "intent": "threshold_record",
+      "routing_source": "deterministic",
+      "interpretation": {
+        "intent": "threshold_record",
+        "game_type": "Regular Season",
+        "start_date": "2025-10-21",
+        "end_date": "2026-04-12",
+        "player_name": "Kevin Durant",
+        "player_id": 201142,
+        "team_name": "Houston Rockets",
+        "team_id": 1610612745,
+        "stat": "points",
+        "threshold": 30
+      },
+      "result": {
+        "method": "sql",
+        "answer": "Houston Rockets went 16-13 when Kevin Durant recorded at least 30 points.",
+        "metrics": {
+          "games": 29,
+          "wins": 16,
+          "losses": 13,
+          "threshold": 30
+        },
+        "calculation": [
+          "Filter played player-game rows where points >= 30.",
+          "Join the matching game IDs to the team's win/loss rows."
+        ],
+        "evidence": [
+          {
+            "source_table": "player_game_stats + team_game_stats + games",
+            "snapshot_id": "eoinamoore/historical-nba-data-and-player-box-scores@515",
+            "game_ids": [
+              "22500093",
+              "22500131",
+              "22500191",
+              "22500042",
+              "22500236",
+              "22500316",
+              "22500375",
+              "22500386",
+              "22500438",
+              "22500453",
+              "22500491",
+              "22500527",
+              "22500540",
+              "22500591",
+              "22500628",
+              "22500635",
+              "22500662",
+              "22500682",
+              "22500737",
+              "22500792",
+              "22500816",
+              "22500852",
+              "22500864",
+              "22500879",
+              "22500964",
+              "22501042",
+              "22501058",
+              "22501142",
+              "22501178"
+            ],
+            "filters": {
+              "team_id": 1610612745,
+              "player_id": 201142,
+              "stat": "points",
+              "threshold": 30,
+              "start_date": "2025-10-21",
+              "end_date": "2026-04-12",
+              "game_type": "Regular Season"
+            }
+          }
+        ],
+        "coverage_note": null
+      },
+      "elapsed_ms": 153
+    },
+    "what was houston's record when kevin durant made at least 4 three-pointers?": {
+      "question": "What was Houston's record when Kevin Durant made at least 4 three-pointers?",
+      "intent": "threshold_record",
+      "routing_source": "deterministic",
+      "interpretation": {
+        "intent": "threshold_record",
+        "game_type": "Regular Season",
+        "start_date": "2025-10-21",
+        "end_date": "2026-04-12",
+        "player_name": "Kevin Durant",
+        "player_id": 201142,
+        "team_name": "Houston Rockets",
+        "team_id": 1610612745,
+        "stat": "three_pointers_made",
+        "threshold": 4
+      },
+      "result": {
+        "method": "sql",
+        "answer": "Houston Rockets went 11-6 when Kevin Durant recorded at least 4 three pointers made.",
+        "metrics": {
+          "games": 17,
+          "wins": 11,
+          "losses": 6,
+          "threshold": 4
+        },
+        "calculation": [
+          "Filter played player-game rows where three_pointers_made >= 4.",
+          "Join the matching game IDs to the team's win/loss rows."
+        ],
+        "evidence": [
+          {
+            "source_table": "player_game_stats + team_game_stats + games",
+            "snapshot_id": "eoinamoore/historical-nba-data-and-player-box-scores@515",
+            "game_ids": [
+              "22500131",
+              "22500375",
+              "22500386",
+              "22500012",
+              "22500540",
+              "22500557",
+              "22500591",
+              "22500628",
+              "22500635",
+              "22500662",
+              "22500816",
+              "22500830",
+              "22500940",
+              "22501027",
+              "22501042",
+              "22501102",
+              "22501157"
+            ],
+            "filters": {
+              "team_id": 1610612745,
+              "player_id": 201142,
+              "stat": "three_pointers_made",
+              "threshold": 4,
+              "start_date": "2025-10-21",
+              "end_date": "2026-04-12",
+              "game_type": "Regular Season"
+            }
+          }
+        ],
+        "coverage_note": null
+      },
+      "elapsed_ms": 151
+    },
+    "how many total points did houston score in january 2026?": {
+      "question": "How many total points did Houston score in January 2026?",
+      "intent": "metric_summary",
+      "routing_source": "deterministic",
+      "interpretation": {
+        "intent": "metric_summary",
+        "game_type": "Regular Season",
+        "start_date": "2026-01-01",
+        "end_date": "2026-01-31",
+        "team_name": "Houston Rockets",
+        "team_id": 1610612745,
+        "entity_type": "team",
+        "stat": "points",
+        "aggregation": "sum",
+        "location": "all",
+        "outcome": "all"
+      },
+      "result": {
+        "method": "sql",
+        "answer": "Houston Rockets recorded 1834 total points across 17 qualifying games from 2026-01-01 through 2026-01-31.",
+        "metrics": {
+          "games": 17,
+          "value": 1834,
+          "stat": "points",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "calculation": [
+          "Filter team-game rows by date, game type, location, and outcome.",
+          "Apply the registered sum operation to the points field."
+        ],
+        "evidence": [
+          {
+            "source_table": "team_game_stats + games",
+            "snapshot_id": "eoinamoore/historical-nba-data-and-player-box-scores@515",
+            "game_ids": [
+              "22500471",
+              "22500491",
+              "22500505",
+              "22500527",
+              "22500540",
+              "22500557",
+              "22500565",
+              "22500581",
+              "22500591",
+              "22500604",
+              "22500615",
+              "22500628",
+              "22500635",
+              "22500662",
+              "22500679",
+              "22500682",
+              "22500701"
+            ],
+            "filters": {
+              "entity_type": "team",
+              "entity_id": 1610612745,
+              "team_id": null,
+              "stat": "points",
+              "aggregation": "sum",
+              "start_date": "2026-01-01",
+              "end_date": "2026-01-31",
+              "game_type": "Regular Season",
+              "location": "all",
+              "outcome": "all"
+            }
+          }
+        ],
+        "coverage_note": null
+      },
+      "elapsed_ms": 153
+    },
+    "what was kevin durant's highest points total on the road?": {
+      "question": "What was Kevin Durant's highest points total on the road?",
+      "intent": "metric_summary",
+      "routing_source": "deterministic",
+      "interpretation": {
+        "intent": "metric_summary",
+        "game_type": "Regular Season",
+        "start_date": "2025-10-21",
+        "end_date": "2026-04-12",
+        "player_name": "Kevin Durant",
+        "player_id": 201142,
+        "entity_type": "player",
+        "stat": "points",
+        "aggregation": "maximum",
+        "location": "away",
+        "outcome": "all"
+      },
+      "result": {
+        "method": "sql",
+        "answer": "Kevin Durant had a single-game high of 40 points on the road across 38 qualifying games from 2025-10-21 through 2026-04-12.",
+        "metrics": {
+          "games": 38,
+          "value": 40,
+          "stat": "points",
+          "aggregation": "maximum",
+          "location": "away",
+          "outcome": "all"
+        },
+        "calculation": [
+          "Filter player-game rows by date, game type, location, and outcome.",
+          "Apply the registered maximum operation to the points field."
+        ],
+        "evidence": [
+          {
+            "source_table": "player_game_stats + games",
+            "snapshot_id": "eoinamoore/historical-nba-data-and-player-box-scores@515",
+            "game_ids": [
+              "22500001",
+              "22500131",
+              "22500146",
+              "22500176",
+              "22500032",
+              "22500191",
+              "22500255",
+              "22500301",
+              "22500316",
+              "22500356",
+              "22501225",
+              "22500375",
+              "22500386",
+              "22500401",
+              "22500422",
+              "22500012",
+              "22500471",
+              "22500491",
+              "22500527",
+              "22500540",
+              "22500557",
+              "22500628",
+              "22500635",
+              "22500682",
+              "22500748",
+              "22500792",
+              "22500816",
+              "22500852",
+              "22500864",
+              "22500879",
+              "22500927",
+              "22500950",
+              "22501042",
+              "22501058",
+              "22501069",
+              "22501088",
+              "22501142",
+              "22501157"
+            ],
+            "filters": {
+              "entity_type": "player",
+              "entity_id": 201142,
+              "team_id": null,
+              "stat": "points",
+              "aggregation": "maximum",
+              "start_date": "2025-10-21",
+              "end_date": "2026-04-12",
+              "game_type": "Regular Season",
+              "location": "away",
+              "outcome": "all"
+            }
+          }
+        ],
+        "coverage_note": null
+      },
+      "elapsed_ms": 150
+    },
+    "which defender guarded kevin durant most often this season?": {
+      "question": "Which defender guarded Kevin Durant most often this season?",
+      "intent": "unsupported",
+      "routing_source": "coverage_guard",
+      "interpretation": {
+        "intent": "unsupported",
+        "game_type": "Regular Season",
+        "location": "all",
+        "outcome": "all",
+        "reason": "The loaded snapshot has box scores, schedules, and availability rows, but no player-tracking or defensive-assignment data needed to identify who guarded a player."
+      },
+      "result": {
+        "method": "refusal",
+        "answer": "The loaded snapshot has box scores, schedules, and availability rows, but no player-tracking or defensive-assignment data needed to identify who guarded a player.",
+        "metrics": {},
+        "calculation": [],
+        "evidence": [],
+        "coverage_note": "The loaded snapshot has box scores, schedules, and availability rows, but no player-tracking or defensive-assignment data needed to identify who guarded a player."
+      },
+      "elapsed_ms": 1
+    }
+  },
+  "games": {
+    "22500001": {
+      "game_id": "22500001",
+      "game_date": "2025-10-21",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Oklahoma City Thunder",
+      "away_score": 124,
+      "home_score": 125,
+      "winner": "Oklahoma City Thunder"
+    },
+    "22500012": {
+      "game_id": "22500012",
+      "game_date": "2025-12-25",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Los Angeles Lakers",
+      "away_score": 119,
+      "home_score": 96,
+      "winner": "Houston Rockets"
+    },
+    "22500032": {
+      "game_id": "22500032",
+      "game_date": "2025-11-07",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "San Antonio Spurs",
+      "away_score": 110,
+      "home_score": 121,
+      "winner": "San Antonio Spurs"
+    },
+    "22500042": {
+      "game_id": "22500042",
+      "game_date": "2025-11-14",
+      "game_type": "Regular Season",
+      "away_team": "Portland Trail Blazers",
+      "home_team": "Houston Rockets",
+      "away_score": 116,
+      "home_score": 140,
+      "winner": "Houston Rockets"
+    },
+    "22500054": {
+      "game_id": "22500054",
+      "game_date": "2025-11-21",
+      "game_type": "Regular Season",
+      "away_team": "Denver Nuggets",
+      "home_team": "Houston Rockets",
+      "away_score": 112,
+      "home_score": 109,
+      "winner": "Denver Nuggets"
+    },
+    "22500066": {
+      "game_id": "22500066",
+      "game_date": "2025-11-26",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Golden State Warriors",
+      "away_score": 104,
+      "home_score": 100,
+      "winner": "Houston Rockets"
+    },
+    "22500093": {
+      "game_id": "22500093",
+      "game_date": "2025-10-24",
+      "game_type": "Regular Season",
+      "away_team": "Detroit Pistons",
+      "home_team": "Houston Rockets",
+      "away_score": 115,
+      "home_score": 111,
+      "winner": "Detroit Pistons"
+    },
+    "22500116": {
+      "game_id": "22500116",
+      "game_date": "2025-10-27",
+      "game_type": "Regular Season",
+      "away_team": "Brooklyn Nets",
+      "home_team": "Houston Rockets",
+      "away_score": 109,
+      "home_score": 137,
+      "winner": "Houston Rockets"
+    },
+    "22500131": {
+      "game_id": "22500131",
+      "game_date": "2025-10-29",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Toronto Raptors",
+      "away_score": 139,
+      "home_score": 121,
+      "winner": "Houston Rockets"
+    },
+    "22500146": {
+      "game_id": "22500146",
+      "game_date": "2025-11-01",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Boston Celtics",
+      "away_score": 128,
+      "home_score": 101,
+      "winner": "Houston Rockets"
+    },
+    "22500160": {
+      "game_id": "22500160",
+      "game_date": "2025-11-03",
+      "game_type": "Regular Season",
+      "away_team": "Dallas Mavericks",
+      "home_team": "Houston Rockets",
+      "away_score": 102,
+      "home_score": 110,
+      "winner": "Houston Rockets"
+    },
+    "22500176": {
+      "game_id": "22500176",
+      "game_date": "2025-11-05",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Memphis Grizzlies",
+      "away_score": 124,
+      "home_score": 109,
+      "winner": "Houston Rockets"
+    },
+    "22500191": {
+      "game_id": "22500191",
+      "game_date": "2025-11-09",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Milwaukee Bucks",
+      "away_score": 122,
+      "home_score": 115,
+      "winner": "Houston Rockets"
+    },
+    "22500218": {
+      "game_id": "22500218",
+      "game_date": "2025-11-12",
+      "game_type": "Regular Season",
+      "away_team": "Washington Wizards",
+      "home_team": "Houston Rockets",
+      "away_score": 112,
+      "home_score": 135,
+      "winner": "Houston Rockets"
+    },
+    "22500236": {
+      "game_id": "22500236",
+      "game_date": "2025-11-16",
+      "game_type": "Regular Season",
+      "away_team": "Orlando Magic",
+      "home_team": "Houston Rockets",
+      "away_score": 113,
+      "home_score": 117,
+      "winner": "Houston Rockets"
+    },
+    "22500255": {
+      "game_id": "22500255",
+      "game_date": "2025-11-19",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Cleveland Cavaliers",
+      "away_score": 114,
+      "home_score": 104,
+      "winner": "Houston Rockets"
+    },
+    "22500290": {
+      "game_id": "22500290",
+      "game_date": "2025-11-24",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Phoenix Suns",
+      "away_score": 114,
+      "home_score": 92,
+      "winner": "Houston Rockets"
+    },
+    "22500301": {
+      "game_id": "22500301",
+      "game_date": "2025-11-30",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Utah Jazz",
+      "away_score": 129,
+      "home_score": 101,
+      "winner": "Houston Rockets"
+    },
+    "22500316": {
+      "game_id": "22500316",
+      "game_date": "2025-12-01",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Utah Jazz",
+      "away_score": 125,
+      "home_score": 133,
+      "winner": "Utah Jazz"
+    },
+    "22500330": {
+      "game_id": "22500330",
+      "game_date": "2025-12-03",
+      "game_type": "Regular Season",
+      "away_team": "Sacramento Kings",
+      "home_team": "Houston Rockets",
+      "away_score": 95,
+      "home_score": 121,
+      "winner": "Houston Rockets"
+    },
+    "22500346": {
+      "game_id": "22500346",
+      "game_date": "2025-12-05",
+      "game_type": "Regular Season",
+      "away_team": "Phoenix Suns",
+      "home_team": "Houston Rockets",
+      "away_score": 98,
+      "home_score": 117,
+      "winner": "Houston Rockets"
+    },
+    "22500356": {
+      "game_id": "22500356",
+      "game_date": "2025-12-06",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Dallas Mavericks",
+      "away_score": 109,
+      "home_score": 122,
+      "winner": "Dallas Mavericks"
+    },
+    "22500375": {
+      "game_id": "22500375",
+      "game_date": "2025-12-18",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "New Orleans Pelicans",
+      "away_score": 128,
+      "home_score": 133,
+      "winner": "New Orleans Pelicans"
+    },
+    "22500386": {
+      "game_id": "22500386",
+      "game_date": "2025-12-20",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Denver Nuggets",
+      "away_score": 115,
+      "home_score": 101,
+      "winner": "Houston Rockets"
+    },
+    "22500401": {
+      "game_id": "22500401",
+      "game_date": "2025-12-21",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Sacramento Kings",
+      "away_score": 124,
+      "home_score": 125,
+      "winner": "Sacramento Kings"
+    },
+    "22500422": {
+      "game_id": "22500422",
+      "game_date": "2025-12-23",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "LA Clippers",
+      "away_score": 108,
+      "home_score": 128,
+      "winner": "LA Clippers"
+    },
+    "22500438": {
+      "game_id": "22500438",
+      "game_date": "2025-12-27",
+      "game_type": "Regular Season",
+      "away_team": "Cleveland Cavaliers",
+      "home_team": "Houston Rockets",
+      "away_score": 100,
+      "home_score": 117,
+      "winner": "Houston Rockets"
+    },
+    "22500453": {
+      "game_id": "22500453",
+      "game_date": "2025-12-29",
+      "game_type": "Regular Season",
+      "away_team": "Indiana Pacers",
+      "home_team": "Houston Rockets",
+      "away_score": 119,
+      "home_score": 126,
+      "winner": "Houston Rockets"
+    },
+    "22500471": {
+      "game_id": "22500471",
+      "game_date": "2026-01-01",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Brooklyn Nets",
+      "away_score": 120,
+      "home_score": 96,
+      "winner": "Houston Rockets"
+    },
+    "22500491": {
+      "game_id": "22500491",
+      "game_date": "2026-01-03",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Dallas Mavericks",
+      "away_score": 104,
+      "home_score": 110,
+      "winner": "Dallas Mavericks"
+    },
+    "22500505": {
+      "game_id": "22500505",
+      "game_date": "2026-01-05",
+      "game_type": "Regular Season",
+      "away_team": "Phoenix Suns",
+      "home_team": "Houston Rockets",
+      "away_score": 97,
+      "home_score": 100,
+      "winner": "Houston Rockets"
+    },
+    "22500527": {
+      "game_id": "22500527",
+      "game_date": "2026-01-07",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Portland Trail Blazers",
+      "away_score": 102,
+      "home_score": 103,
+      "winner": "Portland Trail Blazers"
+    },
+    "22500540": {
+      "game_id": "22500540",
+      "game_date": "2026-01-09",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Portland Trail Blazers",
+      "away_score": 105,
+      "home_score": 111,
+      "winner": "Portland Trail Blazers"
+    },
+    "22500557": {
+      "game_id": "22500557",
+      "game_date": "2026-01-11",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Sacramento Kings",
+      "away_score": 98,
+      "home_score": 111,
+      "winner": "Sacramento Kings"
+    },
+    "22500565": {
+      "game_id": "22500565",
+      "game_date": "2026-01-13",
+      "game_type": "Regular Season",
+      "away_team": "Chicago Bulls",
+      "home_team": "Houston Rockets",
+      "away_score": 113,
+      "home_score": 119,
+      "winner": "Houston Rockets"
+    },
+    "22500581": {
+      "game_id": "22500581",
+      "game_date": "2026-01-15",
+      "game_type": "Regular Season",
+      "away_team": "Oklahoma City Thunder",
+      "home_team": "Houston Rockets",
+      "away_score": 111,
+      "home_score": 91,
+      "winner": "Oklahoma City Thunder"
+    },
+    "22500591": {
+      "game_id": "22500591",
+      "game_date": "2026-01-16",
+      "game_type": "Regular Season",
+      "away_team": "Minnesota Timberwolves",
+      "home_team": "Houston Rockets",
+      "away_score": 105,
+      "home_score": 110,
+      "winner": "Houston Rockets"
+    },
+    "22500604": {
+      "game_id": "22500604",
+      "game_date": "2026-01-18",
+      "game_type": "Regular Season",
+      "away_team": "New Orleans Pelicans",
+      "home_team": "Houston Rockets",
+      "away_score": 110,
+      "home_score": 119,
+      "winner": "Houston Rockets"
+    },
+    "22500615": {
+      "game_id": "22500615",
+      "game_date": "2026-01-20",
+      "game_type": "Regular Season",
+      "away_team": "San Antonio Spurs",
+      "home_team": "Houston Rockets",
+      "away_score": 106,
+      "home_score": 111,
+      "winner": "Houston Rockets"
+    },
+    "22500628": {
+      "game_id": "22500628",
+      "game_date": "2026-01-22",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Philadelphia 76ers",
+      "away_score": 122,
+      "home_score": 128,
+      "winner": "Philadelphia 76ers"
+    },
+    "22500635": {
+      "game_id": "22500635",
+      "game_date": "2026-01-23",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Detroit Pistons",
+      "away_score": 111,
+      "home_score": 104,
+      "winner": "Houston Rockets"
+    },
+    "22500662": {
+      "game_id": "22500662",
+      "game_date": "2026-01-26",
+      "game_type": "Regular Season",
+      "away_team": "Memphis Grizzlies",
+      "home_team": "Houston Rockets",
+      "away_score": 99,
+      "home_score": 108,
+      "winner": "Houston Rockets"
+    },
+    "22500679": {
+      "game_id": "22500679",
+      "game_date": "2026-01-28",
+      "game_type": "Regular Season",
+      "away_team": "San Antonio Spurs",
+      "home_team": "Houston Rockets",
+      "away_score": 111,
+      "home_score": 99,
+      "winner": "San Antonio Spurs"
+    },
+    "22500682": {
+      "game_id": "22500682",
+      "game_date": "2026-01-29",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Atlanta Hawks",
+      "away_score": 104,
+      "home_score": 86,
+      "winner": "Houston Rockets"
+    },
+    "22500701": {
+      "game_id": "22500701",
+      "game_date": "2026-01-31",
+      "game_type": "Regular Season",
+      "away_team": "Dallas Mavericks",
+      "home_team": "Houston Rockets",
+      "away_score": 107,
+      "home_score": 111,
+      "winner": "Houston Rockets"
+    },
+    "22500713": {
+      "game_id": "22500713",
+      "game_date": "2026-02-02",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Indiana Pacers",
+      "away_score": 118,
+      "home_score": 114,
+      "winner": "Houston Rockets"
+    },
+    "22500728": {
+      "game_id": "22500728",
+      "game_date": "2026-02-04",
+      "game_type": "Regular Season",
+      "away_team": "Boston Celtics",
+      "home_team": "Houston Rockets",
+      "away_score": 114,
+      "home_score": 93,
+      "winner": "Boston Celtics"
+    },
+    "22500737": {
+      "game_id": "22500737",
+      "game_date": "2026-02-05",
+      "game_type": "Regular Season",
+      "away_team": "Charlotte Hornets",
+      "home_team": "Houston Rockets",
+      "away_score": 109,
+      "home_score": 99,
+      "winner": "Charlotte Hornets"
+    },
+    "22500748": {
+      "game_id": "22500748",
+      "game_date": "2026-02-07",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Oklahoma City Thunder",
+      "away_score": 112,
+      "home_score": 106,
+      "winner": "Houston Rockets"
+    },
+    "22500772": {
+      "game_id": "22500772",
+      "game_date": "2026-02-10",
+      "game_type": "Regular Season",
+      "away_team": "LA Clippers",
+      "home_team": "Houston Rockets",
+      "away_score": 95,
+      "home_score": 102,
+      "winner": "Houston Rockets"
+    },
+    "22500782": {
+      "game_id": "22500782",
+      "game_date": "2026-02-11",
+      "game_type": "Regular Season",
+      "away_team": "LA Clippers",
+      "home_team": "Houston Rockets",
+      "away_score": 105,
+      "home_score": 102,
+      "winner": "LA Clippers"
+    },
+    "22500792": {
+      "game_id": "22500792",
+      "game_date": "2026-02-19",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Charlotte Hornets",
+      "away_score": 105,
+      "home_score": 101,
+      "winner": "Houston Rockets"
+    },
+    "22500816": {
+      "game_id": "22500816",
+      "game_date": "2026-02-21",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "New York Knicks",
+      "away_score": 106,
+      "home_score": 108,
+      "winner": "New York Knicks"
+    },
+    "22500830": {
+      "game_id": "22500830",
+      "game_date": "2026-02-23",
+      "game_type": "Regular Season",
+      "away_team": "Utah Jazz",
+      "home_team": "Houston Rockets",
+      "away_score": 105,
+      "home_score": 125,
+      "winner": "Houston Rockets"
+    },
+    "22500845": {
+      "game_id": "22500845",
+      "game_date": "2026-02-25",
+      "game_type": "Regular Season",
+      "away_team": "Sacramento Kings",
+      "home_team": "Houston Rockets",
+      "away_score": 97,
+      "home_score": 128,
+      "winner": "Houston Rockets"
+    },
+    "22500852": {
+      "game_id": "22500852",
+      "game_date": "2026-02-26",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Orlando Magic",
+      "away_score": 113,
+      "home_score": 108,
+      "winner": "Houston Rockets"
+    },
+    "22500864": {
+      "game_id": "22500864",
+      "game_date": "2026-02-28",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Miami Heat",
+      "away_score": 105,
+      "home_score": 115,
+      "winner": "Miami Heat"
+    },
+    "22500879": {
+      "game_id": "22500879",
+      "game_date": "2026-03-02",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Washington Wizards",
+      "away_score": 123,
+      "home_score": 118,
+      "winner": "Houston Rockets"
+    },
+    "22500902": {
+      "game_id": "22500902",
+      "game_date": "2026-03-05",
+      "game_type": "Regular Season",
+      "away_team": "Golden State Warriors",
+      "home_team": "Houston Rockets",
+      "away_score": 115,
+      "home_score": 113,
+      "winner": "Golden State Warriors"
+    },
+    "22500910": {
+      "game_id": "22500910",
+      "game_date": "2026-03-06",
+      "game_type": "Regular Season",
+      "away_team": "Portland Trail Blazers",
+      "home_team": "Houston Rockets",
+      "away_score": 99,
+      "home_score": 106,
+      "winner": "Houston Rockets"
+    },
+    "22500927": {
+      "game_id": "22500927",
+      "game_date": "2026-03-08",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "San Antonio Spurs",
+      "away_score": 120,
+      "home_score": 145,
+      "winner": "San Antonio Spurs"
+    },
+    "22500940": {
+      "game_id": "22500940",
+      "game_date": "2026-03-10",
+      "game_type": "Regular Season",
+      "away_team": "Toronto Raptors",
+      "home_team": "Houston Rockets",
+      "away_score": 99,
+      "home_score": 113,
+      "winner": "Houston Rockets"
+    },
+    "22500950": {
+      "game_id": "22500950",
+      "game_date": "2026-03-11",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Denver Nuggets",
+      "away_score": 93,
+      "home_score": 129,
+      "winner": "Denver Nuggets"
+    },
+    "22500964": {
+      "game_id": "22500964",
+      "game_date": "2026-03-13",
+      "game_type": "Regular Season",
+      "away_team": "New Orleans Pelicans",
+      "home_team": "Houston Rockets",
+      "away_score": 105,
+      "home_score": 107,
+      "winner": "Houston Rockets"
+    },
+    "22500989": {
+      "game_id": "22500989",
+      "game_date": "2026-03-16",
+      "game_type": "Regular Season",
+      "away_team": "Los Angeles Lakers",
+      "home_team": "Houston Rockets",
+      "away_score": 100,
+      "home_score": 92,
+      "winner": "Los Angeles Lakers"
+    },
+    "22501007": {
+      "game_id": "22501007",
+      "game_date": "2026-03-18",
+      "game_type": "Regular Season",
+      "away_team": "Los Angeles Lakers",
+      "home_team": "Houston Rockets",
+      "away_score": 124,
+      "home_score": 116,
+      "winner": "Los Angeles Lakers"
+    },
+    "22501018": {
+      "game_id": "22501018",
+      "game_date": "2026-03-20",
+      "game_type": "Regular Season",
+      "away_team": "Atlanta Hawks",
+      "home_team": "Houston Rockets",
+      "away_score": 95,
+      "home_score": 117,
+      "winner": "Houston Rockets"
+    },
+    "22501027": {
+      "game_id": "22501027",
+      "game_date": "2026-03-21",
+      "game_type": "Regular Season",
+      "away_team": "Miami Heat",
+      "home_team": "Houston Rockets",
+      "away_score": 122,
+      "home_score": 123,
+      "winner": "Houston Rockets"
+    },
+    "22501042": {
+      "game_id": "22501042",
+      "game_date": "2026-03-23",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Chicago Bulls",
+      "away_score": 124,
+      "home_score": 132,
+      "winner": "Chicago Bulls"
+    },
+    "22501058": {
+      "game_id": "22501058",
+      "game_date": "2026-03-25",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Minnesota Timberwolves",
+      "away_score": 108,
+      "home_score": 110,
+      "winner": "Minnesota Timberwolves"
+    },
+    "22501069": {
+      "game_id": "22501069",
+      "game_date": "2026-03-27",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Memphis Grizzlies",
+      "away_score": 119,
+      "home_score": 109,
+      "winner": "Houston Rockets"
+    },
+    "22501088": {
+      "game_id": "22501088",
+      "game_date": "2026-03-29",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "New Orleans Pelicans",
+      "away_score": 134,
+      "home_score": 102,
+      "winner": "Houston Rockets"
+    },
+    "22501102": {
+      "game_id": "22501102",
+      "game_date": "2026-03-31",
+      "game_type": "Regular Season",
+      "away_team": "New York Knicks",
+      "home_team": "Houston Rockets",
+      "away_score": 94,
+      "home_score": 111,
+      "winner": "Houston Rockets"
+    },
+    "22501110": {
+      "game_id": "22501110",
+      "game_date": "2026-04-01",
+      "game_type": "Regular Season",
+      "away_team": "Milwaukee Bucks",
+      "home_team": "Houston Rockets",
+      "away_score": 113,
+      "home_score": 119,
+      "winner": "Houston Rockets"
+    },
+    "22501124": {
+      "game_id": "22501124",
+      "game_date": "2026-04-03",
+      "game_type": "Regular Season",
+      "away_team": "Utah Jazz",
+      "home_team": "Houston Rockets",
+      "away_score": 106,
+      "home_score": 140,
+      "winner": "Houston Rockets"
+    },
+    "22501142": {
+      "game_id": "22501142",
+      "game_date": "2026-04-05",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Golden State Warriors",
+      "away_score": 117,
+      "home_score": 116,
+      "winner": "Houston Rockets"
+    },
+    "22501157": {
+      "game_id": "22501157",
+      "game_date": "2026-04-07",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Phoenix Suns",
+      "away_score": 119,
+      "home_score": 105,
+      "winner": "Houston Rockets"
+    },
+    "22501169": {
+      "game_id": "22501169",
+      "game_date": "2026-04-09",
+      "game_type": "Regular Season",
+      "away_team": "Philadelphia 76ers",
+      "home_team": "Houston Rockets",
+      "away_score": 102,
+      "home_score": 113,
+      "winner": "Houston Rockets"
+    },
+    "22501178": {
+      "game_id": "22501178",
+      "game_date": "2026-04-10",
+      "game_type": "Regular Season",
+      "away_team": "Minnesota Timberwolves",
+      "home_team": "Houston Rockets",
+      "away_score": 136,
+      "home_score": 132,
+      "winner": "Minnesota Timberwolves"
+    },
+    "22501194": {
+      "game_id": "22501194",
+      "game_date": "2026-04-12",
+      "game_type": "Regular Season",
+      "away_team": "Memphis Grizzlies",
+      "home_team": "Houston Rockets",
+      "away_score": 101,
+      "home_score": 132,
+      "winner": "Houston Rockets"
+    },
+    "22501205": {
+      "game_id": "22501205",
+      "game_date": "2025-12-11",
+      "game_type": "Regular Season",
+      "away_team": "LA Clippers",
+      "home_team": "Houston Rockets",
+      "away_score": 113,
+      "home_score": 115,
+      "winner": "Houston Rockets"
+    },
+    "22501225": {
+      "game_id": "22501225",
+      "game_date": "2025-12-15",
+      "game_type": "Regular Season",
+      "away_team": "Houston Rockets",
+      "home_team": "Denver Nuggets",
+      "away_score": 125,
+      "home_score": 128,
+      "winner": "Denver Nuggets"
+    }
+  }
+}

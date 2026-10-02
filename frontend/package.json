@@ -1,12 +1,17 @@
 {
   "name": "nba-rockets-ai-analytics-frontend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "ng serve --host 0.0.0.0 --port 4300",
     "build": "ng build",
+    "demo:sync": "node scripts/generate-demo-catalog.mjs",
+    "demo:validate": "node scripts/validate-demo-catalog.mjs",
     "test": "ng test --watch=false",
-    "test:watch": "ng test"
+    "test:watch": "ng test",
+    "e2e": "playwright test",
+    "lighthouse": "npm run build && node scripts/run-lighthouse.mjs",
+    "pages:prepare": "node scripts/prepare-pages.mjs"
   },
   "dependencies": {
     "@angular/common": "22.2.1",
@@ -22,7 +27,10 @@
     "@angular/build": "22.2.1",
     "@angular/cli": "22.2.1",
     "@angular/compiler-cli": "22.2.1",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
     "jsdom": "27.0.0",
+    "lighthouse": "^13.5.0",
     "typescript": "6.0.2",
     "vitest": "4.1.11"
   }

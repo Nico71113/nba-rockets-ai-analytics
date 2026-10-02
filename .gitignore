@@ -16,6 +16,9 @@ node_modules/
 dist/
 .angular/
 coverage/
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
 
 # Editors and OS
 .DS_Store

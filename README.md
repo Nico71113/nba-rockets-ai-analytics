@@ -8,6 +8,18 @@ returns the exact database result, calculation method, interpreted filters, and
 supporting game IDs. When the snapshot cannot support a claim, the app explains
 which data is missing instead of guessing.
 
+![ArcLine NBA Evidence Lab dashboard](docs/assets/arcline-hero.png)
+
+Try questions such as:
+
+- “How many total points did Houston score in January 2026?”
+- “What was Houston's record when Kevin Durant scored at least 30 points?”
+- “What was Kevin Durant's highest road scoring game?”
+
+### 30-second walkthrough
+
+![ArcLine public showcase walkthrough](docs/assets/arcline-demo.gif)
+
 ## What this project demonstrates
 
 - A reproducible pipeline that downloads, normalizes, and validates a fixed
@@ -23,8 +35,9 @@ which data is missing instead of guessing.
   game results, and source-provided availability notes.
 - An Angular evidence interface with explicit calculations, filters, data
   coverage, specific refusals, row-level game details, and CSV export.
-- Synthetic golden evaluations, a 100-question language suite, full-snapshot
-  integrity checks, and a Docker end-to-end CI smoke test.
+- Exact numerical golden evaluations, a 100-question language suite,
+  full-snapshot integrity checks, browser/mobile/accessibility tests, Lighthouse
+  budgets, and a Docker end-to-end CI smoke test.
 
 ## How answers are produced
 
@@ -46,6 +59,8 @@ local model. Application code then resolves players, teams, and dates against
 the loaded database and runs a tested analytics function. This boundary keeps
 numerical results deterministic and makes routing mistakes visible rather than
 silently turning them into facts.
+
+![ArcLine answer with calculation and source evidence](docs/assets/arcline-evidence.png)
 
 ## Supported questions
 
@@ -112,19 +127,36 @@ local applications. Stop the stack with `make down`.
 ```bash
 make verify
 make language-eval  # while the local stack is running
+make golden-eval    # while the local stack is running
+make quality        # includes browser E2E and Lighthouse
 ```
 
-The current suite contains 49 Python tests and 3 Angular tests. The Python
-suite includes a hand-checkable synthetic snapshot and, when local normalized
-files exist, integrity checks against the full data snapshot. The frontend
-verification also runs a production build; `npm audit` reports zero known
-vulnerabilities at the time of this commit.
+The current suite contains 51 Python tests, 3 Angular tests, and 4 Playwright
+browser tests. The Python suite includes a hand-checkable synthetic snapshot
+and, when local normalized files exist, independently recomputes reference
+values against the full data snapshot. Browser coverage checks answered and
+refusal states, evidence expansion, CSV export, a 390 px mobile viewport, and
+serious accessibility violations. The frontend verification also runs a
+production build; `npm audit` reports zero known vulnerabilities at the time of
+this commit.
 
 The checked-in 100-question report currently passes 100/100 cases across team
 records, player summaries, threshold records, composable metrics, dated game
 results, availability, and unsupported questions. See
 [`evals/reports/latest.json`](evals/reports/latest.json) for the machine-readable
-results.
+results. A separate live 20-case numerical suite passes 20/20 exact expected
+answers, methods, metrics, and coverage fields; see
+[`evals/reports/golden-latest.json`](evals/reports/golden-latest.json).
+
+The latest local Lighthouse run scores 95 Performance, 100 Accessibility, 96
+Best Practices, and 100 SEO. The versioned summary is in
+[`docs/quality/lighthouse-summary.json`](docs/quality/lighthouse-summary.json).
+
+Performance is enforced at 80 or higher to account for machine-level audit
+variance (recent repeated runs ranged from 85 to 95). For the engineering
+decisions, measured outcomes, known limitations, and
+failure cases that shaped the product, read the short
+[`case study`](docs/CASE_STUDY.md).
 
 ## Deployment
 

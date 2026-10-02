@@ -11,7 +11,7 @@ from backend.app.config import get_settings
 settings = get_settings()
 app = FastAPI(
     title="NBA Rockets AI Analytics",
-    version="0.1.0",
+    version="1.0.0",
     description="Evidence-grounded analytics for the 2025-26 NBA season.",
 )
 app.add_middleware(
