@@ -16,33 +16,43 @@ which data is missing instead of guessing.
   constraints.
 - A local Ollama model used only for structured intent classification—never for
   arithmetic or arbitrary SQL generation.
-- Parameterized analytics functions for records, player summaries, threshold
-  splits, game results, and source-provided availability notes.
+- A hybrid router: high-confidence common questions use a fast deterministic
+  parser, while ambiguous supported wording can use the local model.
+- Parameterized analytics functions for records, player summaries, composable
+  totals/averages/highs/lows, home/away and win/loss splits, threshold splits,
+  game results, and source-provided availability notes.
 - An Angular evidence interface with explicit calculations, filters, data
-  coverage, and refusals.
-- Synthetic golden evaluations plus full-snapshot integrity checks.
+  coverage, specific refusals, row-level game details, and CSV export.
+- Synthetic golden evaluations, a 100-question language suite, full-snapshot
+  integrity checks, and a Docker end-to-end CI smoke test.
 
 ## How answers are produced
 
 ```mermaid
 flowchart LR
     Q[Plain-English question] --> G[Deterministic coverage guard]
-    G --> L[Ollama structured intent]
-    L --> R[Database-backed entity and date resolver]
+    G --> D{Safe deterministic parse?}
+    D -->|Yes| R[Database-backed entity and date resolver]
+    D -->|No| L[Ollama structured intent]
+    L --> R
     R --> A[Parameterized SQL analytics]
     A --> E[Answer + calculation + game IDs]
     E --> U[Angular evidence UI]
 ```
 
-The model selects one of a small set of typed intents. Application code then
-resolves players, teams, and dates against the loaded database and runs a tested
-analytics function. This boundary keeps numerical results deterministic and
-makes model mistakes visible rather than silently turning them into facts.
+The router selects one of a small set of typed intents. Common, unambiguous
+questions are parsed deterministically; other supported wording can use the
+local model. Application code then resolves players, teams, and dates against
+the loaded database and runs a tested analytics function. This boundary keeps
+numerical results deterministic and makes routing mistakes visible rather than
+silently turning them into facts.
 
 ## Supported questions
 
 - Team record over a season, month, or explicit date range.
 - Player totals and per-game averages.
+- Registered player or team statistics using total, average, maximum, or
+  minimum, optionally split by home/away and wins/losses.
 - Team record when a player reaches a box-score threshold.
 - Final score and winner for a dated matchup.
 - Whether a player appeared in a game and any source-provided availability
@@ -101,13 +111,27 @@ local applications. Stop the stack with `make down`.
 
 ```bash
 make verify
+make language-eval  # while the local stack is running
 ```
 
-The current suite contains 42 Python tests and 2 Angular tests. The Python
+The current suite contains 49 Python tests and 3 Angular tests. The Python
 suite includes a hand-checkable synthetic snapshot and, when local normalized
 files exist, integrity checks against the full data snapshot. The frontend
 verification also runs a production build; `npm audit` reports zero known
 vulnerabilities at the time of this commit.
+
+The checked-in 100-question report currently passes 100/100 cases across team
+records, player summaries, threshold records, composable metrics, dated game
+results, availability, and unsupported questions. See
+[`evals/reports/latest.json`](evals/reports/latest.json) for the machine-readable
+results.
+
+## Deployment
+
+The repository ships production containers and documents two deployment modes:
+a private local-first stack with Ollama, and a hosted portfolio stack where the
+database is restored from the reproducible pipeline and the intent-model policy
+is chosen explicitly. See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
 ## Repository data policy
 

@@ -1,7 +1,8 @@
 PYTHON ?= .venv/bin/python
 
 .PHONY: install data-download data-normalize data-validate migrate data-load data \
-	test lint frontend-install frontend-test frontend-build frontend-audit verify up down
+	test lint language-eval frontend-install frontend-test frontend-build frontend-audit \
+	verify up down
 
 install:
 	python3 -m venv .venv
@@ -31,6 +32,9 @@ test:
 
 lint:
 	$(PYTHON) -m ruff check .
+
+language-eval:
+	$(PYTHON) -m evals.run_language_eval
 
 frontend-install:
 	cd frontend && npm ci

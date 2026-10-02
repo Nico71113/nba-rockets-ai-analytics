@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.analytics.service import (
     game_result,
+    metric_summary,
     player_availability,
     player_period_summary,
     team_record,
@@ -19,6 +20,10 @@ SessionDependency = Annotated[Session, Depends(get_session)]
 PositiveId = Annotated[int, Query(gt=0)]
 NonnegativeThreshold = Annotated[int, Query(ge=0)]
 GameType = Literal["Regular Season", "Emirates NBA Cup", "Play-in Tournament", "Playoffs"]
+EntityType = Literal["player", "team"]
+Aggregation = Literal["sum", "average", "maximum", "minimum"]
+Location = Literal["all", "home", "away"]
+Outcome = Literal["all", "win", "loss"]
 
 
 def _validate_dates(start_date: date, end_date: date) -> None:
@@ -61,6 +66,36 @@ def player_summary_endpoint(
     )
 
 
+@router.get("/metric-summary", response_model=AnalyticsResult)
+def metric_summary_endpoint(
+    entity_type: EntityType,
+    entity_id: PositiveId,
+    stat: str,
+    aggregation: Aggregation,
+    start_date: date,
+    end_date: date,
+    session: SessionDependency,
+    team_id: PositiveId | None = None,
+    game_type: GameType = "Regular Season",
+    location: Location = "all",
+    outcome: Outcome = "all",
+) -> AnalyticsResult:
+    _validate_dates(start_date, end_date)
+    return metric_summary(
+        session,
+        entity_type=entity_type,
+        entity_id=entity_id,
+        team_id=team_id,
+        stat=stat,
+        aggregation=aggregation,
+        start_date=start_date,
+        end_date=end_date,
+        game_type=game_type,
+        location=location,
+        outcome=outcome,
+    )
+
+
 @router.get("/team-record", response_model=AnalyticsResult)
 def team_record_endpoint(
     team_id: PositiveId,
@@ -68,6 +103,7 @@ def team_record_endpoint(
     end_date: date,
     session: SessionDependency,
     game_type: GameType = "Regular Season",
+    location: Location = "all",
 ) -> AnalyticsResult:
     _validate_dates(start_date, end_date)
     return team_record(
@@ -76,6 +112,7 @@ def team_record_endpoint(
         start_date=start_date,
         end_date=end_date,
         game_type=game_type,
+        location=location,
     )
 
 

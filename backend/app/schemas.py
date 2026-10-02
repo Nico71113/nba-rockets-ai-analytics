@@ -40,5 +40,23 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     question: str
     intent: str
+    routing_source: Literal[
+        "local_model",
+        "deterministic",
+        "deterministic_fallback",
+        "coverage_guard",
+    ]
     interpretation: dict[str, Any] = Field(default_factory=dict)
     result: AnalyticsResult
+    elapsed_ms: int | None = None
+
+
+class GameEvidenceRow(BaseModel):
+    game_id: str
+    game_date: date
+    game_type: str
+    away_team: str
+    home_team: str
+    away_score: int
+    home_score: int
+    winner: str

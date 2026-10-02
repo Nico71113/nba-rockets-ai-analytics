@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 
 import { AnalyticsApiService } from './analytics-api.service';
-import { CoverageResponse, QueryResponse } from './models';
+import { CoverageResponse, Evidence, GameEvidenceRow, QueryResponse } from './models';
 
 interface SuggestedQuestion {
   label: string;
@@ -47,6 +47,14 @@ export class AppComponent implements OnInit {
       question: "What was Houston's record when Kevin Durant made at least 4 three-pointers?"
     },
     {
+      label: 'January scoring',
+      question: 'How many total points did Houston score in January 2026?'
+    },
+    {
+      label: 'Road scoring high',
+      question: "What was Kevin Durant's highest points total on the road?"
+    },
+    {
       label: 'Test a limitation',
       question: 'Which defender guarded Kevin Durant most often this season?'
     }
@@ -55,6 +63,10 @@ export class AppComponent implements OnInit {
   question = this.suggestions[0].question;
   coverage: CoverageResponse | null = null;
   response: QueryResponse | null = null;
+  evidenceRows: GameEvidenceRow[] = [];
+  evidenceLoading = false;
+  evidenceError = '';
+  loadedEvidenceKey = '';
   loadingCoverage = true;
   asking = false;
   apiError = '';
@@ -101,6 +113,9 @@ export class AppComponent implements OnInit {
     this.asking = true;
     this.apiError = '';
     this.response = null;
+    this.evidenceRows = [];
+    this.evidenceError = '';
+    this.loadedEvidenceKey = '';
 
     this.api
       .ask(cleanQuestion)
@@ -158,6 +173,65 @@ export class AppComponent implements OnInit {
       return value ? 'Yes' : 'No';
     }
     return String(value).replaceAll('_', ' ');
+  }
+
+  loadEvidence(evidence: Evidence): void {
+    if (!evidence.game_ids.length || this.evidenceLoading) {
+      return;
+    }
+    const evidenceKey = evidence.game_ids.join(',');
+    if (this.loadedEvidenceKey === evidenceKey) {
+      return;
+    }
+    this.evidenceLoading = true;
+    this.evidenceError = '';
+    this.api
+      .getGames(evidence.game_ids)
+      .pipe(
+        finalize(() => {
+          this.evidenceLoading = false;
+          this.changeDetector.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (rows) => {
+          this.evidenceRows = rows;
+          this.loadedEvidenceKey = evidenceKey;
+          this.changeDetector.markForCheck();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.evidenceError = this.describeError(error);
+          this.changeDetector.markForCheck();
+        }
+      });
+  }
+
+  downloadEvidenceCsv(): void {
+    if (!this.evidenceRows.length) {
+      return;
+    }
+    const columns: (keyof GameEvidenceRow)[] = [
+      'game_id',
+      'game_date',
+      'game_type',
+      'away_team',
+      'away_score',
+      'home_team',
+      'home_score',
+      'winner'
+    ];
+    const escape = (value: string | number): string =>
+      `"${String(value).replaceAll('"', '""')}"`;
+    const csv = [
+      columns.join(','),
+      ...this.evidenceRows.map((row) => columns.map((column) => escape(row[column])).join(','))
+    ].join('\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'arcline-evidence.csv';
+    link.click();
+    URL.revokeObjectURL(url);
   }
 
   private describeError(error: HttpErrorResponse): string {

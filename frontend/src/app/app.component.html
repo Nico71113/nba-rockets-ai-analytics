@@ -173,7 +173,11 @@
                   <span class="method-dot"></span>
                   {{ response.result.method === 'refusal' ? 'Honest refusal' : response.result.method + ' answer' }}
                 </span>
-                <span class="intent-label">Intent: {{ response.intent.replaceAll('_', ' ') }}</span>
+                <span class="intent-label">
+                  {{ response.routing_source.replaceAll('_', ' ') }} ·
+                  {{ response.elapsed_ms ?? 0 }} ms ·
+                  {{ response.intent.replaceAll('_', ' ') }}
+                </span>
               </div>
 
               <h2 #answerHeading tabindex="-1">{{ response.result.answer }}</h2>
@@ -273,8 +277,53 @@
                           } @else {
                             <p>No qualifying game rows.</p>
                           }
+                          @if (evidence.game_ids.length) {
+                            <div class="evidence-actions">
+                              <button
+                                type="button"
+                                (click)="loadEvidence(evidence)"
+                                [disabled]="evidenceLoading"
+                              >
+                                {{ evidenceLoading ? 'Loading rows…' : 'Load game details' }}
+                              </button>
+                              @if (evidenceRows.length) {
+                                <button type="button" (click)="downloadEvidenceCsv()">
+                                  Export CSV
+                                </button>
+                              }
+                            </div>
+                          }
                         </div>
                       </div>
+                      @if (evidenceError) {
+                        <p class="evidence-error" role="alert">{{ evidenceError }}</p>
+                      }
+                      @if (evidenceRows.length) {
+                        <div class="evidence-table-wrap">
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Date</th>
+                                <th>Matchup</th>
+                                <th>Score</th>
+                                <th>Winner</th>
+                                <th>Game ID</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              @for (row of evidenceRows; track row.game_id) {
+                                <tr>
+                                  <td>{{ formatDate(row.game_date) }}</td>
+                                  <td>{{ row.away_team }} at {{ row.home_team }}</td>
+                                  <td>{{ row.away_score }}–{{ row.home_score }}</td>
+                                  <td>{{ row.winner }}</td>
+                                  <td><code>{{ row.game_id }}</code></td>
+                                </tr>
+                              }
+                            </tbody>
+                          </table>
+                        </div>
+                      }
                     </details>
                   }
                 </div>

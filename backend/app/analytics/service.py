@@ -18,6 +18,24 @@ SUPPORTED_PLAYER_STATS = {
     "three_pointers_made": PlayerGameStat.three_pointers_made,
 }
 
+SUPPORTED_TEAM_STATS = {
+    "points": TeamGameStat.team_score,
+    "opponent_points": TeamGameStat.opponent_score,
+    "assists": TeamGameStat.assists,
+    "rebounds": TeamGameStat.total_rebounds,
+    "offensive_rebounds": TeamGameStat.offensive_rebounds,
+    "defensive_rebounds": TeamGameStat.defensive_rebounds,
+    "steals": TeamGameStat.steals,
+    "blocks": TeamGameStat.blocks,
+    "turnovers": TeamGameStat.turnovers,
+    "three_pointers_made": TeamGameStat.three_pointers_made,
+    "point_margin": TeamGameStat.plus_minus,
+}
+
+SUPPORTED_AGGREGATIONS = {"sum", "average", "maximum", "minimum"}
+SUPPORTED_LOCATIONS = {"all", "home", "away"}
+SUPPORTED_OUTCOMES = {"all", "win", "loss"}
+
 
 def _round(value: float | None, digits: int = 1) -> float | None:
     return round(float(value), digits) if value is not None else None
@@ -31,6 +49,183 @@ def _player_name(session: Session, player_id: int) -> str:
 def _team_name(session: Session, team_id: int) -> str:
     team = session.get(Team, team_id)
     return team.name if team else f"Team {team_id}"
+
+
+def metric_summary(
+    session: Session,
+    *,
+    entity_type: str,
+    entity_id: int,
+    team_id: int | None = None,
+    stat: str,
+    aggregation: str,
+    start_date: date,
+    end_date: date,
+    game_type: str = "Regular Season",
+    location: str = "all",
+    outcome: str = "all",
+) -> AnalyticsResult:
+    if aggregation not in SUPPORTED_AGGREGATIONS:
+        return AnalyticsResult(
+            method="refusal",
+            answer=f"The aggregation {aggregation!r} is not supported.",
+            coverage_note="Supported aggregations: sum, average, maximum, minimum.",
+        )
+    if location not in SUPPORTED_LOCATIONS or outcome not in SUPPORTED_OUTCOMES:
+        return AnalyticsResult(
+            method="refusal",
+            answer="The requested split is not supported.",
+            coverage_note="Location can be all/home/away and outcome can be all/win/loss.",
+        )
+
+    if entity_type == "player":
+        entity = session.get(Player, entity_id)
+        model = PlayerGameStat
+        registry = SUPPORTED_PLAYER_STATS
+        entity_name = (
+            f"{entity.first_name} {entity.last_name}" if entity else f"Player {entity_id}"
+        )
+        conditions = [
+            PlayerGameStat.player_id == entity_id,
+            PlayerGameStat.did_play.is_(True),
+        ]
+        if team_id is not None:
+            if session.get(Team, team_id) is None:
+                return AnalyticsResult(
+                    method="refusal",
+                    answer=f"Team {team_id} is not present in the loaded snapshot.",
+                    coverage_note="Choose a team returned by this snapshot.",
+                )
+            conditions.append(PlayerGameStat.team_id == team_id)
+    elif entity_type == "team":
+        entity = session.get(Team, entity_id)
+        model = TeamGameStat
+        registry = SUPPORTED_TEAM_STATS
+        entity_name = entity.name if entity else f"Team {entity_id}"
+        conditions = [TeamGameStat.team_id == entity_id]
+    else:
+        return AnalyticsResult(
+            method="refusal",
+            answer=f"The entity type {entity_type!r} is not supported.",
+            coverage_note="Choose either a player or a team.",
+        )
+
+    if entity is None:
+        return AnalyticsResult(
+            method="refusal",
+            answer=f"{entity_name} is not present in the loaded snapshot.",
+            coverage_note="Choose an entity returned by this snapshot.",
+        )
+    column = registry.get(stat)
+    if column is None:
+        supported = ", ".join(sorted(registry))
+        return AnalyticsResult(
+            method="refusal",
+            answer=f"The {entity_type} stat {stat!r} is not supported.",
+            coverage_note=f"Supported {entity_type} stats: {supported}.",
+        )
+
+    conditions.extend(
+        [
+            Game.game_date >= start_date,
+            Game.game_date <= end_date,
+            Game.game_type == game_type,
+        ]
+    )
+    if location != "all":
+        conditions.append(model.is_home.is_(location == "home"))
+    if outcome != "all":
+        conditions.append(model.won.is_(outcome == "win"))
+
+    aggregate_expression = {
+        "sum": func.sum(column),
+        "average": func.avg(column),
+        "maximum": func.max(column),
+        "minimum": func.min(column),
+    }[aggregation]
+    games, raw_value = session.execute(
+        select(func.count(model.game_id), aggregate_expression)
+        .join(Game, Game.game_id == model.game_id)
+        .where(*conditions)
+    ).one()
+    games = int(games or 0)
+    if games == 0 or raw_value is None:
+        return AnalyticsResult(
+            method="refusal",
+            answer=f"No qualifying games were found for {entity_name}.",
+            coverage_note=(
+                "The entity exists, but no rows match the requested dates, game type, "
+                "location, and outcome filters."
+            ),
+        )
+
+    value: int | float
+    if aggregation in {"sum", "maximum", "minimum"}:
+        value = int(raw_value)
+    else:
+        value = _round(raw_value) or 0.0
+    game_ids = list(
+        session.scalars(
+            select(model.game_id)
+            .join(Game, Game.game_id == model.game_id)
+            .where(*conditions)
+            .order_by(Game.game_date, model.game_id)
+        )
+    )
+    split_parts = []
+    if location == "home":
+        split_parts.append("at home")
+    elif location == "away":
+        split_parts.append("on the road")
+    if outcome == "win":
+        split_parts.append("in wins")
+    elif outcome == "loss":
+        split_parts.append("in losses")
+    split = f" {' '.join(split_parts)}" if split_parts else ""
+    stat_label = stat.replace("_", " ")
+    verb = {
+        "sum": f"recorded {value} total {stat_label}",
+        "average": f"averaged {value} {stat_label} per game",
+        "maximum": f"had a single-game high of {value} {stat_label}",
+        "minimum": f"had a single-game low of {value} {stat_label}",
+    }[aggregation]
+    return AnalyticsResult(
+        method="sql",
+        answer=(
+            f"{entity_name} {verb}{split} across {games} qualifying games "
+            f"from {start_date} through {end_date}."
+        ),
+        metrics={
+            "games": games,
+            "value": value,
+            "stat": stat,
+            "aggregation": aggregation,
+            "location": location,
+            "outcome": outcome,
+        },
+        calculation=[
+            f"Filter {entity_type}-game rows by date, game type, location, and outcome.",
+            f"Apply the registered {aggregation} operation to the {stat_label} field.",
+        ],
+        evidence=[
+            Evidence(
+                source_table=f"{entity_type}_game_stats + games",
+                game_ids=game_ids,
+                filters={
+                    "entity_type": entity_type,
+                    "entity_id": entity_id,
+                    "team_id": team_id,
+                    "stat": stat,
+                    "aggregation": aggregation,
+                    "start_date": start_date.isoformat(),
+                    "end_date": end_date.isoformat(),
+                    "game_type": game_type,
+                    "location": location,
+                    "outcome": outcome,
+                },
+            )
+        ],
+    )
 
 
 def player_period_summary(
@@ -177,6 +372,7 @@ def team_record(
     start_date: date,
     end_date: date,
     game_type: str = "Regular Season",
+    location: str = "all",
 ) -> AnalyticsResult:
     if session.get(Team, team_id) is None:
         return AnalyticsResult(
@@ -190,6 +386,14 @@ def team_record(
         Game.game_date <= end_date,
         Game.game_type == game_type,
     ]
+    if location not in SUPPORTED_LOCATIONS:
+        return AnalyticsResult(
+            method="refusal",
+            answer=f"The location split {location!r} is not supported.",
+            coverage_note="Location can be all, home, or away.",
+        )
+    if location != "all":
+        conditions.append(TeamGameStat.is_home.is_(location == "home"))
     games, wins = session.execute(
         select(
             func.count(TeamGameStat.game_id),
@@ -218,7 +422,11 @@ def team_record(
         )
     return AnalyticsResult(
         method="sql",
-        answer=f"{name} went {wins}-{losses} from {start_date} through {end_date}.",
+        answer=(
+            f"{name} went {wins}-{losses}"
+            f"{' at home' if location == 'home' else ' on the road' if location == 'away' else ''} "
+            f"from {start_date} through {end_date}."
+        ),
         metrics={"games": games, "wins": wins, "losses": losses},
         calculation=["Count qualifying team-game rows and sum the rows marked won=true."],
         evidence=[
@@ -230,6 +438,7 @@ def team_record(
                     "start_date": start_date.isoformat(),
                     "end_date": end_date.isoformat(),
                     "game_type": game_type,
+                    "location": location,
                 },
             )
         ],

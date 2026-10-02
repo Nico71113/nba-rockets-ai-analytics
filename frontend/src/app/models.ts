@@ -19,8 +19,21 @@ export interface AnalyticsResult {
 export interface QueryResponse {
   question: string;
   intent: string;
+  routing_source: 'local_model' | 'deterministic' | 'deterministic_fallback' | 'coverage_guard';
   interpretation: Record<string, unknown>;
   result: AnalyticsResult;
+  elapsed_ms: number | null;
+}
+
+export interface GameEvidenceRow {
+  game_id: string;
+  game_date: string;
+  game_type: string;
+  away_team: string;
+  home_team: string;
+  away_score: number;
+  home_score: number;
+  winner: string;
 }
 
 export interface CoverageResponse {

@@ -15,8 +15,10 @@ flowchart TD
     C --> D[Schema and cross-table validation]
     D --> E[(PostgreSQL)]
     Q[User question] --> F[Coverage guard]
-    F --> G[Ollama structured intent]
-    G --> H[Deterministic entity/date resolution]
+    F --> G{Safe deterministic parse?}
+    G -->|Yes| H[Deterministic entity/date resolution]
+    G -->|No| L[Ollama structured intent]
+    L --> H
     E --> I[Parameterized analytics functions]
     H --> I
     I --> J[Evidence response contract]
@@ -35,10 +37,11 @@ Every answer exposes:
 - a specific missing-data explanation when the answer is unsupported.
 
 The language model does not calculate aggregates or execute arbitrary SQL.
-Exact values come from parameterized, tested analytics functions; the model
-only selects a supported intent. Known coverage gaps are rejected before the
-model is called, and team/player/date resolution is checked against the
-database before any analytics function runs.
+Exact values come from parameterized, tested analytics functions. A
+deterministic parser handles common high-confidence forms; the model only
+selects a supported intent when wording is ambiguous. Known coverage gaps are
+rejected before the model is called, and team/player/date resolution is checked
+against the database before any analytics function runs.
 
 ## Reliability boundaries
 
@@ -48,5 +51,7 @@ database before any analytics function runs.
   fixed snapshot transactionally.
 - The UI shows the canonical filters actually used, rather than untrusted
   intermediate fields returned by the intent model.
+- Each response reports its routing source and elapsed time, and game IDs can
+  be expanded into dated matchup/score rows or exported as CSV.
 - A missing player row is not treated as evidence of an injury. Availability
   reasons are returned only when the source includes a comment.

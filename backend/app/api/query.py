@@ -1,4 +1,5 @@
 from functools import lru_cache
+from time import perf_counter
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
@@ -21,8 +22,11 @@ def get_intent_router() -> OllamaIntentRouter:
 
 @router.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest, session: SessionDependency) -> QueryResponse:
-    return answer_question(
+    started_at = perf_counter()
+    response = answer_question(
         session,
         question=request.question.strip(),
         router=get_intent_router(),
     )
+    response.elapsed_ms = max(1, round((perf_counter() - started_at) * 1000))
+    return response

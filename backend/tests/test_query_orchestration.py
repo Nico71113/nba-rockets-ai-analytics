@@ -89,16 +89,29 @@ def test_unresolved_player_returns_specific_refusal(eval_session):
     assert "No loaded player matches" in response.result.answer
 
 
-def test_router_failure_is_visible_instead_of_fabricating(eval_session):
+def test_router_failure_uses_safe_deterministic_fallback(eval_session):
     response = answer_question(
         eval_session,
         question="What was Houston's record?",
         router=BrokenRouter(),
     )
 
+    assert response.intent == "team_record"
+    assert response.routing_source == "deterministic"
+    assert response.result.method == "sql"
+    assert response.result.metrics == {"games": 4, "wins": 2, "losses": 2}
+
+
+def test_router_failure_refuses_when_rules_are_not_sufficient(eval_session):
+    response = answer_question(
+        eval_session,
+        question="Tell me something interesting about basketball.",
+        router=BrokenRouter(),
+    )
+
     assert response.intent == "router_unavailable"
     assert response.result.method == "refusal"
-    assert "local language model is unavailable" in response.result.answer
+    assert "deterministic parser could not safely interpret" in response.result.answer
 
 
 def test_known_tracking_question_returns_the_real_coverage_gap(eval_session):
@@ -129,3 +142,31 @@ def test_supported_question_recovers_entities_and_date_when_model_omits_them(eva
     assert response.interpretation["team_name"] == "Houston Rockets"
     assert response.interpretation["opponent_name"] == "Golden State Warriors"
     assert response.interpretation["game_date"] == "2026-01-05"
+
+
+def test_metric_question_overrides_bad_model_route_with_registered_plan(eval_session):
+    response = answer_question(
+        eval_session,
+        question="How many total points did Houston score in the regular season?",
+        router=FakeRouter(ParsedIntent(intent="unsupported", reason="bad model route")),
+    )
+
+    assert response.intent == "metric_summary"
+    assert response.routing_source == "deterministic"
+    assert response.result.method == "sql"
+    assert response.result.metrics["value"] == 431
+    assert response.interpretation["aggregation"] == "sum"
+    assert response.interpretation["stat"] == "points"
+
+
+def test_player_metric_combines_maximum_and_road_split(eval_session):
+    response = answer_question(
+        eval_session,
+        question="What was Kevin Durant's highest points total on the road?",
+        router=FakeRouter(ParsedIntent(intent="player_summary")),
+    )
+
+    assert response.intent == "metric_summary"
+    assert response.result.metrics["value"] == 30
+    assert response.result.metrics["games"] == 2
+    assert response.interpretation["location"] == "away"

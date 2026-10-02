@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.analytics.service import (
     game_result,
+    metric_summary,
     player_availability,
     player_period_summary,
     team_record,
@@ -27,14 +28,26 @@ TEAM_ALIASES = {
     "lac": "la clippers",
     "sas": "san antonio spurs",
 }
+PLAYER_ALIASES = {"kd": "kevin durant"}
 STAT_TERMS = {
-    "points": ("point", "points", "pts", "scored"),
+    "opponent_points": ("opponent points", "points allowed", "opponents scored"),
+    "offensive_rebounds": ("offensive rebound", "offensive rebounds"),
+    "defensive_rebounds": ("defensive rebound", "defensive rebounds"),
+    "point_margin": ("point margin", "scoring margin", "margin of victory"),
+    "points": ("point", "points", "pts", "scored", "scoring"),
     "assists": ("assist", "assists", "ast"),
     "rebounds": ("rebound", "rebounds", "reb"),
     "steals": ("steal", "steals"),
     "blocks": ("block", "blocks"),
     "turnovers": ("turnover", "turnovers"),
     "three_pointers_made": ("three pointer", "three pointers", "3pm", "threes"),
+}
+
+AGGREGATION_TERMS = {
+    "average": ("average", "averaged", "per game", "avg"),
+    "maximum": ("maximum", "highest", "most", "season high", "game high"),
+    "minimum": ("minimum", "lowest", "least", "season low", "game low"),
+    "sum": ("total", "combined", "how many"),
 }
 MONTHS = {
     "january": 1,
@@ -88,6 +101,11 @@ UNSUPPORTED_QUESTION_RULES = (
 
 def _normalized(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", value.casefold()).strip()
+
+
+def _term_position(normalized: str, term: str) -> int | None:
+    match = re.search(rf"\b{re.escape(term)}\b", normalized)
+    return match.start() if match else None
 
 
 def _resolve_team(session: Session, value: str | None) -> tuple[Team | None, str | None]:
@@ -169,8 +187,143 @@ def _coverage_dates(session: Session, game_type: str) -> tuple[date | None, date
 def _stat_from_question(question: str) -> str | None:
     normalized = _normalized(question)
     for stat, terms in STAT_TERMS.items():
-        if any(term in normalized for term in terms):
+        if any(_term_position(normalized, term) is not None for term in terms):
             return stat
+    return None
+
+
+def _aggregation_from_question(question: str) -> str | None:
+    normalized = _normalized(question)
+    for aggregation, terms in AGGREGATION_TERMS.items():
+        if any(_term_position(normalized, term) is not None for term in terms):
+            return aggregation
+    return None
+
+
+def _threshold_from_question(question: str) -> int | None:
+    normalized = _normalized(question)
+    patterns = (
+        r"(?:at least|minimum of|over|more than)\s+(\d+)",
+        r"\b(\d+)\s*(?:plus|points?|pts|assists?|rebounds?|steals?|blocks?|turnovers?|threes?)\b",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, normalized)
+        if match:
+            return int(match.group(1))
+    plus_match = re.search(r"\b(\d+)\+", question)
+    return int(plus_match.group(1)) if plus_match else None
+
+
+def _location_from_question(question: str) -> str:
+    normalized = _normalized(question)
+    if any(
+        term in normalized
+        for term in ("on the road", "road game", "road games", "road record", "away")
+    ):
+        return "away"
+    if any(term in normalized for term in ("at home", "home game", "home games", "home record")):
+        return "home"
+    return "all"
+
+
+def _outcome_from_question(question: str) -> str:
+    normalized = _normalized(question)
+    if any(term in normalized for term in ("in wins", "games they won", "victories")):
+        return "win"
+    if any(term in normalized for term in ("in losses", "games they lost", "defeats")):
+        return "loss"
+    return "all"
+
+
+def _game_type_from_question(question: str) -> str:
+    normalized = _normalized(question)
+    if "playoff" in normalized:
+        return "Playoffs"
+    if "play in" in normalized:
+        return "Play-in Tournament"
+    if "nba cup" in normalized or "emirates cup" in normalized:
+        return "Emirates NBA Cup"
+    return "Regular Season"
+
+
+def _rule_based_intent(question: str) -> ParsedIntent | None:
+    normalized = _normalized(question)
+    common = {
+        "game_type": _game_type_from_question(question),
+        "location": _location_from_question(question),
+        "outcome": _outcome_from_question(question),
+    }
+    explicit_date = _explicit_date_from_question(question)
+    if any(
+        term in normalized
+        for term in (
+            "why did",
+            "why was",
+            "miss the game",
+            "did not play",
+            "did play",
+            "availability",
+            "was out",
+        )
+    ):
+        return ParsedIntent(
+            intent="player_availability",
+            game_date=explicit_date.isoformat() if explicit_date else None,
+            **common,
+        )
+    if any(term in normalized for term in ("final score", "who won", "game result")):
+        return ParsedIntent(
+            intent="game_result",
+            game_date=explicit_date.isoformat() if explicit_date else None,
+            **common,
+        )
+
+    if any(
+        term in normalized
+        for term in (
+            "scoring rebounding and assist averages",
+            "points rebounds and assists",
+            "box score summary",
+        )
+    ):
+        return ParsedIntent(intent="player_summary", **common)
+
+    stat = _stat_from_question(question)
+    threshold = _threshold_from_question(question)
+    if "record" in normalized and stat and threshold is not None:
+        return ParsedIntent(
+            intent="threshold_record",
+            stat=stat,
+            threshold=threshold,
+            **common,
+        )
+    if "record" in normalized:
+        return ParsedIntent(intent="team_record", **common)
+
+    aggregation = _aggregation_from_question(question)
+    if stat and aggregation:
+        return ParsedIntent(
+            intent="metric_summary",
+            stat=stat,
+            aggregation=aggregation,
+            **common,
+        )
+    if any(
+        term in normalized
+        for term in (
+            "what did",
+            "what were",
+            "player summary",
+            "basic averages",
+            "basic numbers",
+            "regular season summary",
+            "summarize",
+            "perform across",
+            "box score production",
+            "scoring rebounding and assist averages",
+        )
+    ):
+        return ParsedIntent(intent="player_summary", **common)
     return None
 
 
@@ -202,31 +355,115 @@ def _explicit_date_from_question(question: str) -> date | None:
 def _teams_in_question(session: Session, question: str) -> list[Team]:
     normalized = _normalized(question)
     matches: list[tuple[int, Team]] = []
-    for team in session.scalars(select(Team).order_by(Team.name)):
+    teams = list(session.scalars(select(Team).order_by(Team.name)))
+    for team in teams:
         name = _normalized(team.name)
         nickname = name.split()[-1]
+        city = " ".join(name.split()[:-1])
         positions = [
             position
-            for term in (name, nickname)
-            if (position := normalized.find(term)) >= 0
+            for term in (name, nickname, city)
+            if (position := _term_position(normalized, term)) is not None
         ]
         if positions:
             matches.append((min(positions), team))
+    for alias, canonical_name in TEAM_ALIASES.items():
+        match = re.search(rf"\b{re.escape(alias)}\b", normalized)
+        if match is None:
+            continue
+        team = next(
+            (
+                candidate
+                for candidate in teams
+                if _normalized(candidate.name) == canonical_name
+            ),
+            None,
+        )
+        if team is not None and all(existing.team_id != team.team_id for _, existing in matches):
+            matches.append((match.start(), team))
     return [team for _, team in sorted(matches, key=lambda item: item[0])]
+
+
+def _players_in_question(session: Session, question: str) -> list[Player]:
+    normalized = _normalized(question)
+    matches: list[tuple[int, Player]] = []
+    players = list(
+        session.scalars(select(Player).order_by(Player.last_name, Player.first_name))
+    )
+    for player in players:
+        full_name = _normalized(f"{player.first_name} {player.last_name}")
+        last_name = _normalized(player.last_name)
+        positions = [
+            position
+            for term in (full_name, last_name)
+            if len(term) >= 4 and (position := _term_position(normalized, term)) is not None
+        ]
+        if positions:
+            matches.append((min(positions), player))
+    for alias, canonical_name in PLAYER_ALIASES.items():
+        match = re.search(rf"\b{re.escape(alias)}\b", normalized)
+        if match is None:
+            continue
+        player = next(
+            (
+                candidate
+                for candidate in players
+                if _normalized(f"{candidate.first_name} {candidate.last_name}")
+                == canonical_name
+            ),
+            None,
+        )
+        if player is not None and all(
+            existing.player_id != player.player_id for _, existing in matches
+        ):
+            matches.append((match.start(), player))
+    return [player for _, player in sorted(matches, key=lambda item: item[0])]
 
 
 def _known_coverage_gap(question: str) -> str | None:
     normalized = question.casefold()
+    if "live" in normalized and "score" in normalized:
+        return "This project uses a fixed 2025-26 snapshot and has no live-data feed."
     for terms, reason in UNSUPPORTED_QUESTION_RULES:
         if any(term in normalized for term in terms):
             return reason
     return None
 
 
-def _refusal(question: str, intent: str, parsed: ParsedIntent, reason: str) -> QueryResponse:
+def _deterministic_is_complete(
+    parsed: ParsedIntent,
+    *,
+    mentioned_teams: list[Team],
+    mentioned_players: list[Player],
+) -> bool:
+    if parsed.intent == "team_record":
+        return bool(mentioned_teams)
+    if parsed.intent == "threshold_record":
+        return bool(mentioned_teams and mentioned_players and parsed.threshold and parsed.stat)
+    if parsed.intent == "player_summary":
+        return bool(mentioned_players)
+    if parsed.intent == "metric_summary":
+        return bool((mentioned_players or mentioned_teams) and parsed.stat and parsed.aggregation)
+    if parsed.intent in {"game_result", "player_availability"}:
+        entities_ready = len(mentioned_teams) >= 2
+        if parsed.intent == "player_availability":
+            entities_ready = entities_ready and bool(mentioned_players)
+        return bool(parsed.game_date and entities_ready)
+    return False
+
+
+def _refusal(
+    question: str,
+    intent: str,
+    parsed: ParsedIntent,
+    reason: str,
+    *,
+    routing_source: str = "local_model",
+) -> QueryResponse:
     return QueryResponse(
         question=question,
         intent=intent,
+        routing_source=routing_source,
         interpretation=parsed.model_dump(exclude_none=True),
         result=AnalyticsResult(method="refusal", answer=reason, coverage_note=reason),
     )
@@ -241,33 +478,76 @@ def answer_question(
     coverage_gap = _known_coverage_gap(question)
     if coverage_gap:
         parsed = ParsedIntent(intent="unsupported", reason=coverage_gap)
-        return _refusal(question, parsed.intent, parsed, coverage_gap)
-
-    try:
-        parsed = router.parse(question)
-    except IntentRouterError as error:
-        fallback = ParsedIntent(intent="unsupported", reason=str(error))
         return _refusal(
             question,
-            "router_unavailable",
-            fallback,
-            "The local language model is unavailable, so the question could not be interpreted. "
-            f"Technical detail: {error}",
+            parsed.intent,
+            parsed,
+            coverage_gap,
+            routing_source="coverage_guard",
         )
+
+    mentioned_teams = _teams_in_question(session, question)
+    mentioned_players = _players_in_question(session, question)
+    deterministic = _rule_based_intent(question)
+    deterministic_complete = deterministic is not None and _deterministic_is_complete(
+        deterministic,
+        mentioned_teams=mentioned_teams,
+        mentioned_players=mentioned_players,
+    )
+    if deterministic_complete:
+        parsed = deterministic
+        routing_source = "deterministic"
+    else:
+        routing_source = "local_model"
+        try:
+            parsed = router.parse(question)
+        except IntentRouterError as error:
+            if deterministic is not None:
+                parsed = deterministic
+                routing_source = "deterministic_fallback"
+            else:
+                fallback = ParsedIntent(intent="unsupported", reason=str(error))
+                return _refusal(
+                    question,
+                    "router_unavailable",
+                    fallback,
+                    "The local language model is unavailable and the deterministic parser could "
+                    f"not safely interpret this question. Technical detail: {error}",
+                    routing_source="deterministic_fallback",
+                )
 
     if parsed.intent == "unsupported":
         reason = parsed.reason or (
             "The question requires data outside box scores, schedules, "
             "and source availability rows."
         )
-        return _refusal(question, parsed.intent, parsed, reason)
+        return _refusal(
+            question,
+            parsed.intent,
+            parsed,
+            reason,
+            routing_source=routing_source,
+        )
 
     player = team = opponent = None
     errors: list[str] = []
-    mentioned_teams = _teams_in_question(session, question)
     team_value = parsed.team_name
     opponent_value = parsed.opponent_name
-    if not team_value and mentioned_teams:
+    player_value = parsed.player_name
+    if not player_value and mentioned_players:
+        player_value = f"{mentioned_players[0].first_name} {mentioned_players[0].last_name}"
+    entity_type = parsed.entity_type
+    if parsed.intent == "metric_summary" and entity_type is None:
+        entity_type = "player" if mentioned_players else "team"
+    if (
+        not team_value
+        and mentioned_teams
+        and (
+            parsed.intent
+            in {"team_record", "threshold_record", "game_result", "player_availability"}
+            or (parsed.intent == "metric_summary" and entity_type == "team")
+        )
+    ):
         team_value = mentioned_teams[0].name
     if parsed.intent in {"game_result", "player_availability"} and not opponent_value:
         primary_name = _normalized(team_value) if team_value else None
@@ -279,8 +559,10 @@ def answer_question(
             ),
             None,
         )
-    if parsed.intent in {"player_summary", "threshold_record", "player_availability"}:
-        player, error = _resolve_player(session, parsed.player_name or question)
+    if parsed.intent in {"player_summary", "threshold_record", "player_availability"} or (
+        parsed.intent == "metric_summary" and entity_type == "player"
+    ):
+        player, error = _resolve_player(session, player_value or question)
         if error:
             errors.append(error)
     if parsed.intent in {
@@ -288,18 +570,26 @@ def answer_question(
         "threshold_record",
         "game_result",
         "player_availability",
-    } or team_value:
+    } or (parsed.intent == "player_summary" and team_value) or (
+        parsed.intent == "metric_summary" and (entity_type == "team" or bool(team_value))
+    ):
         team, error = _resolve_team(session, team_value)
         if error:
             errors.append(error)
-    if parsed.intent in {"game_result", "player_availability"} or opponent_value:
+    if parsed.intent == "game_result" or opponent_value:
         opponent, error = _resolve_team(session, opponent_value)
         if error:
             errors.append(error)
     if errors:
-        return _refusal(question, parsed.intent, parsed, " ".join(errors))
+        return _refusal(
+            question,
+            parsed.intent,
+            parsed,
+            " ".join(errors),
+            routing_source=routing_source,
+        )
 
-    if parsed.intent in {"player_summary", "team_record", "threshold_record"}:
+    if parsed.intent in {"player_summary", "metric_summary", "team_record", "threshold_record"}:
         coverage_start, coverage_end = _coverage_dates(session, parsed.game_type)
         explicit_month = _month_range_from_question(question)
         if explicit_month:
@@ -318,10 +608,20 @@ def answer_question(
             )
         if start_error or end_error or start_date is None or end_date is None:
             reason = start_error or end_error or f"No {parsed.game_type} coverage is loaded."
-            return _refusal(question, parsed.intent, parsed, reason)
+            return _refusal(
+                question,
+                parsed.intent,
+                parsed,
+                reason,
+                routing_source=routing_source,
+            )
         if start_date > end_date:
             return _refusal(
-                question, parsed.intent, parsed, "The start date must be on or before the end date."
+                question,
+                parsed.intent,
+                parsed,
+                "The start date must be on or before the end date.",
+                routing_source=routing_source,
             )
 
     if parsed.intent == "player_summary":
@@ -333,6 +633,31 @@ def answer_question(
             end_date=end_date,
             game_type=parsed.game_type,
         )
+    elif parsed.intent == "metric_summary":
+        stat = parsed.stat or _stat_from_question(question)
+        aggregation = parsed.aggregation or _aggregation_from_question(question)
+        if stat is None or aggregation is None or entity_type is None:
+            return _refusal(
+                question,
+                parsed.intent,
+                parsed,
+                "A player or team, registered stat, and aggregation are required.",
+                routing_source=routing_source,
+            )
+        entity_id = player.player_id if entity_type == "player" else team.team_id
+        result = metric_summary(
+            session,
+            entity_type=entity_type,
+            entity_id=entity_id,
+            team_id=team.team_id if entity_type == "player" and team else None,
+            stat=stat,
+            aggregation=aggregation,
+            start_date=start_date,
+            end_date=end_date,
+            game_type=parsed.game_type,
+            location=parsed.location,
+            outcome=parsed.outcome,
+        )
     elif parsed.intent == "team_record":
         result = team_record(
             session,
@@ -340,6 +665,7 @@ def answer_question(
             start_date=start_date,
             end_date=end_date,
             game_type=parsed.game_type,
+            location=parsed.location,
         )
     elif parsed.intent == "threshold_record":
         stat = parsed.stat or _stat_from_question(question)
@@ -349,6 +675,7 @@ def answer_question(
                 parsed.intent,
                 parsed,
                 "A supported box-score stat and numeric threshold are required.",
+                routing_source=routing_source,
             )
         result = team_record_when_player_reaches(
             session,
@@ -367,7 +694,13 @@ def answer_question(
             "game date",
         )
         if error or game_date is None:
-            return _refusal(question, parsed.intent, parsed, error or "A game date is required.")
+            return _refusal(
+                question,
+                parsed.intent,
+                parsed,
+                error or "A game date is required.",
+                routing_source=routing_source,
+            )
         result = game_result(
             session,
             team_id=team.team_id,
@@ -381,7 +714,13 @@ def answer_question(
             "game date",
         )
         if error or game_date is None:
-            return _refusal(question, parsed.intent, parsed, error or "A game date is required.")
+            return _refusal(
+                question,
+                parsed.intent,
+                parsed,
+                error or "A game date is required.",
+                routing_source=routing_source,
+            )
         result = player_availability(
             session,
             player_id=player.player_id,
@@ -394,7 +733,7 @@ def answer_question(
         "intent": parsed.intent,
         "game_type": parsed.game_type,
     }
-    if parsed.intent in {"player_summary", "team_record", "threshold_record"}:
+    if parsed.intent in {"player_summary", "metric_summary", "team_record", "threshold_record"}:
         interpretation["start_date"] = start_date.isoformat()
         interpretation["end_date"] = end_date.isoformat()
     if player:
@@ -409,11 +748,20 @@ def answer_question(
     if parsed.intent == "threshold_record":
         interpretation["stat"] = stat
         interpretation["threshold"] = parsed.threshold
+    if parsed.intent == "metric_summary":
+        interpretation["entity_type"] = entity_type
+        interpretation["stat"] = stat
+        interpretation["aggregation"] = aggregation
+        interpretation["location"] = parsed.location
+        interpretation["outcome"] = parsed.outcome
+    if parsed.intent == "team_record":
+        interpretation["location"] = parsed.location
     if parsed.intent in {"game_result", "player_availability"}:
         interpretation["game_date"] = game_date.isoformat()
     return QueryResponse(
         question=question,
         intent=parsed.intent,
+        routing_source=routing_source,
         interpretation=interpretation,
         result=result,
     )

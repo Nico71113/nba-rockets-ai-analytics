@@ -34,4 +34,14 @@ describe('AnalyticsApiService', () => {
     expect(request.request.body).toEqual({ question: "What was Houston's record?" });
     request.flush({});
   });
+
+  it('loads auditable game rows for the evidence IDs', () => {
+    service.getGames(['game-2', 'game-1']).subscribe();
+
+    const request = http.expectOne(
+      'http://localhost:8100/api/v1/evidence/games?game_ids=game-2,game-1'
+    );
+    expect(request.request.method).toBe('GET');
+    request.flush([]);
+  });
 });

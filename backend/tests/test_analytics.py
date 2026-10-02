@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.analytics.service import (
     game_result,
+    metric_summary,
     player_period_summary,
     team_record,
     team_record_when_player_reaches,
@@ -243,6 +244,44 @@ def test_team_record_and_threshold_record(session):
     assert record.metrics == {"games": 2, "wins": 1, "losses": 1}
     assert threshold.metrics["games"] == 1
     assert threshold.metrics["wins"] == 1
+
+
+def test_registered_metric_engine_composes_aggregation_and_splits(session):
+    player_road_loss = metric_summary(
+        session,
+        entity_type="player",
+        entity_id=DURANT,
+        team_id=HOU,
+        stat="points",
+        aggregation="average",
+        start_date=date(2026, 1, 1),
+        end_date=date(2026, 1, 31),
+        location="away",
+        outcome="loss",
+    )
+    team_home_total = metric_summary(
+        session,
+        entity_type="team",
+        entity_id=HOU,
+        stat="points",
+        aggregation="sum",
+        start_date=date(2026, 1, 1),
+        end_date=date(2026, 1, 31),
+        location="home",
+    )
+    home_record = team_record(
+        session,
+        team_id=HOU,
+        start_date=date(2026, 1, 1),
+        end_date=date(2026, 1, 31),
+        location="home",
+    )
+
+    assert player_road_loss.metrics["value"] == 25.0
+    assert player_road_loss.evidence[0].game_ids == ["g2"]
+    assert team_home_total.metrics["value"] == 110
+    assert team_home_total.evidence[0].game_ids == ["g1"]
+    assert home_record.metrics == {"games": 1, "wins": 1, "losses": 0}
 
 
 def test_game_result_and_explicit_refusals(session):

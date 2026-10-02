@@ -36,3 +36,14 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm audit --audit-level=moderate
+
+  docker-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up --build -d
+      - run: python3 scripts/ci_smoke.py
+      - if: always()
+        run: docker compose logs --no-color
+      - if: always()
+        run: docker compose down -v

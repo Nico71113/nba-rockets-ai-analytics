@@ -1,0 +1,3540 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-02T14:06:12.825342+00:00",
+  "base_url": "http://localhost:8100",
+  "summary": {
+    "cases": 100,
+    "passed": 100,
+    "failed": 0,
+    "accuracy": 1.0,
+    "average_latency_ms": 123.4,
+    "p95_latency_ms": 52,
+    "routing_sources": {
+      "deterministic": 86,
+      "local_model": 4,
+      "coverage_guard": 10
+    },
+    "accuracy_by_intent": {
+      "game_result": 1.0,
+      "metric_summary": 1.0,
+      "player_availability": 1.0,
+      "player_summary": 1.0,
+      "team_record": 1.0,
+      "threshold_record": 1.0,
+      "unsupported": 1.0
+    }
+  },
+  "failures": [],
+  "results": [
+    {
+      "case_id": "record-houston-rockets-all",
+      "question": "What was the Houston Rockets's regular-season record?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "all"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "location": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 54,
+        "answer": "Houston Rockets went 52-30 from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-houston-rockets-home",
+      "question": "What was the Houston Rockets's home record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "home"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "location": "home"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 30-11 at home from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-houston-rockets-away",
+      "question": "What was the Houston Rockets's road record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "away"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "location": "away"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 52,
+        "answer": "Houston Rockets went 22-19 on the road from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-oklahoma-city-thunder-all",
+      "question": "What was the Oklahoma City Thunder's regular-season record?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "all"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Oklahoma City Thunder",
+          "team_id": 1610612760,
+          "location": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Oklahoma City Thunder went 64-18 from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-oklahoma-city-thunder-home",
+      "question": "What was the Oklahoma City Thunder's home record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "home"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Oklahoma City Thunder",
+          "team_id": 1610612760,
+          "location": "home"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Oklahoma City Thunder went 34-8 at home from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-oklahoma-city-thunder-away",
+      "question": "What was the Oklahoma City Thunder's road record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "away"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Oklahoma City Thunder",
+          "team_id": 1610612760,
+          "location": "away"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Oklahoma City Thunder went 30-10 on the road from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-golden-state-warriors-all",
+      "question": "What was the Golden State Warriors's regular-season record?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "all"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Golden State Warriors",
+          "team_id": 1610612744,
+          "location": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Golden State Warriors went 37-45 from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-golden-state-warriors-home",
+      "question": "What was the Golden State Warriors's home record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "home"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Golden State Warriors",
+          "team_id": 1610612744,
+          "location": "home"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Golden State Warriors went 22-19 at home from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-golden-state-warriors-away",
+      "question": "What was the Golden State Warriors's road record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "away"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Golden State Warriors",
+          "team_id": 1610612744,
+          "location": "away"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Golden State Warriors went 15-26 on the road from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-boston-celtics-all",
+      "question": "What was the Boston Celtics's regular-season record?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "all"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Boston Celtics",
+          "team_id": 1610612738,
+          "location": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Boston Celtics went 56-26 from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-boston-celtics-home",
+      "question": "What was the Boston Celtics's home record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "home"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Boston Celtics",
+          "team_id": 1610612738,
+          "location": "home"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Boston Celtics went 30-11 at home from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-boston-celtics-away",
+      "question": "What was the Boston Celtics's road record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "away"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Boston Celtics",
+          "team_id": 1610612738,
+          "location": "away"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Boston Celtics went 26-15 on the road from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-los-angeles-lakers-all",
+      "question": "What was the Los Angeles Lakers's regular-season record?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "all"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Los Angeles Lakers",
+          "team_id": 1610612747,
+          "location": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Los Angeles Lakers went 53-29 from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-los-angeles-lakers-home",
+      "question": "What was the Los Angeles Lakers's home record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "home"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Los Angeles Lakers",
+          "team_id": 1610612747,
+          "location": "home"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Los Angeles Lakers went 28-13 at home from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "record-los-angeles-lakers-away",
+      "question": "What was the Los Angeles Lakers's road record this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "location": "away"
+        }
+      },
+      "actual": {
+        "intent": "team_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "team_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Los Angeles Lakers",
+          "team_id": 1610612747,
+          "location": "away"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Los Angeles Lakers went 25-16 on the road from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-01",
+      "question": "What did Kevin Durant average during the regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 20,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-02",
+      "question": "Give me Kevin Durant's basic regular-season averages.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-01",
+          "end_date": "2026-04-15",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745
+        },
+        "routing_source": "local_model",
+        "elapsed_ms": 3845,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-01 through 2026-04-15."
+      }
+    },
+    {
+      "case_id": "player-summary-03",
+      "question": "Summarize Kevin Durant's regular-season production.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 25,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-04",
+      "question": "How did Kevin Durant perform across the regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 20,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-05",
+      "question": "What did Durant average for Houston this season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 45,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-06",
+      "question": "Show Kevin Durant's scoring, rebounding, and assist averages.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 20,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-07",
+      "question": "Give me a regular-season summary for Kevin Durant.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 18,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-08",
+      "question": "What were Durant's basic numbers this season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-09",
+      "question": "Summarize KD's regular-season box-score production.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-summary-10",
+      "question": "Across the season, what did Kevin Durant average?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "player_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant played 78 games and scored 2026 total points (26.0 per game) from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "threshold-points-20",
+      "question": "What was Houston's record when Kevin Durant recorded at least 20 points?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "points",
+          "threshold": 20
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "points",
+          "threshold": 20
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 20,
+        "answer": "Houston Rockets went 40-24 when Kevin Durant recorded at least 20 points."
+      }
+    },
+    {
+      "case_id": "threshold-points-25",
+      "question": "What was Houston's record when Kevin Durant recorded at least 25 points?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "points",
+          "threshold": 25
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "points",
+          "threshold": 25
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 20,
+        "answer": "Houston Rockets went 30-15 when Kevin Durant recorded at least 25 points."
+      }
+    },
+    {
+      "case_id": "threshold-points-30",
+      "question": "What was Houston's record when Kevin Durant recorded at least 30 points?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "points",
+          "threshold": 30
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "points",
+          "threshold": 30
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 24,
+        "answer": "Houston Rockets went 16-13 when Kevin Durant recorded at least 30 points."
+      }
+    },
+    {
+      "case_id": "threshold-points-35",
+      "question": "What was Houston's record when Kevin Durant recorded at least 35 points?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "points",
+          "threshold": 35
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "points",
+          "threshold": 35
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 25,
+        "answer": "Houston Rockets went 4-4 when Kevin Durant recorded at least 35 points."
+      }
+    },
+    {
+      "case_id": "threshold-assists-4",
+      "question": "What was Houston's record when Kevin Durant recorded at least 4 assists?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "assists",
+          "threshold": 4
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "assists",
+          "threshold": 4
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 34-15 when Kevin Durant recorded at least 4 assists."
+      }
+    },
+    {
+      "case_id": "threshold-assists-5",
+      "question": "What was Houston's record when Kevin Durant recorded at least 5 assists?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "assists",
+          "threshold": 5
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "assists",
+          "threshold": 5
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 20,
+        "answer": "Houston Rockets went 27-12 when Kevin Durant recorded at least 5 assists."
+      }
+    },
+    {
+      "case_id": "threshold-assists-6",
+      "question": "What was Houston's record when Kevin Durant recorded at least 6 assists?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "assists",
+          "threshold": 6
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "assists",
+          "threshold": 6
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 35,
+        "answer": "Houston Rockets went 19-9 when Kevin Durant recorded at least 6 assists."
+      }
+    },
+    {
+      "case_id": "threshold-assists-8",
+      "question": "What was Houston's record when Kevin Durant recorded at least 8 assists?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "assists",
+          "threshold": 8
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "assists",
+          "threshold": 8
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 18,
+        "answer": "Houston Rockets went 11-3 when Kevin Durant recorded at least 8 assists."
+      }
+    },
+    {
+      "case_id": "threshold-rebounds-5",
+      "question": "What was Houston's record when Kevin Durant recorded at least 5 rebounds?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "rebounds",
+          "threshold": 5
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "rebounds",
+          "threshold": 5
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 31-21 when Kevin Durant recorded at least 5 rebounds."
+      }
+    },
+    {
+      "case_id": "threshold-rebounds-7",
+      "question": "What was Houston's record when Kevin Durant recorded at least 7 rebounds?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "rebounds",
+          "threshold": 7
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "rebounds",
+          "threshold": 7
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 12-11 when Kevin Durant recorded at least 7 rebounds."
+      }
+    },
+    {
+      "case_id": "threshold-rebounds-10",
+      "question": "What was Houston's record when Kevin Durant recorded at least 10 rebounds?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "rebounds",
+          "threshold": 10
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "rebounds",
+          "threshold": 10
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 18,
+        "answer": "Houston Rockets went 2-2 when Kevin Durant recorded at least 10 rebounds."
+      }
+    },
+    {
+      "case_id": "threshold-rebounds-12",
+      "question": "What was Houston's record when Kevin Durant recorded at least 12 rebounds?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "rebounds",
+          "threshold": 12
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "rebounds",
+          "threshold": 12
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 18,
+        "answer": "Houston Rockets went 0-1 when Kevin Durant recorded at least 12 rebounds."
+      }
+    },
+    {
+      "case_id": "threshold-steals-1",
+      "question": "What was Houston's record when Kevin Durant recorded at least 1 steals?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "steals",
+          "threshold": 1
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "steals",
+          "threshold": 1
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 24-12 when Kevin Durant recorded at least 1 steals."
+      }
+    },
+    {
+      "case_id": "threshold-steals-2",
+      "question": "What was Houston's record when Kevin Durant recorded at least 2 steals?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "steals",
+          "threshold": 2
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "steals",
+          "threshold": 2
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 10-8 when Kevin Durant recorded at least 2 steals."
+      }
+    },
+    {
+      "case_id": "threshold-steals-3",
+      "question": "What was Houston's record when Kevin Durant recorded at least 3 steals?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "steals",
+          "threshold": 3
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "steals",
+          "threshold": 3
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 18,
+        "answer": "Houston Rockets went 1-4 when Kevin Durant recorded at least 3 steals."
+      }
+    },
+    {
+      "case_id": "threshold-steals-4",
+      "question": "What was Houston's record when Kevin Durant recorded at least 4 steals?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "steals",
+          "threshold": 4
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "steals",
+          "threshold": 4
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 0-2 when Kevin Durant recorded at least 4 steals."
+      }
+    },
+    {
+      "case_id": "threshold-three_pointers_made-1",
+      "question": "What was Houston's record when Kevin Durant recorded at least 1 three-pointers?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "three_pointers_made",
+          "threshold": 1
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "three_pointers_made",
+          "threshold": 1
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 46-24 when Kevin Durant recorded at least 1 three pointers made."
+      }
+    },
+    {
+      "case_id": "threshold-three_pointers_made-2",
+      "question": "What was Houston's record when Kevin Durant recorded at least 2 three-pointers?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "three_pointers_made",
+          "threshold": 2
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "three_pointers_made",
+          "threshold": 2
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets went 39-19 when Kevin Durant recorded at least 2 three pointers made."
+      }
+    },
+    {
+      "case_id": "threshold-three_pointers_made-3",
+      "question": "What was Houston's record when Kevin Durant recorded at least 3 three-pointers?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "three_pointers_made",
+          "threshold": 3
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "three_pointers_made",
+          "threshold": 3
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 35,
+        "answer": "Houston Rockets went 22-11 when Kevin Durant recorded at least 3 three pointers made."
+      }
+    },
+    {
+      "case_id": "threshold-three_pointers_made-4",
+      "question": "What was Houston's record when Kevin Durant recorded at least 4 three-pointers?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "stat": "three_pointers_made",
+          "threshold": 4
+        }
+      },
+      "actual": {
+        "intent": "threshold_record",
+        "method": "sql",
+        "interpretation": {
+          "intent": "threshold_record",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "stat": "three_pointers_made",
+          "threshold": 4
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 20,
+        "answer": "Houston Rockets went 11-6 when Kevin Durant recorded at least 4 three pointers made."
+      }
+    },
+    {
+      "case_id": "player-metric-points-sum",
+      "question": "What was Kevin Durant's total points figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "points",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "points",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant recorded 2026 total points across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-points-average",
+      "question": "What was Kevin Durant's average points figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "points",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "points",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant averaged 26.0 points per game across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-points-maximum",
+      "question": "What was Kevin Durant's highest points figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "points",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "points",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game high of 40 points across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-points-minimum",
+      "question": "What was Kevin Durant's lowest points figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "points",
+          "aggregation": "minimum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "points",
+          "aggregation": "minimum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game low of 11 points across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-assists-sum",
+      "question": "What was Kevin Durant's total assists figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "assists",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "assists",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant recorded 372 total assists across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-assists-average",
+      "question": "What was Kevin Durant's average assists figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "assists",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "assists",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant averaged 4.8 assists per game across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-assists-maximum",
+      "question": "What was Kevin Durant's highest assists figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "assists",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "assists",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game high of 12 assists across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-assists-minimum",
+      "question": "What was Kevin Durant's lowest assists figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "assists",
+          "aggregation": "minimum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "assists",
+          "aggregation": "minimum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game low of 0 assists across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-rebounds-sum",
+      "question": "What was Kevin Durant's total rebounds figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "rebounds",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "rebounds",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant recorded 426 total rebounds across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-rebounds-average",
+      "question": "What was Kevin Durant's average rebounds figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "rebounds",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "rebounds",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 34,
+        "answer": "Kevin Durant averaged 5.5 rebounds per game across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-rebounds-maximum",
+      "question": "What was Kevin Durant's highest rebounds figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "rebounds",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "rebounds",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game high of 12 rebounds across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-rebounds-minimum",
+      "question": "What was Kevin Durant's lowest rebounds figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "rebounds",
+          "aggregation": "minimum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "rebounds",
+          "aggregation": "minimum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game low of 1 rebounds across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-steals-sum",
+      "question": "What was Kevin Durant's total steals figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "steals",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "steals",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant recorded 62 total steals across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-steals-average",
+      "question": "What was Kevin Durant's average steals figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "steals",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "steals",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant averaged 0.8 steals per game across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-steals-maximum",
+      "question": "What was Kevin Durant's highest steals figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "steals",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "steals",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game high of 5 steals across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-steals-minimum",
+      "question": "What was Kevin Durant's lowest steals figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "steals",
+          "aggregation": "minimum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "steals",
+          "aggregation": "minimum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game low of 0 steals across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-three_pointers_made-sum",
+      "question": "What was Kevin Durant's total made threes figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "three_pointers_made",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "three_pointers_made",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant recorded 186 total three pointers made across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-three_pointers_made-average",
+      "question": "What was Kevin Durant's average made threes figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "three_pointers_made",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "three_pointers_made",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant averaged 2.4 three pointers made per game across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-three_pointers_made-maximum",
+      "question": "What was Kevin Durant's highest made threes figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "three_pointers_made",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "three_pointers_made",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game high of 6 three pointers made across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "player-metric-three_pointers_made-minimum",
+      "question": "What was Kevin Durant's lowest made threes figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "player",
+          "stat": "three_pointers_made",
+          "aggregation": "minimum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "entity_type": "player",
+          "stat": "three_pointers_made",
+          "aggregation": "minimum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Kevin Durant had a single-game low of 0 three pointers made across 78 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-points-sum",
+      "question": "What was Houston's total points figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "points",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "points",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 17,
+        "answer": "Houston Rockets recorded 9449 total points across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-points-average",
+      "question": "What was Houston's average points figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "points",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "points",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 17,
+        "answer": "Houston Rockets averaged 115.2 points per game across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-points-maximum",
+      "question": "What was Houston's highest points figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "points",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "points",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 32,
+        "answer": "Houston Rockets had a single-game high of 140 points across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-opponent_points-sum",
+      "question": "What was Houston's total points allowed figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "opponent_points",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "opponent_points",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 17,
+        "answer": "Houston Rockets recorded 9021 total opponent points across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-opponent_points-average",
+      "question": "What was Houston's average points allowed figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "opponent_points",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "opponent_points",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Houston Rockets averaged 110.0 opponent points per game across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-opponent_points-maximum",
+      "question": "What was Houston's highest points allowed figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "opponent_points",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "opponent_points",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Houston Rockets had a single-game high of 145 opponent points across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-assists-sum",
+      "question": "What was Houston's total assists figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "assists",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "assists",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Houston Rockets recorded 2083 total assists across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-assists-average",
+      "question": "What was Houston's average assists figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "assists",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "assists",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Houston Rockets averaged 25.4 assists per game across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-assists-maximum",
+      "question": "What was Houston's highest assists figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "assists",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "assists",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Houston Rockets had a single-game high of 35 assists across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-rebounds-sum",
+      "question": "What was Houston's total rebounds figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "rebounds",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "rebounds",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 17,
+        "answer": "Houston Rockets recorded 3946 total rebounds across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-rebounds-average",
+      "question": "What was Houston's average rebounds figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "rebounds",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "rebounds",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Houston Rockets averaged 48.1 rebounds per game across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-rebounds-maximum",
+      "question": "What was Houston's highest rebounds figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "rebounds",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "rebounds",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 17,
+        "answer": "Houston Rockets had a single-game high of 64 rebounds across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-point_margin-sum",
+      "question": "What was Houston's total point margin figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "point_margin",
+          "aggregation": "sum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "point_margin",
+          "aggregation": "sum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 17,
+        "answer": "Houston Rockets recorded 428 total point margin across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-point_margin-average",
+      "question": "What was Houston's average point margin figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "point_margin",
+          "aggregation": "average"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "point_margin",
+          "aggregation": "average",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Houston Rockets averaged 5.2 point margin per game across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "team-metric-point_margin-maximum",
+      "question": "What was Houston's highest point margin figure this regular season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "entity_type": "team",
+          "stat": "point_margin",
+          "aggregation": "maximum"
+        }
+      },
+      "actual": {
+        "intent": "metric_summary",
+        "method": "sql",
+        "interpretation": {
+          "intent": "metric_summary",
+          "game_type": "Regular Season",
+          "start_date": "2025-10-21",
+          "end_date": "2026-04-12",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "entity_type": "team",
+          "stat": "point_margin",
+          "aggregation": "maximum",
+          "location": "all",
+          "outcome": "all"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Houston Rockets had a single-game high of 34 point margin across 82 qualifying games from 2025-10-21 through 2026-04-12."
+      }
+    },
+    {
+      "case_id": "game-result-01",
+      "question": "What was the final score when Houston played Oklahoma City on October 21, 2025?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {
+          "intent": "game_result",
+          "game_type": "Regular Season",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Oklahoma City Thunder",
+          "opponent_team_id": 1610612760,
+          "game_date": "2025-10-21"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 16,
+        "answer": "Oklahoma City Thunder won. Final score: Houston Rockets 124, Oklahoma City Thunder 125."
+      }
+    },
+    {
+      "case_id": "game-result-02",
+      "question": "Who won the Rockets-Thunder game on October 21, 2025?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {
+          "intent": "game_result",
+          "game_type": "Regular Season",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Oklahoma City Thunder",
+          "opponent_team_id": 1610612760,
+          "game_date": "2025-10-21"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 15,
+        "answer": "Oklahoma City Thunder won. Final score: Houston Rockets 124, Oklahoma City Thunder 125."
+      }
+    },
+    {
+      "case_id": "game-result-03",
+      "question": "Give me the game result for Houston versus OKC on October 21, 2025.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {
+          "intent": "game_result",
+          "game_type": "Regular Season",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Oklahoma City Thunder",
+          "opponent_team_id": 1610612760,
+          "game_date": "2025-10-21"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 15,
+        "answer": "Oklahoma City Thunder won. Final score: Houston Rockets 124, Oklahoma City Thunder 125."
+      }
+    },
+    {
+      "case_id": "game-result-04",
+      "question": "What was the final score of the October 21, 2025 Rockets vs Thunder game?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {
+          "intent": "game_result",
+          "game_type": "Regular Season",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Oklahoma City Thunder",
+          "opponent_team_id": 1610612760,
+          "game_date": "2025-10-21"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 15,
+        "answer": "Oklahoma City Thunder won. Final score: Houston Rockets 124, Oklahoma City Thunder 125."
+      }
+    },
+    {
+      "case_id": "game-result-05",
+      "question": "Who won between the Houston Rockets and Oklahoma City Thunder on October 21, 2025?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "game_result",
+        "method": "sql",
+        "interpretation": {
+          "intent": "game_result",
+          "game_type": "Regular Season",
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Oklahoma City Thunder",
+          "opponent_team_id": 1610612760,
+          "game_date": "2025-10-21"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 15,
+        "answer": "Oklahoma City Thunder won. Final score: Houston Rockets 124, Oklahoma City Thunder 125."
+      }
+    },
+    {
+      "case_id": "availability-01",
+      "question": "Why did Kevin Durant miss Houston's game against Phoenix on November 24, 2025?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "player_availability",
+          "game_type": "Regular Season",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Phoenix Suns",
+          "opponent_team_id": 1610612756,
+          "game_date": "2025-11-24"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 19,
+        "answer": "Houston Rockets played, but no availability row exists for Kevin Durant."
+      }
+    },
+    {
+      "case_id": "availability-02",
+      "question": "Did Kevin Durant play when Houston faced Phoenix on November 24, 2025?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "player_availability",
+          "game_type": "Regular Season",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Phoenix Suns",
+          "opponent_team_id": 1610612756,
+          "game_date": "2025-11-24"
+        },
+        "routing_source": "local_model",
+        "elapsed_ms": 2557,
+        "answer": "Houston Rockets played, but no availability row exists for Kevin Durant."
+      }
+    },
+    {
+      "case_id": "availability-03",
+      "question": "Why was Durant out for Rockets-Suns on November 24, 2025?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "player_availability",
+          "game_type": "Regular Season",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Phoenix Suns",
+          "opponent_team_id": 1610612756,
+          "game_date": "2025-11-24"
+        },
+        "routing_source": "deterministic",
+        "elapsed_ms": 23,
+        "answer": "Houston Rockets played, but no availability row exists for Kevin Durant."
+      }
+    },
+    {
+      "case_id": "availability-04",
+      "question": "Check Kevin Durant's availability against Phoenix on November 24, 2025.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "player_availability",
+          "game_type": "Regular Season",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Phoenix Suns",
+          "team_id": 1610612756,
+          "game_date": "2025-11-24"
+        },
+        "routing_source": "local_model",
+        "elapsed_ms": 1646,
+        "answer": "Phoenix Suns played, but no availability row exists for Kevin Durant."
+      }
+    },
+    {
+      "case_id": "availability-05",
+      "question": "Did KD play in the Houston versus Phoenix game on November 24, 2025?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "player_availability",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "player_availability",
+          "game_type": "Regular Season",
+          "player_name": "Kevin Durant",
+          "player_id": 201142,
+          "team_name": "Houston Rockets",
+          "team_id": 1610612745,
+          "opponent_name": "Phoenix Suns",
+          "opponent_team_id": 1610612756,
+          "game_date": "2025-11-24"
+        },
+        "routing_source": "local_model",
+        "elapsed_ms": 2560,
+        "answer": "Houston Rockets played, but no availability row exists for Kevin Durant."
+      }
+    },
+    {
+      "case_id": "unsupported-01",
+      "question": "Which defender guarded Kevin Durant most often this season?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "The loaded snapshot has box scores, schedules, and availability rows, but no player-tracking or defensive-assignment data needed to identify who guarded a player."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "The loaded snapshot has box scores, schedules, and availability rows, but no player-tracking or defensive-assignment data needed to identify who guarded a player."
+      }
+    },
+    {
+      "case_id": "unsupported-02",
+      "question": "How many off-ball cuts by Durant created an open shot?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "The loaded snapshot has no synchronized video or player-tracking coordinates, so it cannot measure off-ball movement or its effect on the defense."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "The loaded snapshot has no synchronized video or player-tracking coordinates, so it cannot measure off-ball movement or its effect on the defense."
+      }
+    },
+    {
+      "case_id": "unsupported-03",
+      "question": "Use game video to grade Houston's screen angles.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "The loaded snapshot has no synchronized video or player-tracking coordinates, so it cannot measure off-ball movement or its effect on the defense."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "The loaded snapshot has no synchronized video or player-tracking coordinates, so it cannot measure off-ball movement or its effect on the defense."
+      }
+    },
+    {
+      "case_id": "unsupported-04",
+      "question": "Who will win Houston's next game?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "This project calculates historical results from a fixed snapshot; it does not contain a validated predictive model."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "This project calculates historical results from a fixed snapshot; it does not contain a validated predictive model."
+      }
+    },
+    {
+      "case_id": "unsupported-05",
+      "question": "What is the Rockets live score right now?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "This project uses a fixed 2025-26 snapshot and has no live-data feed."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "This project uses a fixed 2025-26 snapshot and has no live-data feed."
+      }
+    },
+    {
+      "case_id": "unsupported-06",
+      "question": "Predict Kevin Durant's points tomorrow.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "This project calculates historical results from a fixed snapshot; it does not contain a validated predictive model."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "This project calculates historical results from a fixed snapshot; it does not contain a validated predictive model."
+      }
+    },
+    {
+      "case_id": "unsupported-07",
+      "question": "Which matchup forced the most defensive switches onto Durant?",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "The loaded snapshot has box scores, schedules, and availability rows, but no player-tracking or defensive-assignment data needed to identify who guarded a player."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "The loaded snapshot has box scores, schedules, and availability rows, but no player-tracking or defensive-assignment data needed to identify who guarded a player."
+      }
+    },
+    {
+      "case_id": "unsupported-08",
+      "question": "Analyze Houston's off-ball spacing from film.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "The loaded snapshot has no synchronized video or player-tracking coordinates, so it cannot measure off-ball movement or its effect on the defense."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "The loaded snapshot has no synchronized video or player-tracking coordinates, so it cannot measure off-ball movement or its effect on the defense."
+      }
+    },
+    {
+      "case_id": "unsupported-09",
+      "question": "Project the Rockets' playoff odds.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "This project calculates historical results from a fixed snapshot; it does not contain a validated predictive model."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "This project calculates historical results from a fixed snapshot; it does not contain a validated predictive model."
+      }
+    },
+    {
+      "case_id": "unsupported-10",
+      "question": "Show today's live Rockets game score.",
+      "passed": true,
+      "checks": {
+        "intent": true,
+        "method": true,
+        "interpretation": true
+      },
+      "expected": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {}
+      },
+      "actual": {
+        "intent": "unsupported",
+        "method": "refusal",
+        "interpretation": {
+          "intent": "unsupported",
+          "game_type": "Regular Season",
+          "location": "all",
+          "outcome": "all",
+          "reason": "This project uses a fixed 2025-26 snapshot and has no live-data feed."
+        },
+        "routing_source": "coverage_guard",
+        "elapsed_ms": 1,
+        "answer": "This project uses a fixed 2025-26 snapshot and has no live-data feed."
+      }
+    }
+  ]
+}
