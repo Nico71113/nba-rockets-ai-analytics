@@ -6,7 +6,7 @@
       </span>
       <span>
         <strong>ArcLine</strong>
-        <small>NBA Evidence Lab</small>
+        <small>Houston Intelligence</small>
       </span>
     </a>
 
@@ -22,43 +22,38 @@
     </div>
   </header>
 
-  @if (demoMode) {
-    <div class="demo-notice" role="note">
-      <strong>Public showcase mode.</strong>
-      The seven suggested questions replay versioned responses captured from the tested API.
-      Clone the repository to run broader queries against PostgreSQL.
-    </div>
-  }
-
   <main id="top">
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy">
-        <p class="eyebrow"><span></span> Evidence-first NBA analytics</p>
-        <h1 id="page-title">Ask a basketball question.<br /><em>See the math.</em></h1>
+        <p class="eyebrow"><span></span> Houston · 2025–26 verified snapshot</p>
+        <h1 id="page-title">Ask a basketball question.<br /><em>Inspect the evidence.</em></h1>
         <p class="hero-description">
-          Exact SQL answers for Houston and Kevin Durant, grounded in game-level data—complete
-          with calculations, filters, and source rows you can inspect.
+          Plain-English questions become exact SQL answers with visible calculations and
+          game-level source rows.
         </p>
-        <div class="scope-tags" aria-label="Current analysis focus">
-          <span>Houston focus</span>
-          <span>Kevin Durant</span>
-          <span>2025–26</span>
-          <span>All 30 teams</span>
+        <div class="hero-actions">
+          <a class="primary-action" href="#query">Explore the data</a>
+          <span>Houston focus · all 30 teams</span>
         </div>
       </div>
 
-      <div class="hero-visual" aria-hidden="true">
-        <div class="court-orbit court-orbit--outer"></div>
-        <div class="court-orbit court-orbit--inner"></div>
-        <div class="ball">
-          <span class="ball-line ball-line--vertical"></span>
-          <span class="ball-line ball-line--arc"></span>
+      <aside class="focus-card" aria-label="Kevin Durant snapshot">
+        <div class="focus-card__topline">
+          <span>Player focus</span>
+          <strong>KD</strong>
         </div>
-        <div class="shot-path"></div>
-        <span class="data-point data-point--one"></span>
-        <span class="data-point data-point--two"></span>
-        <span class="data-point data-point--three"></span>
-      </div>
+        <div class="focus-card__identity">
+          <p>Kevin Durant</p>
+          <span>Houston · regular season</span>
+        </div>
+        <div class="focus-card__metrics">
+          <div><strong>26.0</strong><span>PPG</span></div>
+          <div><strong>78</strong><span>GP</span></div>
+          <div><strong>2,026</strong><span>PTS</span></div>
+        </div>
+        <p class="focus-card__source">Computed from the versioned 2025–26 player-game snapshot.</p>
+        <span class="focus-card__arc" aria-hidden="true"></span>
+      </aside>
     </section>
 
     <section class="coverage-strip" aria-labelledby="coverage-heading">
@@ -98,17 +93,23 @@
 
     <section class="workspace" aria-label="Analytics workspace">
       <div class="query-column">
-        <div class="panel query-panel">
+        <div class="panel query-panel" id="query">
           <div class="panel-heading">
             <div>
-              <p class="section-kicker">Query desk</p>
-              <h2>What do you want to know?</h2>
+              <p class="section-kicker">Analysis console</p>
+              <h2>Ask the season</h2>
             </div>
             <span class="engine-chip"><span>SQL</span> verified</span>
           </div>
 
+          @if (demoMode) {
+            <p class="showcase-note">
+              Hosted demo: seven versioned API responses. Run locally for broader queries.
+            </p>
+          }
+
           <div class="suggestions" aria-label="Suggested questions">
-            @for (suggestion of suggestions; track suggestion.label) {
+            @for (suggestion of suggestions.slice(0, 3); track suggestion.label) {
               <button type="button" class="suggestion" (click)="useSuggestion(suggestion)">
                 <span>{{ suggestion.label }}</span>
                 <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -116,6 +117,19 @@
                 </svg>
               </button>
             }
+            <details class="more-suggestions">
+              <summary>More examples <span>+4</span></summary>
+              <div>
+                @for (suggestion of suggestions.slice(3); track suggestion.label) {
+                  <button type="button" class="suggestion" (click)="useSuggestion(suggestion)">
+                    <span>{{ suggestion.label }}</span>
+                    <svg viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M4 10h11m-4-4 4 4-4 4" />
+                    </svg>
+                  </button>
+                }
+              </div>
+            </details>
           </div>
 
           <form class="question-form" (ngSubmit)="ask()">
@@ -142,9 +156,6 @@
                 }
               </button>
             </div>
-            <p class="form-note">
-              Arithmetic comes from database queries—not model-generated estimates.
-            </p>
           </form>
         </div>
 
@@ -190,9 +201,9 @@
 
               <h2 #answerHeading tabindex="-1">{{ response.result.answer }}</h2>
 
-              @if (objectEntries(response.result.metrics).length) {
+              @if (metricEntries(response.result.metrics).length) {
                 <div class="metric-grid" aria-label="Answer metrics">
-                  @for (metric of objectEntries(response.result.metrics); track metric[0]) {
+                  @for (metric of metricEntries(response.result.metrics); track metric[0]) {
                     <article>
                       <span>{{ formatMetric(metric[1]) }}</span>
                       <small>{{ metricLabel(metric[0]) }}</small>
@@ -227,8 +238,11 @@
                 }
 
                 @if (objectEntries(response.interpretation).length) {
-                  <section>
-                    <h3>Question interpreted as</h3>
+                  <details class="query-plan">
+                    <summary>
+                      <span><strong>View query plan</strong><small>Resolved filters and entities</small></span>
+                      <span class="details-action">Inspect</span>
+                    </summary>
                     <dl class="interpretation-list">
                       @for (item of objectEntries(response.interpretation); track item[0]) {
                         <div>
@@ -237,7 +251,7 @@
                         </div>
                       }
                     </dl>
-                  </section>
+                  </details>
                 }
               </div>
 
@@ -337,75 +351,28 @@
                 </div>
               }
             </section>
-          } @else if (!apiError) {
-            <section class="panel empty-state">
-              <div class="empty-graphic" aria-hidden="true">
-                <span class="empty-line"></span>
-                <span class="empty-dot empty-dot--one"></span>
-                <span class="empty-dot empty-dot--two"></span>
-                <span class="empty-dot empty-dot--three"></span>
-              </div>
-              <div>
-                <p class="section-kicker">Ready for a question</p>
-                <h2>Answers you can audit, not just accept.</h2>
-                <p>Choose a prompt above or ask your own question to see the answer, math, and exact source rows together.</p>
-              </div>
-            </section>
           }
         </div>
       </div>
 
       <aside class="context-column" aria-label="Dataset details">
-        <section class="panel passport-card">
+        <section class="panel passport-card boundary-card">
           <div class="passport-heading">
-            <p class="section-kicker">Data passport</p>
+            <p class="section-kicker">Data boundary</p>
             <span class="live-pill"><i></i> {{ demoMode ? 'Verified showcase' : 'Local snapshot' }}</span>
           </div>
-          <h2>Know what the system knows.</h2>
-          <p>
-            @if (demoMode) {
-              Hosted examples are versioned API responses from the reproducible 2025–26 snapshot.
-            } @else {
-              Every answer is limited to the reproducible 2025–26 snapshot loaded into PostgreSQL.
-            }
-          </p>
-
-          <div class="coverage-list">
-            <div>
-              <span class="coverage-icon" aria-hidden="true">30</span>
-              <div><strong>League-wide context</strong><small>All NBA teams</small></div>
+          <h2>What the system can prove</h2>
+          <div class="boundary-list">
+            <div class="boundary-list__item boundary-list__item--yes">
+              <span aria-hidden="true">✓</span>
+              <p><strong>In the snapshot</strong>Scores, box-score stats, dates, opponents, locations, and outcomes.</p>
             </div>
-            <div>
-              <span class="coverage-icon coverage-icon--court" aria-hidden="true"></span>
-              <div><strong>Structured box scores</strong><small>Game, team, and player rows</small></div>
-            </div>
-            <div>
-              <span class="coverage-icon coverage-icon--focus" aria-hidden="true"></span>
-              <div><strong>Houston-first experience</strong><small>Kevin Durant defaults</small></div>
+            <div class="boundary-list__item boundary-list__item--no">
+              <span aria-hidden="true">×</span>
+              <p><strong>Not in the snapshot</strong>Tracking, defensive assignments, video, live results, and predictions.</p>
             </div>
           </div>
-        </section>
-
-        <section class="panel trust-card">
-          <div class="trust-number">01</div>
-          <div>
-            <h3>SQL does the math</h3>
-            <p>Totals, averages, filters, and records are calculated from typed database fields.</p>
-          </div>
-        </section>
-        <section class="panel trust-card">
-          <div class="trust-number">02</div>
-          <div>
-            <h3>Evidence travels with the answer</h3>
-            <p>Each result includes the tables, filters, and qualifying game identifiers.</p>
-          </div>
-        </section>
-        <section class="panel trust-card">
-          <div class="trust-number">03</div>
-          <div>
-            <h3>Missing data stays missing</h3>
-            <p>Tracking, matchup, and video questions receive a specific refusal instead of a guess.</p>
-          </div>
+          <p class="boundary-note">If the required field is missing, ArcLine names the missing evidence instead of guessing.</p>
         </section>
       </aside>
     </section>

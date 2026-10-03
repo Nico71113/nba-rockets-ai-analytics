@@ -1,13 +1,11 @@
-# ArcLine · NBA Evidence Lab
+# ArcLine · Houston Basketball Intelligence
 
 [![CI](https://github.com/Nico71113/nba-rockets-ai-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/Nico71113/nba-rockets-ai-analytics/actions/workflows/ci.yml)
-[![Public showcase](https://img.shields.io/badge/live-public_showcase-4bd6c3)](https://nico71113.github.io/nba-rockets-ai-analytics/)
+[![Public showcase](https://img.shields.io/badge/live-public_showcase-d6243a)](https://nico71113.github.io/nba-rockets-ai-analytics/)
 
-An explainable, local-first NBA analytics assistant built around the Houston
-Rockets and Kevin Durant. Ask a supported question in plain English and the app
-returns the exact database result, calculation method, interpreted filters, and
-supporting game IDs. When the snapshot cannot support a claim, the app explains
-which data is missing instead of guessing.
+An evidence-first NBA analytics product built around Houston and Kevin Durant.
+Ask in plain English; ArcLine returns the exact database result, visible math,
+and game-level source rows—or names the missing evidence instead of guessing.
 
 **[Open the public HTTPS showcase →](https://nico71113.github.io/nba-rockets-ai-analytics/)**
 
@@ -23,7 +21,7 @@ Try questions such as:
 - “What was Houston's record when Kevin Durant scored at least 30 points?”
 - “What was Kevin Durant's highest road scoring game?”
 
-### 30-second walkthrough
+### 10-second walkthrough
 
 ![ArcLine public showcase walkthrough](docs/assets/arcline-demo.gif)
 

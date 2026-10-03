@@ -166,6 +166,10 @@ export class AppComponent implements OnInit {
     return Object.entries(value);
   }
 
+  metricEntries(value: Record<string, unknown>): [string, unknown][] {
+    return Object.entries(value).filter(([, metric]) => typeof metric === 'number');
+  }
+
   displayValue(value: unknown): string {
     if (value === null || value === undefined || value === '') {
       return 'Any';

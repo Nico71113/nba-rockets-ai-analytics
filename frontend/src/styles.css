@@ -1,18 +1,14 @@
 :root {
   color-scheme: dark;
-  --ink: #eaf6f4;
-  --muted: #94aaa8;
-  --muted-strong: #bdcfcc;
-  --page: #061113;
-  --panel: rgba(13, 31, 33, 0.82);
-  --panel-solid: #0d1f21;
-  --line: rgba(181, 222, 216, 0.14);
-  --teal: #4bd6c3;
-  --teal-dark: #123e3b;
-  --orange: #ff8a4c;
-  --gold: #f4c56a;
-  --red: #ff6d6d;
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+  --ink: #f7f7f8;
+  --muted: #92949c;
+  --muted-strong: #c3c4c9;
+  --page: #08080a;
+  --line: rgba(255, 255, 255, 0.11);
+  --accent: #d6243a;
+  --accent-dark: #41151c;
+  --accent-light: #ff5668;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
   font-family:
     Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
@@ -35,9 +31,10 @@ body {
   margin: 0;
   color: var(--ink);
   background:
-    radial-gradient(circle at 82% 8%, rgba(75, 214, 195, 0.13), transparent 32rem),
-    radial-gradient(circle at 8% 36%, rgba(255, 138, 76, 0.09), transparent 28rem),
+    radial-gradient(circle at 82% 4%, rgba(241, 58, 77, 0.17), transparent 30rem),
+    linear-gradient(115deg, rgba(241, 58, 77, 0.035) 1px, transparent 1px),
     var(--page);
+  background-size: auto, 38px 38px, auto;
 }
 
 button,
@@ -55,13 +52,13 @@ a:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 [tabindex="-1"]:focus-visible {
-  outline: 3px solid rgba(75, 214, 195, 0.55);
+  outline: 3px solid rgba(241, 58, 77, 0.62);
   outline-offset: 3px;
 }
 
 ::selection {
-  color: #041112;
-  background: var(--teal);
+  color: #fff;
+  background: var(--accent);
 }
 
 .visually-hidden {
@@ -84,7 +81,7 @@ summary:focus-visible,
 
 .spinner--dark {
   border-color: rgba(75, 214, 195, 0.2);
-  border-top-color: var(--teal);
+  border-top-color: var(--accent);
 }
 
 .skeleton {
@@ -107,9 +104,9 @@ summary:focus-visible,
   height: 38px;
   overflow: hidden;
   place-items: center;
-  border: 1px solid rgba(75, 214, 195, 0.34);
-  border-radius: 50%;
-  background: rgba(75, 214, 195, 0.08);
+  border: 1px solid rgba(241, 58, 77, 0.46);
+  border-radius: 10px;
+  background: rgba(241, 58, 77, 0.09);
 }
 
 .brand-mark::before,
@@ -122,23 +119,23 @@ summary:focus-visible,
 .brand-mark::before {
   width: 22px;
   height: 22px;
-  border: 2px solid var(--teal);
+  border: 2px solid var(--accent);
   border-radius: 50%;
 }
 
 .brand-mark::after {
   width: 27px;
   height: 1px;
-  background: var(--orange);
-  transform: rotate(-38deg);
+  background: var(--ink);
+  transform: rotate(-32deg);
 }
 
 .brand-mark span {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--orange);
-  box-shadow: 9px -8px 0 var(--teal), -8px 8px 0 var(--teal);
+  background: var(--ink);
+  box-shadow: 9px -8px 0 var(--accent), -8px 8px 0 var(--accent);
 }
 
 @keyframes spin {

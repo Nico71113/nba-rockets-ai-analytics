@@ -94,11 +94,12 @@ test('answers a question, exposes evidence, and exports CSV', async ({ page }) =
   await page.goto('/');
   await expect(page.getByText('1,322')).toBeVisible();
 
+  await page.locator('.more-suggestions summary').click();
   await page.getByRole('button', { name: 'January scoring' }).click();
   await expect(page.getByRole('heading', { name: /recorded 1834 total points/ })).toBeVisible();
   await expect(page.getByText('deterministic · 24 ms · metric summary')).toBeVisible();
 
-  await page.locator('summary').click();
+  await page.locator('.evidence-block summary').click();
   await page.getByRole('button', { name: 'Load game details' }).click();
   await expect(page.getByRole('cell', { name: 'Houston Rockets at Brooklyn Nets' })).toBeVisible();
 
@@ -110,6 +111,7 @@ test('answers a question, exposes evidence, and exports CSV', async ({ page }) =
 
 test('explains unsupported questions instead of guessing', async ({ page }) => {
   await page.goto('/');
+  await page.locator('.more-suggestions summary').click();
   await page.getByRole('button', { name: 'Test a limitation' }).click();
 
   await expect(page.getByText('Honest refusal')).toBeVisible();
@@ -119,6 +121,7 @@ test('explains unsupported questions instead of guessing', async ({ page }) => {
 
 test('has no serious accessibility violations in the answered state', async ({ page }) => {
   await page.goto('/');
+  await page.locator('.more-suggestions summary').click();
   await page.getByRole('button', { name: 'January scoring' }).click();
   await expect(page.getByRole('heading', { name: /recorded 1834 total points/ })).toBeVisible();
 
