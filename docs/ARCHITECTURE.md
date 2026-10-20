@@ -20,9 +20,12 @@ flowchart TD
     G -->|No| L[Ollama structured intent]
     L --> H
     E --> I[Parameterized analytics functions]
+    E --> M[Chronological forecast backtest]
     H --> I
     I --> J[Evidence response contract]
     J --> K[Angular analytics workspace]
+    M --> N[Versioned experiment report]
+    N --> K
 ```
 
 ## Answer contract
@@ -42,6 +45,12 @@ deterministic parser handles common high-confidence forms; the model only
 selects a supported intent when wording is ambiguous. Known coverage gaps are
 rejected before the model is called, and team/player/date resolution is checked
 against the database before any analytics function runs.
+
+The forecast experiment is intentionally outside the conversational routing
+path. It reads the same typed player-game rows, performs a chronological split,
+tunes only inside the training period, and returns a versioned report through a
+dedicated endpoint. This prevents a statistical backtest from being confused
+with an ad hoc answer or an unsupported live prediction.
 
 ## Reliability boundaries
 

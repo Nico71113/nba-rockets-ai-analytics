@@ -6,12 +6,15 @@
 An evidence-first NBA analytics product built around Houston and Kevin Durant.
 Ask in plain English; ArcLine returns the exact database result, visible math,
 and game-level source rows—or names the missing evidence instead of guessing.
+Its Forecast Lab adds a leakage-aware test of whether first-half three-point
+shooting can predict the held-out second half.
 
 **[Open the public HTTPS showcase →](https://nico71113.github.io/nba-rockets-ai-analytics/)**
 
 The hosted showcase contains seven versioned responses captured from the tested
-API, including row-level evidence. It is explicitly labeled in the UI; clone
-the repository to run broader natural-language questions against PostgreSQL.
+API, including row-level evidence, plus the full 311-player forecast backtest.
+It is explicitly labeled in the UI; clone the repository to run broader
+natural-language questions against PostgreSQL.
 
 ![ArcLine NBA Evidence Lab dashboard](docs/assets/arcline-hero.png)
 
@@ -43,6 +46,9 @@ Try questions such as:
 - Exact numerical golden evaluations, a 100-question language suite,
   full-snapshot integrity checks, browser/mobile/accessibility tests, Lighthouse
   budgets, and a Docker end-to-end CI smoke test.
+- A chronological three-point backtest that compares raw player history,
+  league-mean prediction, and empirical-Bayes shrinkage, with nested temporal
+  tuning and player-level error analysis.
 
 ## How answers are produced
 
@@ -67,6 +73,25 @@ silently turning them into facts.
 
 ![ArcLine answer with calculation and source evidence](docs/assets/arcline-evidence.png)
 
+## Forecast Lab: from correct answers to statistical judgment
+
+ArcLine asks a separate research question: **using only the first half of the
+season, can we predict player second-half three-point percentage more
+accurately?** The experiment chronologically splits 1,230 regular-season games,
+tunes the shrinkage strength only inside the first half, and evaluates 311
+eligible players on 613 held-out games.
+
+| Method | Player-level MAE | Player-level RMSE |
+| --- | ---: | ---: |
+| First-half rate | 5.67 pp | 7.42 pp |
+| League mean | 4.84 pp | 5.99 pp |
+| Empirical-Bayes shrinkage | **4.58 pp** | **5.84 pp** |
+
+Shrinkage lowers RMSE by **21.3%** against carrying the raw first-half rate
+forward. The UI also shows where it fails: for Kevin Durant, the raw first-half
+rate was closer to his held-out result. Read the full
+[experiment protocol and error analysis](docs/THREE_POINT_FORECAST.md).
+
 ## Supported questions
 
 - Team record over a season, month, or explicit date range.
@@ -78,9 +103,10 @@ silently turning them into facts.
 - Whether a player appeared in a game and any source-provided availability
   comment.
 
-The system deliberately refuses live scores, predictions, defensive matchups,
-player tracking, and video/off-ball analysis because those fields are not in
-the snapshot.
+The question-answering system deliberately refuses live scores, ad hoc matchup
+predictions, defensive matchups, player tracking, and video/off-ball analysis
+because those fields are not in the snapshot. The Forecast Lab is a separate,
+fixed historical backtest with an explicit train/test boundary.
 
 ## Verified snapshot
 
@@ -115,6 +141,7 @@ make install
 make data
 docker compose up -d db
 make data-load
+make forecast-report
 make up
 ```
 
@@ -136,14 +163,15 @@ make golden-eval    # while the local stack is running
 make quality        # includes browser E2E and Lighthouse
 ```
 
-The current suite contains 51 Python tests, 3 Angular tests, and 4 Playwright
+The current suite contains 53 Python tests, 4 Angular tests, and 5 Playwright
 browser tests. The Python suite includes a hand-checkable synthetic snapshot
 and, when local normalized files exist, independently recomputes reference
-values against the full data snapshot. Browser coverage checks answered and
-refusal states, evidence expansion, CSV export, a 390 px mobile viewport, and
-serious accessibility violations. The frontend verification also runs a
-production build; `npm audit` reports zero known vulnerabilities at the time of
-this commit.
+values against the full data snapshot. A dedicated leakage test proves that
+changing held-out makes cannot change a fitted forecast. Browser coverage
+checks answered and refusal states, the Forecast Lab, evidence expansion, CSV
+export, a 390 px mobile viewport, and serious accessibility violations. The
+frontend verification also runs a production build; `npm audit` reports zero
+known vulnerabilities at the time of this commit.
 
 The checked-in 100-question report currently passes 100/100 cases across team
 records, player summaries, threshold records, composable metrics, dated game
@@ -153,7 +181,7 @@ results. A separate live 20-case numerical suite passes 20/20 exact expected
 answers, methods, metrics, and coverage fields; see
 [`evals/reports/golden-latest.json`](evals/reports/golden-latest.json).
 
-The latest local Lighthouse run scores 95 Performance, 100 Accessibility, 96
+The latest local Lighthouse run scores 94 Performance, 100 Accessibility, 96
 Best Practices, and 100 SEO. The versioned summary is in
 [`docs/quality/lighthouse-summary.json`](docs/quality/lighthouse-summary.json).
 
@@ -167,10 +195,11 @@ failure cases that shaped the product, read the short
 
 The repository ships production containers and a stable
 [GitHub Pages showcase](https://nico71113.github.io/nba-rockets-ai-analytics/).
-The showcase replays seven versioned API responses so it stays available without
-claiming that PostgreSQL is running in the browser. The full local-first stack
-uses PostgreSQL and Ollama; a hosted full-stack deployment restores the database
-from the reproducible pipeline and chooses the intent-model policy explicitly.
+The showcase replays seven versioned API responses and a deterministic forecast
+report so it stays available without claiming that PostgreSQL is running in the
+browser. The full local-first stack uses PostgreSQL and Ollama; a hosted
+full-stack deployment restores the database from the reproducible pipeline and
+chooses the intent-model policy explicitly.
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
 
 ## Repository data policy

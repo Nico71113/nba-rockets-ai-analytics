@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.app.api.analytics import router as analytics_router
 from backend.app.api.coverage import router as coverage_router
 from backend.app.api.evidence import router as evidence_router
+from backend.app.api.experiments import router as experiments_router
 from backend.app.api.health import router as health_router
 from backend.app.api.query import router as query_router
 from backend.app.config import get_settings
@@ -11,7 +12,7 @@ from backend.app.config import get_settings
 settings = get_settings()
 app = FastAPI(
     title="NBA Rockets AI Analytics",
-    version="1.0.0",
+    version="1.1.0",
     description="Evidence-grounded analytics for the 2025-26 NBA season.",
 )
 app.add_middleware(
@@ -26,3 +27,4 @@ app.include_router(coverage_router)
 app.include_router(evidence_router)
 app.include_router(analytics_router)
 app.include_router(query_router)
+app.include_router(experiments_router)

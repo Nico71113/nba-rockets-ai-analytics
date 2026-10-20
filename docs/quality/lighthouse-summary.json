@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-10-02T18:38:03.414Z",
+  "generated_at": "2026-10-20T02:14:19.959Z",
   "lighthouse_version": "13.5.0",
   "categories": {
-    "performance": 0.95,
+    "performance": 0.94,
     "accessibility": 1,
     "best-practices": 0.96,
     "seo": 1
   },
   "metrics": {
-    "first_contentful_paint_ms": 2102.6702999999998,
-    "largest_contentful_paint_ms": 2615.6425999999997,
-    "total_blocking_time_ms": 12,
+    "first_contentful_paint_ms": 2254.8703,
+    "largest_contentful_paint_ms": 2756.5901,
+    "total_blocking_time_ms": 1,
     "cumulative_layout_shift": 0
   }
 }

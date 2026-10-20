@@ -4,7 +4,12 @@ import { fileURLToPath } from 'node:url';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const catalogPath = path.join(projectRoot, 'frontend/public/demo/catalog.json');
+const forecastPath = path.join(
+  projectRoot,
+  'frontend/public/demo/three-point-forecast.json'
+);
 const catalog = JSON.parse(await fs.readFile(catalogPath, 'utf8'));
+const forecast = JSON.parse(await fs.readFile(forecastPath, 'utf8'));
 const failures = [];
 const queryEntries = Object.entries(catalog.queries ?? {});
 
@@ -17,6 +22,18 @@ if (!queryEntries.some(([, response]) => response.result?.method === 'sql')) {
 }
 if (!queryEntries.some(([, response]) => response.result?.method === 'refusal')) {
   failures.push('catalog must contain an honest refusal example');
+}
+if (forecast.cohort?.players !== 311) failures.push('forecast cohort must contain 311 players');
+if (forecast.best_method !== 'shrinkage') failures.push('shrinkage must win the versioned backtest');
+if (forecast.selected_prior_strength !== 200) {
+  failures.push('forecast prior strength must equal the nested-validation result of 200');
+}
+if (forecast.methods?.length !== 3) failures.push('forecast must compare exactly three methods');
+if (forecast.split?.training_end >= forecast.split?.testing_start) {
+  failures.push('forecast training and testing periods must not overlap');
+}
+if (forecast.improvement_vs_historical_rmse_pct <= 0) {
+  failures.push('forecast must report improvement against the historical-rate baseline');
 }
 
 for (const [question, response] of queryEntries) {
@@ -37,5 +54,5 @@ if (failures.length) {
 }
 
 console.log(
-  `Validated ${queryEntries.length} showcase queries and ${Object.keys(catalog.games).length} evidence rows.`
+  `Validated ${queryEntries.length} showcase queries, ${Object.keys(catalog.games).length} evidence rows, and the ${forecast.cohort.players}-player forecast backtest.`
 );

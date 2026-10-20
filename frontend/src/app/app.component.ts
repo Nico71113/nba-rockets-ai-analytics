@@ -12,7 +12,15 @@ import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 
 import { AnalyticsApiService, DEMO_MODE } from './analytics-api.service';
-import { CoverageResponse, Evidence, GameEvidenceRow, QueryResponse } from './models';
+import {
+  CoverageResponse,
+  Evidence,
+  ForecastMethodKey,
+  ForecastMethodResult,
+  GameEvidenceRow,
+  QueryResponse,
+  ThreePointForecastResponse
+} from './models';
 
 interface SuggestedQuestion {
   label: string;
@@ -71,6 +79,9 @@ export class AppComponent implements OnInit {
   loadingCoverage = true;
   asking = false;
   apiError = '';
+  forecast: ThreePointForecastResponse | null = null;
+  forecastLoading = true;
+  forecastError = '';
 
   constructor(
     private readonly api: AnalyticsApiService,
@@ -97,6 +108,44 @@ export class AppComponent implements OnInit {
           this.changeDetector.markForCheck();
         }
       });
+
+    this.api
+      .getThreePointForecast()
+      .pipe(
+        finalize(() => {
+          this.forecastLoading = false;
+          this.changeDetector.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (forecast) => {
+          this.forecast = forecast;
+          this.changeDetector.markForCheck();
+        },
+        error: () => {
+          this.forecastError =
+            'The forecast report is unavailable. Regenerate it with make forecast-report.';
+          this.changeDetector.markForCheck();
+        }
+      });
+  }
+
+  percentage(value: number, digits = 1): string {
+    return `${(value * 100).toFixed(digits)}%`;
+  }
+
+  percentagePoints(value: number): string {
+    return `${(value * 100).toFixed(2)} pp`;
+  }
+
+  forecastBarWidth(method: ForecastMethodResult): number {
+    const maximum = Math.max(...(this.forecast?.methods.map((item) => item.metrics.rmse) ?? [1]));
+    return (method.metrics.rmse / maximum) * 100;
+  }
+
+  bucketRmse(bucketIndex: number, method: ForecastMethodKey): string {
+    const bucket = this.forecast?.volume_buckets[bucketIndex];
+    return bucket ? this.percentagePoints(bucket.methods[method].rmse) : '—';
   }
 
   useSuggestion(suggestion: SuggestedQuestion): void {

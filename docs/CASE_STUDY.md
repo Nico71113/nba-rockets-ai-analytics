@@ -48,12 +48,30 @@ separate suites.
 - 100/100 language cases pass the expected intent and response-contract checks.
 - 20/20 numerical golden cases match exact answers, methods, metrics, and
   coverage fields.
-- 51 Python, 3 Angular, and 4 Playwright browser tests pass.
+- 53 Python, 4 Angular, and 5 Playwright browser tests pass.
 - Browser tests cover evidence expansion, CSV download, refusal behavior,
   mobile overflow, and serious accessibility violations.
-- Latest Lighthouse scores: 95 Performance, 100 Accessibility, 96 Best Practices,
+- Latest Lighthouse scores: 94 Performance, 100 Accessibility, 96 Best Practices,
   and 100 SEO in the versioned local audit.
 - CI also builds and smoke-tests the complete Docker stack.
+
+## Statistical experiment: predicting second-half shooting
+
+Correct SQL answers demonstrate data reliability, but not statistical judgment.
+The Forecast Lab therefore asks whether first-half player data predicts
+second-half three-point percentage. It compares a raw historical rate, a league
+mean, and empirical-Bayes shrinkage across a chronological holdout.
+
+The shrinkage strength is chosen through a second time split contained entirely
+inside the first half. Once selected, the parameter is locked before the 613
+held-out games are scored. Across 311 eligible players, shrinkage reduces RMSE
+from 7.42 to 5.84 percentage points, a 21.3% improvement over using the raw
+first-half rate. The UI also surfaces the largest misses and the Kevin Durant
+counterexample, where the raw rate was closer. This distinction prevents an
+aggregate metric from being presented as universal player-level accuracy.
+
+The complete protocol, formulas, volume analysis, and limitations are in
+[`THREE_POINT_FORECAST.md`](THREE_POINT_FORECAST.md).
 
 ## Limitations
 
@@ -67,7 +85,10 @@ a mismatch.
 
 ## Next experiment
 
-The most valuable extension would be a separately evaluated tracking/video
+The next statistical step is to repeat the locked forecast protocol across
+multiple seasons and add pre-declared contextual features such as shot quality,
+role stability, and availability. The most valuable basketball extension would
+still be a separately evaluated tracking/video
 layer for off-ball actions: cuts, screens, spacing changes, and the resulting
 defensive reactions. That work needs a new data contract and human review
 protocol rather than being inferred from box scores.

@@ -10,6 +10,12 @@ import { chromium } from '@playwright/test';
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const staticRoot = path.join(projectRoot, 'frontend/dist/nba-analytics/browser');
 const reportPath = path.join(projectRoot, 'docs/quality/lighthouse-summary.json');
+const forecastReport = JSON.parse(
+  await fs.readFile(
+    path.join(projectRoot, 'frontend/public/demo/three-point-forecast.json'),
+    'utf8'
+  )
+);
 const mimeTypes = {
   '.css': 'text/css',
   '.html': 'text/html',
@@ -40,6 +46,10 @@ const apiServer = http.createServer((request, response) => {
         team_game_rows: 2644
       })
     );
+    return;
+  }
+  if (request.url === '/api/v1/experiments/three-point-forecast') {
+    response.end(JSON.stringify(forecastReport));
     return;
   }
   response.statusCode = 404;

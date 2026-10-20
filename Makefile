@@ -2,7 +2,7 @@ PYTHON ?= .venv/bin/python
 
 .PHONY: install data-download data-normalize data-validate migrate data-load data \
 	test lint language-eval golden-eval frontend-install frontend-test frontend-build frontend-audit \
-	frontend-e2e frontend-lighthouse verify quality up down
+	frontend-e2e frontend-lighthouse forecast-report verify quality up down
 
 install:
 	python3 -m venv .venv
@@ -38,6 +38,9 @@ language-eval:
 
 golden-eval:
 	$(PYTHON) -m evals.run_golden_eval
+
+forecast-report:
+	$(PYTHON) scripts/generate_forecast_report.py
 
 frontend-install:
 	cd frontend && npm ci

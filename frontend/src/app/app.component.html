@@ -33,6 +33,7 @@
         </p>
         <div class="hero-actions">
           <a class="primary-action" href="#query">Explore the data</a>
+          <a class="secondary-action" href="#forecast">View forecast lab</a>
           <span>Houston focus · all 30 teams</span>
         </div>
       </div>
@@ -104,7 +105,8 @@
 
           @if (demoMode) {
             <p class="showcase-note">
-              Hosted demo: seven versioned API responses. Run locally for broader queries.
+              Hosted demo: seven versioned API responses plus a fixed forecast backtest.
+              Run locally for broader queries.
             </p>
           }
 
@@ -369,12 +371,214 @@
             </div>
             <div class="boundary-list__item boundary-list__item--no">
               <span aria-hidden="true">×</span>
-              <p><strong>Not in the snapshot</strong>Tracking, defensive assignments, video, live results, and predictions.</p>
+              <p><strong>Not in the snapshot</strong>Tracking, defensive assignments, video, live results, and matchup forecasts.</p>
             </div>
           </div>
           <p class="boundary-note">If the required field is missing, ArcLine names the missing evidence instead of guessing.</p>
         </section>
       </aside>
+    </section>
+
+    <section class="forecast-lab" id="forecast" aria-labelledby="forecast-title">
+      <div class="forecast-intro">
+        <div>
+          <p class="section-kicker">Forecast lab · leakage-aware backtest</p>
+          <h2 id="forecast-title">Can first-half shooting predict the second half?</h2>
+        </div>
+        <p>
+          Three deliberately simple forecasts compete on future games: trust each player's
+          observed rate, use the league average, or partially pool noisy rates toward the league.
+        </p>
+      </div>
+
+      @if (forecastLoading) {
+        <div class="forecast-loading" aria-label="Loading forecast experiment">
+          <span class="skeleton skeleton--answer"></span>
+          <span class="skeleton skeleton--answer-short"></span>
+        </div>
+      } @else if (forecastError) {
+        <div class="notice notice--error" role="alert">
+          <span class="notice-icon" aria-hidden="true">!</span>
+          <div><strong>Forecast unavailable</strong><p>{{ forecastError }}</p></div>
+        </div>
+      } @else if (forecast) {
+        <article class="forecast-result">
+          <div>
+            <span class="forecast-verdict">Backtest result</span>
+            <strong>{{ forecast.improvement_vs_historical_rmse_pct }}% lower RMSE</strong>
+            <p>Empirical-Bayes shrinkage beats the raw first-half percentage across the cohort.</p>
+          </div>
+          <dl>
+            <div><dt>Players</dt><dd>{{ forecast.cohort.players }}</dd></div>
+            <div><dt>Train games</dt><dd>{{ forecast.split.training_games }}</dd></div>
+            <div><dt>Test games</dt><dd>{{ forecast.split.testing_games }}</dd></div>
+            <div><dt>Future leakage</dt><dd>None</dd></div>
+          </dl>
+        </article>
+
+        <div class="forecast-timeline" aria-label="Temporal train and test split">
+          <div class="timeline-label">
+            <span>Nested validation</span>
+            <small>
+              {{ formatDate(forecast.split.training_start) }} —
+              {{ formatDate(forecast.split.training_end) }}
+            </small>
+          </div>
+          <div class="timeline-track" aria-hidden="true">
+            <span class="timeline-train"></span><span class="timeline-test"></span>
+          </div>
+          <div class="timeline-label timeline-label--right">
+            <span>Held-out test</span>
+            <small>
+              {{ formatDate(forecast.split.testing_start) }} —
+              {{ formatDate(forecast.split.testing_end) }}
+            </small>
+          </div>
+        </div>
+
+        <div class="forecast-section-heading">
+          <div>
+            <p class="section-kicker">01 · Method comparison</p>
+            <h3>Simple baselines first</h3>
+          </div>
+          <p>Lower error is better. RMSE is measured in three-point percentage points.</p>
+        </div>
+
+        <div class="method-comparison">
+          @for (method of forecast.methods; track method.key) {
+            <article [class.method-card--winner]="method.key === forecast.best_method">
+              <div class="method-card__topline">
+                <span>{{ method.key === forecast.best_method ? 'Best overall' : 'Baseline' }}</span>
+                <small>{{ percentagePoints(method.metrics.mae) }} MAE</small>
+              </div>
+              <h4>{{ method.label }}</h4>
+              <strong>{{ percentagePoints(method.metrics.rmse) }}</strong>
+              <div class="error-bar" aria-hidden="true">
+                <span [style.width.%]="forecastBarWidth(method)"></span>
+              </div>
+              <p>{{ method.description }}</p>
+            </article>
+          }
+        </div>
+
+        <div class="forecast-analysis-grid">
+          <section class="forecast-panel volume-panel" aria-labelledby="volume-title">
+            <p class="section-kicker">02 · Error by sample size</p>
+            <h3 id="volume-title">Small samples need more help</h3>
+            <p class="forecast-panel__lede">
+              Players are grouped only by first-half attempt volume. Shrinkage has its largest
+              advantage where the observed percentage is noisiest.
+            </p>
+            <div class="forecast-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>First-half 3PA</th>
+                    <th>Players</th>
+                    <th>Raw</th>
+                    <th>League</th>
+                    <th>Shrinkage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (bucket of forecast.volume_buckets; track bucket.label; let index = $index) {
+                    <tr>
+                      <td>{{ bucket.label }}</td>
+                      <td>{{ bucket.players }}</td>
+                      <td>{{ bucketRmse(index, 'historical_rate') }}</td>
+                      <td>{{ bucketRmse(index, 'league_mean') }}</td>
+                      <td class="table-best">{{ bucketRmse(index, 'shrinkage') }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          @if (forecast.featured_player; as player) {
+            <section class="forecast-panel durant-case" aria-labelledby="durant-case-title">
+              <p class="section-kicker">03 · Houston reality check</p>
+              <h3 id="durant-case-title">The cohort winner is not universal</h3>
+              <p class="forecast-panel__lede">
+                For Kevin Durant, the unadjusted first-half rate was closer. A good backtest
+                reports the exception instead of hiding it behind the average.
+              </p>
+              <div class="durant-rates">
+                <div><span>First-half rate</span><strong>{{ percentage(player.first_half_percentage) }}</strong></div>
+                <div><span>League baseline</span><strong>{{ percentage(player.league_mean_prediction) }}</strong></div>
+                <div class="durant-rates__model"><span>Shrinkage forecast</span><strong>{{ percentage(player.shrinkage_prediction) }}</strong></div>
+                <div class="durant-rates__actual"><span>Second-half actual</span><strong>{{ percentage(player.second_half_percentage) }}</strong></div>
+              </div>
+              <p class="durant-attempts">
+                {{ player.first_half_attempts }} training attempts ·
+                {{ player.second_half_attempts }} held-out attempts
+              </p>
+            </section>
+          }
+        </div>
+
+        <section class="forecast-panel miss-panel" aria-labelledby="miss-title">
+          <div class="forecast-section-heading forecast-section-heading--compact">
+            <div>
+              <p class="section-kicker">04 · Error analysis</p>
+              <h3 id="miss-title">Where the best model missed most</h3>
+            </div>
+            <p>Largest absolute errors from the held-out second half.</p>
+          </div>
+          <div class="forecast-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>Team</th>
+                  <th>First half</th>
+                  <th>Forecast</th>
+                  <th>Actual</th>
+                  <th>Miss</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (player of forecast.largest_misses.slice(0, 5); track player.player_id) {
+                  <tr>
+                    <td><strong>{{ player.player_name }}</strong></td>
+                    <td>{{ player.primary_team }}</td>
+                    <td>{{ percentage(player.first_half_percentage) }}</td>
+                    <td>{{ percentage(player.predicted_percentage) }}</td>
+                    <td>{{ percentage(player.actual_percentage) }}</td>
+                    <td class="miss-value">{{ percentagePoints(player.absolute_error) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <details class="methodology-panel">
+          <summary>
+            <span><strong>Inspect methodology and limitations</strong><small>Eligibility, tuning, and what the model cannot see</small></span>
+            <span class="details-action">Open protocol</span>
+          </summary>
+          <div class="methodology-grid">
+            <section>
+              <h4>Leakage controls</h4>
+              <ol>
+                <li>Split all 1,230 regular-season games chronologically at the league midpoint.</li>
+                <li>Tune prior strength inside the first half only: {{ forecast.cohort.validation_players }} players, minimum {{ forecast.cohort.validation_minimum_attempts }} attempts per validation segment.</li>
+                <li>Lock the {{ forecast.selected_prior_strength }}-attempt prior before scoring the held-out second half.</li>
+                <li>Evaluate {{ forecast.cohort.players }} players with at least {{ forecast.cohort.minimum_attempts_per_half }} attempts in each half.</li>
+              </ol>
+            </section>
+            <section>
+              <h4>Limitations</h4>
+              <ul>
+                @for (limitation of forecast.limitations; track limitation) {
+                  <li>{{ limitation }}</li>
+                }
+              </ul>
+            </section>
+          </div>
+        </details>
+      }
     </section>
   </main>
 
