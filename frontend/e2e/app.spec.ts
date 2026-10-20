@@ -64,6 +64,95 @@ const refusalResponse = {
   }
 };
 
+const forecastResponse = {
+  season_id: '2025-26',
+  question: "Can first-half data predict a player's second-half three-point percentage?",
+  split: {
+    training_start: '2025-10-21',
+    training_end: '2026-01-16',
+    testing_start: '2026-01-17',
+    testing_end: '2026-04-12',
+    validation_training_end: '2025-12-02',
+    validation_start: '2025-12-03',
+    training_games: 617,
+    testing_games: 613
+  },
+  cohort: {
+    players: 311,
+    minimum_attempts_per_half: 25,
+    validation_players: 316,
+    validation_minimum_attempts: 10
+  },
+  league_first_half_percentage: 0.358689,
+  selected_prior_strength: 200,
+  validation_rmse: 0.078098,
+  selection_metric: 'unweighted player-level RMSE',
+  methods: [
+    {
+      key: 'historical_rate',
+      label: 'First-half rate',
+      description: 'Use the observed rate without adjustment.',
+      metrics: { mae: 0.05669, rmse: 0.074206, attempt_weighted_mae: 0.049, attempt_weighted_rmse: 0.064 }
+    },
+    {
+      key: 'league_mean',
+      label: 'League mean',
+      description: 'Give every player the league rate.',
+      metrics: { mae: 0.048428, rmse: 0.059911, attempt_weighted_mae: 0.043, attempt_weighted_rmse: 0.052 }
+    },
+    {
+      key: 'shrinkage',
+      label: 'Empirical-Bayes shrinkage',
+      description: 'Partially pool the player rate toward the league.',
+      metrics: { mae: 0.045838, rmse: 0.058432, attempt_weighted_mae: 0.04, attempt_weighted_rmse: 0.05 }
+    }
+  ],
+  best_method: 'shrinkage',
+  improvement_vs_historical_rmse_pct: 21.3,
+  improvement_vs_league_rmse_pct: 2.5,
+  volume_buckets: [
+    {
+      label: '25–74 attempts',
+      minimum_attempts: 25,
+      maximum_attempts: 74,
+      players: 85,
+      methods: {
+        historical_rate: { mae: 0.076, rmse: 0.099459, attempt_weighted_mae: 0.07, attempt_weighted_rmse: 0.09 },
+        league_mean: { mae: 0.053, rmse: 0.068233, attempt_weighted_mae: 0.05, attempt_weighted_rmse: 0.06 },
+        shrinkage: { mae: 0.051, rmse: 0.067732, attempt_weighted_mae: 0.04, attempt_weighted_rmse: 0.06 }
+      }
+    }
+  ],
+  largest_misses: [
+    {
+      player_id: 1,
+      player_name: 'Example Player',
+      primary_team: 'Example Team',
+      first_half_made: 16,
+      first_half_attempts: 39,
+      first_half_percentage: 0.410256,
+      predicted_percentage: 0.367104,
+      second_half_made: 7,
+      second_half_attempts: 39,
+      actual_percentage: 0.179487,
+      absolute_error: 0.187617
+    }
+  ],
+  featured_player: {
+    player_id: 201142,
+    player_name: 'Kevin Durant',
+    primary_team: 'Houston Rockets',
+    first_half_percentage: 0.403941,
+    league_mean_prediction: 0.358689,
+    shrinkage_prediction: 0.381483,
+    second_half_percentage: 0.421053,
+    first_half_attempts: 203,
+    second_half_attempts: 247
+  },
+  findings: [],
+  limitations: ['Single-season backtest.']
+};
+
 test.beforeEach(async ({ page }) => {
   await page.route('**/api/v1/coverage', (route) => route.fulfill({ json: coverage }));
   await page.route('**/api/v1/query', async (route) => {
@@ -87,6 +176,9 @@ test.beforeEach(async ({ page }) => {
         }
       ]
     })
+  );
+  await page.route('**/api/v1/experiments/three-point-forecast', (route) =>
+    route.fulfill({ json: forecastResponse })
   );
 });
 
@@ -117,6 +209,19 @@ test('explains unsupported questions instead of guessing', async ({ page }) => {
   await expect(page.getByText('Honest refusal')).toBeVisible();
   await expect(page.getByRole('heading', { name: /no player-tracking/ })).toBeVisible();
   await expect(page.getByText('coverage guard · 1 ms · unsupported')).toBeVisible();
+});
+
+test('shows a leakage-aware forecast comparison and player-level error analysis', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'View forecast lab' }).click();
+
+  await expect(
+    page.getByRole('heading', { name: 'Can first-half shooting predict the second half?' })
+  ).toBeVisible();
+  await expect(page.getByText('21.3% lower RMSE')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Empirical-Bayes shrinkage' })).toBeVisible();
+  await expect(page.getByText('Future leakage')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The cohort winner is not universal' })).toBeVisible();
 });
 
 test('has no serious accessibility violations in the answered state', async ({ page }) => {

@@ -1,0 +1,295 @@
+{
+  "season_id": "2025-26",
+  "question": "Can first-half data predict a player's second-half three-point percentage more accurately?",
+  "split": {
+    "training_start": "2025-10-21",
+    "training_end": "2026-01-16",
+    "testing_start": "2026-01-17",
+    "testing_end": "2026-04-12",
+    "validation_training_end": "2025-12-02",
+    "validation_start": "2025-12-03",
+    "training_games": 617,
+    "testing_games": 613
+  },
+  "cohort": {
+    "players": 311,
+    "minimum_attempts_per_half": 25,
+    "validation_players": 316,
+    "validation_minimum_attempts": 10
+  },
+  "league_first_half_percentage": 0.358689,
+  "selected_prior_strength": 200,
+  "validation_rmse": 0.078098,
+  "selection_metric": "unweighted player-level RMSE",
+  "methods": [
+    {
+      "key": "historical_rate",
+      "label": "First-half rate",
+      "description": "Use each player's first-half makes divided by attempts without adjustment.",
+      "metrics": {
+        "mae": 0.05669,
+        "rmse": 0.074206,
+        "attempt_weighted_mae": 0.049264,
+        "attempt_weighted_rmse": 0.064321
+      }
+    },
+    {
+      "key": "league_mean",
+      "label": "League mean",
+      "description": "Give every eligible player the first-half league-wide three-point rate.",
+      "metrics": {
+        "mae": 0.048428,
+        "rmse": 0.059911,
+        "attempt_weighted_mae": 0.042696,
+        "attempt_weighted_rmse": 0.051692
+      }
+    },
+    {
+      "key": "shrinkage",
+      "label": "Empirical-Bayes shrinkage",
+      "description": "Blend each player's first-half rate toward the league mean using a prior strength selected only inside the first half.",
+      "metrics": {
+        "mae": 0.045838,
+        "rmse": 0.058432,
+        "attempt_weighted_mae": 0.039686,
+        "attempt_weighted_rmse": 0.050218
+      }
+    }
+  ],
+  "best_method": "shrinkage",
+  "improvement_vs_historical_rmse_pct": 21.3,
+  "improvement_vs_league_rmse_pct": 2.5,
+  "volume_buckets": [
+    {
+      "label": "25–74 attempts",
+      "minimum_attempts": 25,
+      "maximum_attempts": 74,
+      "players": 85,
+      "methods": {
+        "historical_rate": {
+          "mae": 0.0764,
+          "rmse": 0.099459,
+          "attempt_weighted_mae": 0.072314,
+          "attempt_weighted_rmse": 0.094212
+        },
+        "league_mean": {
+          "mae": 0.052865,
+          "rmse": 0.068233,
+          "attempt_weighted_mae": 0.046459,
+          "attempt_weighted_rmse": 0.059751
+        },
+        "shrinkage": {
+          "mae": 0.050798,
+          "rmse": 0.067732,
+          "attempt_weighted_mae": 0.044098,
+          "attempt_weighted_rmse": 0.05924
+        }
+      }
+    },
+    {
+      "label": "75–149 attempts",
+      "minimum_attempts": 75,
+      "maximum_attempts": 149,
+      "players": 112,
+      "methods": {
+        "historical_rate": {
+          "mae": 0.057414,
+          "rmse": 0.071913,
+          "attempt_weighted_mae": 0.051841,
+          "attempt_weighted_rmse": 0.065936
+        },
+        "league_mean": {
+          "mae": 0.055392,
+          "rmse": 0.066147,
+          "attempt_weighted_mae": 0.048734,
+          "attempt_weighted_rmse": 0.058473
+        },
+        "shrinkage": {
+          "mae": 0.052138,
+          "rmse": 0.063613,
+          "attempt_weighted_mae": 0.046123,
+          "attempt_weighted_rmse": 0.056571
+        }
+      }
+    },
+    {
+      "label": "150+ attempts",
+      "minimum_attempts": 150,
+      "maximum_attempts": null,
+      "players": 114,
+      "methods": {
+        "historical_rate": {
+          "mae": 0.041282,
+          "rmse": 0.050653,
+          "attempt_weighted_mae": 0.03994,
+          "attempt_weighted_rmse": 0.049091
+        },
+        "league_mean": {
+          "mae": 0.038279,
+          "rmse": 0.044966,
+          "attempt_weighted_mae": 0.037842,
+          "attempt_weighted_rmse": 0.043879
+        },
+        "shrinkage": {
+          "mae": 0.035951,
+          "rmse": 0.043798,
+          "attempt_weighted_mae": 0.034376,
+          "attempt_weighted_rmse": 0.042257
+        }
+      }
+    }
+  ],
+  "largest_misses": [
+    {
+      "player_id": 1631123,
+      "player_name": "Jamaree Bouyea",
+      "primary_team": "Phoenix Suns",
+      "first_half_made": 16,
+      "first_half_attempts": 39,
+      "first_half_percentage": 0.410256,
+      "predicted_percentage": 0.367104,
+      "second_half_made": 7,
+      "second_half_attempts": 39,
+      "actual_percentage": 0.179487,
+      "absolute_error": 0.187617
+    },
+    {
+      "player_id": 1642879,
+      "player_name": "Ben Saraf",
+      "primary_team": "Brooklyn Nets",
+      "first_half_made": 9,
+      "first_half_attempts": 33,
+      "first_half_percentage": 0.272727,
+      "predicted_percentage": 0.346514,
+      "second_half_made": 10,
+      "second_half_attempts": 57,
+      "actual_percentage": 0.175439,
+      "absolute_error": 0.171076
+    },
+    {
+      "player_id": 1642404,
+      "player_name": "Chaz Lanier",
+      "primary_team": "Detroit Pistons",
+      "first_half_made": 14,
+      "first_half_attempts": 41,
+      "first_half_percentage": 0.341463,
+      "predicted_percentage": 0.355759,
+      "second_half_made": 5,
+      "second_half_attempts": 26,
+      "actual_percentage": 0.192308,
+      "absolute_error": 0.163451
+    },
+    {
+      "player_id": 203484,
+      "player_name": "Kentavious Caldwell-Pope",
+      "primary_team": "Memphis Grizzlies",
+      "first_half_made": 48,
+      "first_half_attempts": 138,
+      "first_half_percentage": 0.347826,
+      "predicted_percentage": 0.354254,
+      "second_half_made": 7,
+      "second_half_attempts": 36,
+      "actual_percentage": 0.194444,
+      "absolute_error": 0.15981
+    },
+    {
+      "player_id": 1629645,
+      "player_name": "Kevin Porter Jr.",
+      "primary_team": "Milwaukee Bucks",
+      "first_half_made": 38,
+      "first_half_attempts": 106,
+      "first_half_percentage": 0.358491,
+      "predicted_percentage": 0.35862,
+      "second_half_made": 8,
+      "second_half_attempts": 37,
+      "actual_percentage": 0.216216,
+      "absolute_error": 0.142404
+    },
+    {
+      "player_id": 1642869,
+      "player_name": "Noah Penda",
+      "primary_team": "Orlando Magic",
+      "first_half_made": 18,
+      "first_half_attempts": 41,
+      "first_half_percentage": 0.439024,
+      "predicted_percentage": 0.372356,
+      "second_half_made": 12,
+      "second_half_attempts": 52,
+      "actual_percentage": 0.230769,
+      "absolute_error": 0.141587
+    },
+    {
+      "player_id": 1642859,
+      "player_name": "Jase Richardson",
+      "primary_team": "Orlando Magic",
+      "first_half_made": 21,
+      "first_half_attempts": 49,
+      "first_half_percentage": 0.428571,
+      "predicted_percentage": 0.372441,
+      "second_half_made": 7,
+      "second_half_attempts": 30,
+      "actual_percentage": 0.233333,
+      "absolute_error": 0.139108
+    },
+    {
+      "player_id": 1642278,
+      "player_name": "Tyler Kolek",
+      "primary_team": "New York Knicks",
+      "first_half_made": 24,
+      "first_half_attempts": 73,
+      "first_half_percentage": 0.328767,
+      "predicted_percentage": 0.350688,
+      "second_half_made": 20,
+      "second_half_attempts": 41,
+      "actual_percentage": 0.487805,
+      "absolute_error": 0.137117
+    },
+    {
+      "player_id": 1641774,
+      "player_name": "Tristan Vukcevic",
+      "primary_team": "Washington Wizards",
+      "first_half_made": 12,
+      "first_half_attempts": 60,
+      "first_half_percentage": 0.2,
+      "predicted_percentage": 0.322069,
+      "second_half_made": 38,
+      "second_half_attempts": 84,
+      "actual_percentage": 0.452381,
+      "absolute_error": 0.130312
+    },
+    {
+      "player_id": 1631133,
+      "player_name": "Jabari Walker",
+      "primary_team": "Philadelphia 76ers",
+      "first_half_made": 13,
+      "first_half_attempts": 54,
+      "first_half_percentage": 0.240741,
+      "predicted_percentage": 0.333614,
+      "second_half_made": 19,
+      "second_half_attempts": 41,
+      "actual_percentage": 0.463415,
+      "absolute_error": 0.129801
+    }
+  ],
+  "featured_player": {
+    "player_id": 201142,
+    "player_name": "Kevin Durant",
+    "primary_team": "Houston Rockets",
+    "first_half_percentage": 0.403941,
+    "league_mean_prediction": 0.358689,
+    "shrinkage_prediction": 0.381483,
+    "second_half_percentage": 0.421053,
+    "first_half_attempts": 203,
+    "second_half_attempts": 247
+  },
+  "findings": [
+    "Partial pooling materially reduces error versus trusting noisy first-half percentages at face value.",
+    "The largest gains come from lower-volume shooters, whose observed rates carry the most sampling noise.",
+    "Shrinkage wins across the cohort, but it can underpredict established high-skill shooters; player-level misses still need basketball context."
+  ],
+  "limitations": [
+    "The evaluation cohort requires at least 25 three-point attempts in each half, so it excludes many low-usage and injured players.",
+    "The model uses makes and attempts only; role, shot quality, injuries, lineup context, and tracking data are not available.",
+    "This is a single-season backtest. A production forecast should repeat the design across multiple seasons before deployment."
+  ]
+}

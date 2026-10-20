@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, shareReplay } from 'rxjs';
 
-import { CoverageResponse, GameEvidenceRow, QueryResponse } from './models';
+import {
+  CoverageResponse,
+  GameEvidenceRow,
+  QueryResponse,
+  ThreePointForecastResponse
+} from './models';
 
 export const API_BASE_URL = (
   window.__NBA_ANALYTICS_CONFIG__?.apiBaseUrl ?? 'http://localhost:8100'
@@ -53,6 +58,16 @@ export class AnalyticsApiService {
       return this.demoCatalog$.pipe(map((catalog) => catalog.coverage));
     }
     return this.http.get<CoverageResponse>(`${API_BASE_URL}/api/v1/coverage`);
+  }
+
+  getThreePointForecast(): Observable<ThreePointForecastResponse> {
+    if (DEMO_MODE) {
+      const reportUrl = new URL('demo/three-point-forecast.json', document.baseURI).toString();
+      return this.http.get<ThreePointForecastResponse>(reportUrl);
+    }
+    return this.http.get<ThreePointForecastResponse>(
+      `${API_BASE_URL}/api/v1/experiments/three-point-forecast`
+    );
   }
 
   ask(question: string): Observable<QueryResponse> {

@@ -9,7 +9,9 @@ The original code in this repository is available under the MIT License.
 This project downloads data from Eoin A Moore's “NBA Dataset: Box Scores and
 Stats (1947 - Today)” on Kaggle. The dataset page declares the data CC0 1.0
 Universal and credits NBA.com as the underlying source. Raw source files are
-not redistributed by this repository.
+not redistributed by this repository. The hosted showcase includes a limited
+set of derived aggregates and evidence summaries generated from the declared
+CC0 snapshot.
 
 BoxScore Lab data may be used later for independent validation and is
 published under CC BY 4.0; any such use will be attributed in the relevant

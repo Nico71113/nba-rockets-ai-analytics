@@ -51,14 +51,17 @@ so it cannot power the main question set by itself.
 
 Even though the selected Kaggle dataset declares CC0, all large source files
 remain local and ignored by Git. The repository publishes transformation code,
-checksums, schemas, tests, and attribution—not a replacement copy of the source
-database.
+checksums, schemas, tests, attribution, a small evidence catalog, and derived
+forecast aggregates—not a replacement copy of the source database. The public
+forecast artifact contains method-level metrics and ten player-level error
+summaries rather than the underlying player-game rows.
 
 ## Implemented subset
 
 - Season: 2025-26
 - Structured scope: all 30 teams
 - Product focus: Houston Rockets and Kevin Durant
+- Forecast experiment: 311-player chronological three-point backtest
 - Play-by-play: not downloaded or used in the current version
 
 The verified source snapshot contains 1,230 regular-season games across 30

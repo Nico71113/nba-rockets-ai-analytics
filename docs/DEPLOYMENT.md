@@ -10,8 +10,8 @@ instance requires an explicit data and model policy.
 This is the reference configuration in `docker-compose.yml`:
 
 1. PostgreSQL stores the normalized fixed snapshot.
-2. FastAPI runs migrations and exposes health, coverage, query, analytics, and
-   evidence endpoints.
+2. FastAPI runs migrations and exposes health, coverage, query, analytics,
+   evidence, and experiment endpoints.
 3. The Angular production bundle is served by unprivileged Nginx.
 4. Ollama runs on the host. High-confidence deterministic questions continue to
    work if it is unavailable; ambiguous wording receives a specific refusal.
@@ -37,10 +37,16 @@ third-party rows, credentials, or provider secrets to Git. Review the source
 dataset's license and hosting terms before redistributing any rows through a
 public service.
 
+The GitHub Pages mode ships `demo/three-point-forecast.json`, generated with
+`make forecast-report`. It is a deterministic historical result, not a live
+model service. `npm run demo:validate` checks the cohort, split, methods, and
+selected shrinkage strength before deployment.
+
 ## Pre-release checklist
 
 ```bash
 make verify
+make forecast-report
 docker compose up --build -d
 python3 scripts/ci_smoke.py
 make language-eval

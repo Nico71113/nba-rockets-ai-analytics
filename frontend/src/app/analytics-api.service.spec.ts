@@ -26,6 +26,16 @@ describe('AnalyticsApiService', () => {
     request.flush({});
   });
 
+  it('loads the leakage-aware three-point forecast experiment', () => {
+    service.getThreePointForecast().subscribe();
+
+    const request = http.expectOne(
+      'http://localhost:8100/api/v1/experiments/three-point-forecast'
+    );
+    expect(request.request.method).toBe('GET');
+    request.flush({});
+  });
+
   it('trims and posts a natural-language question', () => {
     service.ask('  What was Houston\'s record?  ').subscribe();
 
